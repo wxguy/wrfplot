@@ -1,0 +1,26 @@
+# conda env create -f environment.yml
+name: wrfplot
+channels:
+  - conda-forge
+  - defaults
+dependencies:
+  - python=3.10
+  #- gcc_linux-64
+  - conda-forge::libpython-static
+  - conda-forge::wrf-python
+  - conda-forge::netcdf4
+  - conda-forge::cartopy
+  - conda-forge::imageio
+  - conda-forge::nuitka
+  - conda-forge::ordered-set
+  - conda-forge::tqdm
+  - conda-forge::wrapt
+  - conda-forge::psutil
+  - conda-forge::patchelf
+  - conda-forge::pip
+  - conda-forge::tqdm
+  - pip:
+    - sphinx
+    - sphinx_rtd_theme
+    - pyinstaller
+    
