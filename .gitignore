@@ -12,7 +12,7 @@ install_env.txt
 dev/
 test/
 release_check_list*
-docs/
+# docs/
 
 # Distribution / packaging
 .Python
