@@ -22,9 +22,9 @@ along with wrfplot. If not, see <http://www.gnu.org/licenses/>.
 __author__ = 'J Sundar (wrf.guy@gmail.com)'
 
 import os
+import platform
 import sys
 import argparse
-import platform
 from tqdm import tqdm
 import netCDF4 as nc
 import numpy as np
@@ -48,7 +48,8 @@ warnings.filterwarnings("ignore", module="datetime")
 if platform.system() == "Linux":
     os.system("export FONTCONFIG_PATH=$CONDA_PREFIX/etc/fonts/")
     os.system("export FONTCONFIG_FILE=$CONDA_PREFIX/etc/fonts/fonts.conf")
-    os.system("export PROJ_LIB=pyproj/proj")
+    # os.system("export PROJ_LIB=pyproj/proj")
+    os.environ["PROJ_LIB"] = "pyproj/proj"
 
 
 class Wrfplot(object):
@@ -169,6 +170,8 @@ class Wrfplot(object):
         elif 'u_' in self.var:
             self.plot_upper()
 
+        return True
+
     def to_datetime(self, date):
         """ Convert numpy datetime data into string time
         Args:
@@ -183,8 +186,7 @@ class Wrfplot(object):
         return datetime.utcfromtimestamp(timestamp)
 
     def get_time_period(self):
-        """ Extract times of the WRF output file
-        """
+        """ Extract times of the WRF output file """
         dates = self.var_data.Time
         for _date in dates:
             if not np.isnat(_date):
@@ -205,7 +207,7 @@ class Wrfplot(object):
         data_plot = None
         for index in pbar:
             _time = self.date_time[index]
-            if 'slp' in self.var:
+            if self.var == 'slp':
                 self.var_data = smooth2d(self.var_data, 3, cenweight=4)
                 self.clevels = utils.get_auto_clevel(self.var_data, slp=True)
             else:
@@ -271,9 +273,11 @@ class Wrfplot(object):
                                          dpi=self.dpi, config_file=self.config)
             plot_map.plot_var()
         except Exception as err:
+            tqdm.write(str(err))
             exc_type, exc_obj, exc_tb = sys.exc_info()
             fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
             tqdm.write("\tError:" + str(err) + str(exc_type) + str(fname) + str(exc_tb.tb_lineno))
+            return False
 
     def convert_unit(self, data):
         """ Convert data to other unit """
@@ -330,7 +334,6 @@ def _praser():
 
 
 def main():
-    """ Prase command line input """
     args = _praser()
     if args.list_vars:
         sys.exit(arguments.list_vars())

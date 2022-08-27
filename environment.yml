@@ -1,17 +1,18 @@
 # conda env create -f environment.yml
+# conda env remove -n ENV_NAME
 name: wrfplot
 channels:
   - conda-forge
   - defaults
 dependencies:
   - python=3.10
-  #- gcc_linux-64
+  # - conda-forge::gcc_linux-64=8.5.0
   - conda-forge::libpython-static
-  - conda-forge::wrf-python
+  - conda-forge::wrf-python=1.3.4
   - conda-forge::netcdf4
   - conda-forge::cartopy
   - conda-forge::imageio
-  - conda-forge::nuitka
+  - conda-forge::nuitka=0.8.4
   - conda-forge::ordered-set
   - conda-forge::tqdm
   - conda-forge::wrapt

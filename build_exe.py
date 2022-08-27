@@ -1,12 +1,31 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
+""" Script to build final executables from source """
+"""
+This file is part of wrfplot application.
+
+wrfplot is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+any later version.
+
+wrfplot is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with wrfplot. If not, see <http://www.gnu.org/licenses/>.
+"""
+
 import os
 import sys
 import time
 import platform
 import psutil
 import shutil
+from shutil import which
 from wrfplot._version import __version__
 
 # Define variables that would be used at later stage
@@ -18,42 +37,83 @@ data_dir = os.path.join(os.path.dirname(app_src_py_path), "data")
 app_icon = os.path.join(os.path.dirname(app_src_py_path), "data", "wrfplot.png")
 win_fs = ["ntfs", "fat", "vfat"]
 makeself_path = os.path.join("dev", "makeself-2.4.5", "makeself.sh")
+makeself_wrk_path = os.path.join(project_root, "build", "linux", "wrfplot")
 pyinst_dest_path = os.path.join("dist", "wrfplot_dist")
+conda_prefix = os.getenv("CONDA_PREFIX")
+pyproj_lib_trgt_dir = os.path.join("pyproj", "proj")
+
+# Set compilation option
+compile_module = 'nuitka'
 
 # Set platform specific variable options that would form as part of nutika command
 if platform.system() == "Windows":
     output_dir = os.path.join(project_root, 'build', 'windows')
     exe_out_name = os.path.join(output_dir, "wrfplot.exe")
     icon_option = "--windows-icon-from-ico=" + app_icon
+    pyproj_lib_src_dir = os.path.join(conda_prefix, "Library", "share", "proj")
+    geos_dll_files = conda_prefix + "\\Lib\\Library\\bin\\geos*.dll"
+    geos_trgt_dir = os.path.join("shapely", "DLLs", "\\")
+
 elif platform.system() == "Linux":
     output_dir = os.path.join(project_root, 'build', 'linux')
     exe_out_name = os.path.join(output_dir, "wrfplot")
     icon_option = "--linux-onefile-icon=" + app_icon
+    pyproj_lib_src_dir = os.path.join(conda_prefix, "share", "proj")
+    geos_dll_files = conda_prefix + "/lib/libgeos\*so.\*"
+    geos_trgt_dir = "shapely/.libs/"
 
-# Set the list of nutika command line options based on above set variables
+# Tested on Miniconda Python 3.10.4
+# This is the place one need to be carefull. For wrfplot project, netcdf, shapely and pyproj modules were not detected
+# automatically. Hence, I added it manually here.
 cmd = ["python -m nuitka",              # Invoke Nutika using existing Python
-       "--assume-yes-for-downloads",    # Yes for downloading necessary remote files by Nutika. Only works on windows but does not affect Linux
-       "--follow-imports",              # Follow all the imports by application, modules, submodules etc.
-       "--onefile",                     # One directory mode that need to be packaged again for distribution. Spped is better
+       "--assume-yes-for-downloads",    # Yes for downloading necessary remote files by Nutika
+       "--follow-imports",               # Follow all the imports by application, modules, submodules etc.
+       "--standalone",                  # One directory mode that need to be packaged again for distribution. Spped is better
+       "--remove-output",
        "--python-flag=-OO",             # Strips comments that are not required for distribution
+       "--noinclude-default-mode=nofollow",  # uncomment this line if you wish to avoid various tests and bloated modules. But test it before release
+       # "--nofollow-import-to=pandas",
        "--output-dir=" + output_dir,         # Output directory where all build and distribution files are to be dumped
        "--plugin-enable=numpy",         # Exclusive module support for comples modules such as numpy, pyside6, pyqt etc. See here for complete list https://github.com/Nuitka/Nuitka/blob/develop/Standard-Plugins-Documentation.rst
        "--show-scons",                  # Show output of scon module. Required for reporting bugs at GitHub
-       "--include-package=wrfplot",
-       " --include-plugin-directory=wrfplot",
        "--show-modules",                # Provide a final summary on included modules
-       "--include-data-dir=" + data_dir + "=data",  # Include data directory that are part of wrfplot project
-       app_src_py_path,                 # Actual file from which Nutika will take on
-       # icon_option,                     # Add icon for program
-       "-o " + exe_out_name]               # Output file name for final executable file
-       # "| tee dist1/nuitka_lin.log"]   # Show and save the log to file. Required for reporting bugs
-       # --follow-import-to=pyproj --follow-import-to=cartopy
+       "--include-module=netCDF4.utils",    # Add necessary modules not included by Nutika. You will get import module error after compilation only
+       "--include-module=colormaps",    # Include missing colormaps module
+       "--include-package-data=pyproj",  # Add missing data files of modules that are reported during run time
+       "--follow-import-to=pyproj",  # Include puproj data to final directory. Have to patch it later as it did not include automatically
+       "--follow-import-to=shapely",  # Ensure that nutika include all shapely related modules
+       "--include-package=shapely",  # Include missing shapely module
+       "--include-package-data=shapely",  # Include shapely data to final directory. Have to patch it later as it did not include automatically
+       "--include-data-dir=wrfplot/data=data",  # Include data directory that are part of wrfplot project
+       "--include-data-dir=wrfplot/colormaps/colormaps=colormaps/colormaps",
+       "--include-data-dir=" + pyproj_lib_src_dir + "=" + pyproj_lib_trgt_dir,  # Include missing data files of pyproj module
+       # "--include-data-file=" + geos_dll_files + "=" + geos_trgt_dir,   # Include libgeos* files to proper destination
+       app_src_py_path]            # Actual file from which Nutika will take on
 
+# Frame full command line options from above list
+nuitka_cmd = " ".join(cmd)
+
+test_cmd_options = ["build/linux/wrfplot/wrfplot",
+            "--input",
+            "../../WRF_TEST_FILES/wrfout_d02_2016-03-31_00_00_00",
+            "--var",
+            "T2",
+            "--output",
+            "~/Documents/wrfplot_output"]
+
+test_cmd = " ".join(test_cmd_options)
 
 # Simple wrapper command to execute command and check the exit status
 def execute_cmd(cmd):
-    # proc = Popen(cmd, stdout=PIPE, encoding='utf-8')
-    # return proc
+    """ Execute command and wait for it to complete
+
+    Args:
+        cmd (str): Command to be executed
+
+    Returns:
+        bool: True if command exit with 0 or else false
+    """
+
     if os.system(cmd) == 0:
         return True
     else:
@@ -62,6 +122,7 @@ def execute_cmd(cmd):
 
 def get_fs_type(path):
     """ Check filesystem for a given path """
+
     bestMatch = ""
     fsType = ""
     for part in psutil.disk_partitions():
@@ -73,6 +134,8 @@ def get_fs_type(path):
 
 
 def check_fs():
+    """ Check if we are building under correct filesystem """
+
     filesystem = get_fs_type(project_root)
     if platform.system == "Linux":
         if filesystem in win_fs:
@@ -82,6 +145,7 @@ def check_fs():
 
 class style():
     """ Give colours to terminal fonts """
+
     BLACK = '\033[30m'
     RED = '\033[31m'
     GREEN = '\033[32m'
@@ -95,6 +159,15 @@ class style():
 
 
 def convertSeconds(seconds):
+    """ Convert seconds into human readable hour/ time format
+
+    Args:
+        seconds (int): Input seconds which needs to be formated
+
+    Returns:
+        str : Nicely formated hours, minutes, seconds for given seconds
+     """
+
     h = seconds // (60 * 60)
     m = (seconds - h * 60 * 60) // 60
     s = seconds - (h * 60 * 60) - (m * 60)
@@ -104,45 +177,157 @@ def convertSeconds(seconds):
 
 
 def create_makeself():
-    """ Create makeself self executable app distribution """
+    """ Create makeself self executable app distribution under Linux """
 
-    if os.path.join(pyinst_dest_path, "wrfplot.run"):
+    if os.path.exists(os.path.join(output_dir, "wrfplot.run")):
         print("Deleting old 'wrfplot.run' file...")
-        os.remove(os.path.join(pyinst_dest_path, "wrfplot.run"))
+        os.remove(os.path.join(output_dir, "wrfplot.run"))
 
-    if os.path.exists(os.path.join(pyinst_dest_path, "wrfplot")):
+    if os.path.exists(os.path.join(output_dir, "installer.sh")):
+        print("Deleting old 'installer.sh' file...")
+        os.remove(os.path.join(output_dir, "installer.sh"))
+
+    if os.path.exists(os.path.join(output_dir, "wrfplot.dist")) and os.path.exists(os.path.join(output_dir, "wrfplot")):
+        print("Removing previosly created 'wrfplot' directory...")
+        shutil.rmtree(os.path.join(output_dir, "wrfplot"))
+
+    if os.path.exists(os.path.join(output_dir, "wrfplot.dist")):
+        print("Deleting old 'wrfplot.dist' directory...")
+        os.rename(os.path.join(output_dir, "wrfplot.dist"), os.path.join(output_dir, "wrfplot"))
+
+    if os.path.exists(os.path.join(output_dir, "wrfplot")):
         print("Creating Linux installer...")
-        shutil.copy("installer.sh", pyinst_dest_path)
+        shutil.copy("installer.sh", output_dir)
         print("Executing makeself command to create archive...")
-        execute_cmd("bash " + makeself_path + " " + pyinst_dest_path + " " + os.path.join(pyinst_dest_path, "wrfplot.run") + " wrfplot_Linux_Installer " + "./installer.sh")
-        if os.path.exists(os.path.join(pyinst_dest_path, "wrfplot.run")):
-            print("Please find the final Linux installer at: " + os.path.join(pyinst_dest_path, "wrfplot.run"))
+        execute_cmd("bash " + makeself_path + " " + os.path.join(output_dir) + " " + os.path.join(output_dir, "wrfplot.run") + " wrfplot_Linux_Installer " + "./installer.sh")
+        if os.path.exists(os.path.join(output_dir, "wrfplot.run")):
+            print("Please find the final Linux installer at: " + os.path.join(output_dir, "wrfplot.run"))
         else:
             print("Failed to create Linux installer...")
+    else:
+        print("wrfplot distribution directory does not exist. Hence not creating a Linux installer...")
+
+
+def test_wrfplt_exe():
+    """ Test the final executable before packing for distribution
+
+    Args:
+        nil
+
+    Returns:
+        bool : True if command executed is successful or else false
+    """
+
+    if execute_cmd(test_cmd) is True:
+        print("All successfull...")
+        return True
+    else:
+        return False
+
+
+def copy_files():
+    if platform.system() == "Linux":
+        shaply_target_lib_dir = os.path.join(output_dir, "wrfplot.dist", "shapely", ".libs")
+        pyproj_target_lib_dir = os.path.join(output_dir, "wrfplot.dist", "pyproj")
+        if not os.path.exists(shaply_target_lib_dir):
+            print("Making lib directory at", shaply_target_lib_dir)
+            os.makedirs(shaply_target_lib_dir)
+            print("Copying necessary GEOS libraries to shapely libs directory...")
+            execute_cmd("cp -rf " + output_dir + "/wrfplot.dist/libgeos*so.* " + shaply_target_lib_dir)
+            execute_cmd("cp -rf " + conda_prefix + "/share/proj " + pyproj_target_lib_dir)
+
+    elif platform.system() == "Windows":
+        shaply_target_lib_dir = os.path.join(output_dir, 'wrfplot.dist', 'shapely', 'DLLs')
+        if not os.path.exists(shaply_target_lib_dir):
+            print("Making DLL directory at", shaply_target_lib_dir)
+            os.makedirs(shaply_target_lib_dir)
+            print("Copying necessary GEOS libraries to shapely libs directory...")
+            shutil.copy(os.path.join(output_dir, 'wrfplot.dist', 'geos.dll'), shaply_target_lib_dir)
+            shutil.copy(os.path.join(output_dir, 'wrfplot.dist', 'geos_c.dll'), shaply_target_lib_dir)
+
+
+def create_win_exe():
+    print('Executing ==>', nuitka_cmd, '\n\n')
+    # It will take loong time to compile. Please waaait...
+    execute_cmd(nuitka_cmd)
+
+
+def create_linux_exe():
+    print('Executing ==>', nuitka_cmd, '\n\n')
+    # It will take loong time to compile. Please waaait...
+    execute_cmd(nuitka_cmd)
+
+
+def create_nsis_installer():
+    if platform.system() == 'Windows':
+        print("Still work in progress...")
+        # nsis = os.path.join("C:\\", "Program Files (x86)", "NSIS", "makensis.exe")
+        # nsi_installer_path = "installer.nsi"
+        print("C:\\Program Files (x86)\\NSIS\\makensis.exe installer.nsi")
+        # execute_cmd(os.path.join(nsis) + " " + nsi_installer_path)
+        execute_cmd(r'"C:\Program Files (x86)\NSIS\makensis.exe installer.nsi"')
+
+
+def is_tool(name):
+    """Check whether `name` is on PATH and marked as executable."""
+
+    return which(name) is not None
+
+
+def check_linux_exes():
+    print("Checking if all necessary linux applications are installed in host system...\n")
+    for exe in linux_req_apps:
+        if not is_tool(exe):
+            sys.exit("You need to install " + " ".join(linux_req_apps) + " to get nuitka working properly.")
+        else:
+            print("Executable '" + exe + "' is installed...")
+    if is_tool("gcc-7"):
+        print("'gcc-7' is available...")
+        print("Setting CC to 'gcc-7' for maximum compatability...")
+        os.system("export CC=gcc-7")
+        os.environ["CC"] = "gcc-7"
+    elif is_tool("gcc-8"):
+        print("'gcc-8' is available...")
+        print("Setting CC to 'gcc-8' for maximum compatability...")
+        os.environ["CC"] = "gcc-8"
+    else:
+        os.environ["CC"] = "gcc"
+
+
+def main():
+    if platform.system() == "Windows":
+        print("Creating distribution files under Windows...\n\n")
+        # create_win_exe()
+        # copy_files()
+        create_nsis_installer()
+
+    elif platform.system() == "Linux":
+        # execute_cmd("pyinstaller --noconfirm --distpath " + pyinst_dest_path + " wrfplot.spec")
+        # create_makeself()
+
+        print("Creating distribution files under Linux...")
+        if compile_module == 'nuitka':
+            check_linux_exes()
+            print("Using nuitka as backend for compiling source code...")
+            create_linux_exe()
+            copy_files()
+
+        else:
+            print("Using pyinstaller as backend for creating final executable...")
+            execute_cmd("pyinstaller --noconfirm --distpath " + output_dir + " wrfplot.spec")
+        
+        test_wrfplt_exe()
+        create_makeself()
 
 
 # Read script starts from here when this file is executed
 if __name__ == "__main__":
+    # Decide wheather to build using nuitka or pyinstaller
+    if len(sys.argv) > 1 and sys.argv[1] == "pyinstaller":
+        compile_module = "pyinstaller"
     # Check if we are running the script in correct filesystem
     check_fs()
     startTime = time.time()
-
-    """
-    # Create the full command line options from above list
-    nuitka_cmd = " ".join(cmd)
-    print(style.GREEN + "*** Executable is successfully created ***" + style.RESET)
-    print()
-    print('\n"' + "***" * 7 + nuitka_cmd + '"\n\n' + "***" * 7)
-    if execute_cmd(nuitka_cmd):
-        # print(style.GREEN + "*** Executable is successfully created ***" + style.RESET)
-        print("*** Executable is successfully created ***")
-    else:
-        print(style.RED + "xxx Error creating executable xxx")
-        print("xxx Error creating executable xxx")
-    total_time = time.time() - startTime
-    print('The script took {0} Min !'.format(convertSeconds(total_time)))
-    """
-    execute_cmd("pyinstaller --noconfirm --distpath " + pyinst_dest_path + " wrfplot.spec")
-    create_makeself()
+    main()
     total_time = time.time() - startTime
     print('The script took {0}'.format(convertSeconds(total_time)))

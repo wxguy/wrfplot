@@ -2,9 +2,9 @@
 ; Download and extract to NSIS install directory C:\Program Files(x86)
 
 ; Define the path to directory where Nutika put all our application files and directories
-!define PY_APP_DIR "dist_win\wrfplot.dist"
+!define PY_APP_DIR "build\windows\wrfplot.dist" 
 !define PRODUCT_NAME "wrfplot"
-!define PRODUCT_VERSION "3.0"
+!define PRODUCT_VERSION "0.1.0"
 !define BITNESS "64"
 !define ARCH_TAG ".amd64"
 !define INSTALLER_NAME "wrfplot-setup.exe"
@@ -47,7 +47,7 @@ SetCompressor lzma
 !insertmacro MUI_LANGUAGE "English"
 
 Name "${PRODUCT_NAME} ${PRODUCT_VERSION}"
-OutFile "dist_win\${INSTALLER_NAME}"
+OutFile "build\windows\${INSTALLER_NAME}"
 ShowInstDetails show
 
 Var cmdLineInstallDir
@@ -113,7 +113,7 @@ Section "!${PRODUCT_NAME}" sec_app
   WriteRegStr SHCTX "Software\Microsoft\Windows\CurrentVersion\Uninstall\${PRODUCT_NAME}" \
                    "DisplayIcon" "$INSTDIR\${PRODUCT_ICON}"
     WriteRegStr SHCTX "Software\Microsoft\Windows\CurrentVersion\Uninstall\${PRODUCT_NAME}" \
-                     "Publisher" "Indian Navy"
+                     "Publisher" "WxGuy"
   WriteRegStr SHCTX "Software\Microsoft\Windows\CurrentVersion\Uninstall\${PRODUCT_NAME}" \
                    "DisplayVersion" "${PRODUCT_VERSION}"
   WriteRegDWORD SHCTX "Software\Microsoft\Windows\CurrentVersion\Uninstall\${PRODUCT_NAME}" \

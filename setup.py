@@ -1,8 +1,25 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-# Note: To use the 'upload' functionality of this file, you must install Twine:
-#   $ pip install -r requirements.txt
+""" Standard setup.py file for wrfplot """
+"""
+This file is part of wrfplot application.
+
+wrfplot is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+any later version.
+
+wrfplot is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with wrfplot. If not, see <http://www.gnu.org/licenses/>.
+"""
+
+__author__ = 'J Sundar (wrf.guy@gmail.com)'
 
 import io
 import os
@@ -15,15 +32,14 @@ from setuptools import find_packages, setup, Command
 NAME = 'wrfplot'
 DESCRIPTION = 'Command line application to plot WRF model output data'
 URL = 'https://github.com/wxguy/wrfplot'
-EMAIL = 'me@example.com'
+EMAIL = 'wrf.guy@gmail.com'
 AUTHOR = 'J Sundar'
 REQUIRES_PYTHON = '>=3.5.0'
 VERSION = None
 LICENSE = 'MIT'
 # What packages are required for this module to be executed?
 REQUIRED = [
-    'numpy', 'wrapt', 'matplotlib', 'cartopy', 'click', 'xarray',
-    'matplotlib', 'wrf-python', 'Click',
+    'numpy', 'wrapt', 'cartopy', 'xarray', 'matplotlib', 'wrf-python',
 ]
 
 here = os.path.abspath(os.path.dirname(__file__))
@@ -94,7 +110,6 @@ setup(
     include_package_data=True,
     license=LICENSE,
     classifiers=[
-        # Trove classifiers
         # Full list: https://pypi.python.org/pypi?%3Aaction=list_classifiers
         'License :: OSI Approved :: GPLv3',
         'Programming Language :: Python',
@@ -105,7 +120,6 @@ setup(
         'Programming Language :: Python :: 3.9',
         'Programming Language :: Python :: 3.10',
         'Programming Language :: Python :: Implementation :: CPython',
-        'Programming Language :: Python :: Implementation :: PyPy'
     ],
     packages=find_packages(
         exclude=["*.tests", "*.tests.*", "tests.*", "tests"],),

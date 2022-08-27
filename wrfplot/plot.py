@@ -24,6 +24,7 @@ __author__ = 'J Sundar (wrf.guy@gmail.com)'
 import matplotlib.pyplot as plt
 import os
 from wrf import to_np
+import cartopy
 from cartopy import feature as cf
 from cartopy.feature import ShapelyFeature
 from cartopy.io.shapereader import Reader
@@ -39,6 +40,9 @@ import warnings
 from shapely.errors import ShapelyDeprecationWarning
 warnings.filterwarnings("ignore", category=ShapelyDeprecationWarning)
 warnings.filterwarnings("ignore", category=UserWarning)
+
+# Set the cartopy NE shape file to our data dir
+cartopy.config['pre_existing_data_dir'] = os.path.abspath(utils.data_dir())
 
 
 class MakePlot(object):
@@ -176,13 +180,13 @@ class MakePlot(object):
         """ Plot 2D data on a Map
         """
         # We need to normalise the colour map with data levels. Otherwise, colourmap will be squed
-        norm = BoundaryNorm(self.clevels, self.cmap.N)
         # SLP data does not reqire to have colour fill
         if self.var_name == 'slp':
             self.cs = plt.contour(self.lons, self.lats, self.data, colors="blue", transform=ccrs.PlateCarree(),
                                   linewidths=0.5, levels=self.clevels)
             self.cl = plt.clabel(self.cs, inline=1, fontsize=10, fmt='%1.0f', inline_spacing=1)
         else:
+            norm = BoundaryNorm(self.clevels, self.cmap.N)
             self.cf = self.ax.contourf(self.lons, self.lats, self.data, transform=ccrs.PlateCarree(), cmap=self.cmap, norm=norm,
                                        levels=self.clevels, extend=self.c_bar_extend)  # colors=('lime', 'limegreen', 'darkgreen', 'yellow', 'orange', 'red', 'purple')
             self.cs = self.ax.contour(self.cf, colors="black", transform=ccrs.PlateCarree(), linewidths=0.3)
