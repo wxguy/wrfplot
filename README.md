@@ -4,6 +4,10 @@
 
 The idea of developing wrfplot came to my mind as I frequently revisit the same code base again and again to tweak few lines of code to get changes in final plots. Therefore, I was looking for a command line application that would help me to tweak the common WRF model forecast images by providing appropriate command line options. I could not find any and hence created one.
 
+## Documentation
+
+Documentation of this project is located at https://wrfplot.readthedocs.io.
+
 ## Use Cases
 
 A typical use case of wrfplot would be to include as part of your WRF model run framework to plotting of variables immediately after the model run is completed. The other use case would be to use it for producing publication quality 2D maps which does not much tweaking for your publication.

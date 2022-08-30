@@ -8,7 +8,7 @@ About wrfplot
 
 **wrfplot** is a command line application written in Python programming language to plot set of diagnostic variables from World Research and Forecasting (WRF) atmospheric model output file. Though, WRF model output files are simple NetCDF, it requires one to install various software and libraries to plot a few variables.  Python has many modules that can deal with WRF model output data set. However, setting up theses libraries, plotting variables through reading lot of documentation is tedious process. **wrfplot** aims to fill this gap by proving an application that is easy to install and use. 
 
-The idea of developing wrfplot came to my mind as I frequently revisit the same code base again and again to tweak few lines of code to get changes in final plots. Therefore, decided to start this project where most of the common visualisation can be tweaked by providing appropriate command line options.
+The idea of developing wrfplot came to my mind as I frequently revisit the same code base again and again to tweak few lines of code to get changes in final plots. Therefore, I was looking for a command line application that would help me to tweak the common WRF model forecast images by providing appropriate command line options. I could not find any and hence created one.
 
 Use Cases
 =========

@@ -2,8 +2,19 @@
 History
 =======
 
-0.1.0 (2022-08-27)
-------------------
+0.1.0-beta (2022-08-30)
+------------------------
 
-* First release.
+* Fixed the pyproj database missing error.
+* Include the Windows setup file. 
+* Updated readme file to reflect installation procedures.
+* Tweaked build script and included static images.
+* Tweak to windows NSIS installer script to change the output name
+
+0.1.0-alpha (2022-08-27)
+------------------------
+
+* First alpha release.
+* Still a work in progress. 
+* Pushing it to test the release-related aspects.
 

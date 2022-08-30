@@ -2,69 +2,73 @@
 Installation Guide
 ==================
 
-There are multiple ways you can install wrfplot. You can choose any of the methods you are comfortable in. The documentation written here are in recommanded hierarchy. Each one are listed below.
+Since it is intended to be used as command line, the application is distributed as stand-alone on both Linux and Windows. You must download the correct version of application installer or setup file. Both are described below:
 
-Standalone
-~~~~~~~~~~
+Windows
+~~~~~~~
 
-Standalone Method (Recommanded)::
+Go to https://github.com/wxguy/wrfplot/releases and look for latest release. The Windows setup executable will have name `wrfplot-windows-64bit.exe`. Click on the link and download it to local disk. The rest of the installation procedure is same as you do for any other windows setup files. Here are the complete process of installing in visual format:
 
-	$ wget 
-	$ 
+.. image:: _static/images/screenshots/1-windows-setup.png
+  :width: 500
+  :alt: Windows Setup File
 
-Conda
+.. image:: _static/images/screenshots/2-user-elivation.png
+  :width: 400
+  :alt: Windows User Elevation
+
+.. image:: _static/images/screenshots/3-windows-welcome-screen.png
+  :width: 400
+  :alt: Windows Welcome Screen
+
+.. image:: _static/images/screenshots/4-windows-user-agreement.png
+  :width: 400
+  :alt: Windows User Agreement
+
+.. image:: _static/images/screenshots/5-windows-install-options.png
+  :width: 400
+  :alt: Windows Install Options
+
+.. image:: _static/images/screenshots/6-windows-destination-dir.png
+  :width: 400
+  :alt: Windows Install Directory
+
+.. image:: _static/images/screenshots/7-windows-install-progress.png
+  :width: 400
+  :alt: Windows Install Progress
+
+.. image:: _static/images/screenshots/8-windows-install-finish.png
+  :width: 400
+  :alt: Windows Finish Screen
+
+
+Linux
 ~~~~~~
-Conda Method::
 
-	$ conda install -c conda-forge wrfplot
+ Go to https://github.com/wxguy/wrfplot/releases and look for latest release. The Windows setup executable will have name `wrfplot-linux-64bit.run`. Click on the link and download it to local disk. Thereafter execute the below command (assuming that the Linux installer is downloaded at `~/Downloads`)::
 
+ 	$ bash ~/Downloads/wrfplot-linux-64bit.run
+ 
 
-Pip
-~~~~~~
-
-Pip Method::
-
-	$ sudo apt update && sudo apt install build-essential gfortran libhdf5-mpich-dev libpng-dev libnetcdff-dev
-	$ pip install wrfplot
+ that would produce the output as indicated below::
 
 
-From Source
-~~~~~~~~~~~
-The wrfplot application relies on Python module ``wrf-python``. Hence you need to install these packages first.
-
-.. warning::
-  Installing ``wrf-python`` Python module under Windows OS is cumbersome process. It is highly recommended that you follow any of the above methods, if your OS is Windows.
-
-Before proceeding to install wrfplot, ensure to install following system libraries that are required for compiling Python modules from your favourite distro. Following is the procedure required to be done for Debian/Ubuntu based distros::
-
-	$ sudo apt update && sudo apt install build-essential gfortran libhdf5-mpich-dev libpng-dev libnetcdff-dev
-
-Required Dependencies
-=====================
-
-Following Python modules are the basic dependencies of wrfplot:
-
-* Python 3.5+
-* numpy (1.11 or later; 1.14 required to build on Windows)
-* wrapt (1.10 or later)
-* setuptools (38.0 or later)
-* xarray (0.7.0 or later)
-* netCDF4-python (1.2.0 or later)
-* matplotlib (1.4.3 or later)
-* cartopy (0.13 or later)
-
-
-Once everting is installed execute the below command::
-
-	git clone https://github.com/wxguy/wrfplot
-    cd wrfplot
-    python setup.py install 
+	Verifying archive integrity...  100%   MD5 checksums are OK. All good.
+	Uncompressing wrfplot_Linux_Installer  100%  
+	Removing previous install directory...
+	Installing wrfplot to /home/wxguy/.wrfplot...
+	Renaming '/home/wxguy/wrfplot' directory to '/home/wxguy/.wrfplot'..
+	'/home/wxguy/.local/bin' directory already exists. Not creating it.
+	Linking wrfplot executable...
+	Updating .bashrc file to include install directory...
+	/home/wxguy/.local/bin directory already added to PATH. Skipping...
+	Installation completed. Please restart your terminal to continue using wrfplot...
 
 
 Confirm Installation
 ~~~~~~~~~~~~~~~~~~~~~
 
-Once you install wrfplot using one of the above mentioned, you must ensure that it is installed successfully. For this you can execute following command from terminal::
+Once you install wrfplot using one of the above mentioned, you must ensure that it is installed successfully. For this you can execute following command from terminal on Linux or cmd on Windows::
 
 	$ wrfplot --help
 	usage: wrfplot.py [-h] [--list-vars] [--input <input_file>] [--output <output_dir>] [--vars <variables>]
@@ -87,22 +91,3 @@ Once you install wrfplot using one of the above mentioned, you must ensure that 
 	© J Sundar, wrf.guy@gmail.com, 2022
 
 If you get inbuilt help page of ``wrfplot``, then it is ensured that you have successfully installed wrfplot.
-
-Uninstall
-~~~~~~~~~
-
-The uninstallation depends on the system you used to install wrfplot. Either you did it via conda (see Uninstallation via conda), via pip or from the source files (see Uninstallation via pip).
-
-Uninstallation via conda
-========================
-
-If you installed wrfplot via conda, simply run::
-
-	conda remove wrfplot
-
-Uninstallation via pip
-======================
-
-Uninstalling via pip simply goes via::
-
-	pip uninstall wrfplot
