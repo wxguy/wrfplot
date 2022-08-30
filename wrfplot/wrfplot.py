@@ -22,6 +22,16 @@ along with wrfplot. If not, see <http://www.gnu.org/licenses/>.
 __author__ = 'J Sundar (wrf.guy@gmail.com)'
 
 import os
+# Set these env variables to avoid font related errors
+os.environ["FONTCONFIG_PATH"] = "$CONDA_PREFIX/etc/fonts/"
+os.environ["FONTCONFIG_FILE"] = "$CONDA_PREFIX/etc/fonts/fonts.conf"
+# Have to set update env variables before importing pyproj module when running from freeze mode
+custom_pyproj_dbase_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), "pyproj", "proj")
+if os.path.exists(custom_pyproj_dbase_dir):
+    os.environ["PROJ_LIB"] = custom_pyproj_dbase_dir
+    os.environ["PATH"] += os.pathsep + custom_pyproj_dbase_dir
+    os.environ["PATH"] += os.path.dirname(os.path.abspath(__file__))
+
 import platform
 import sys
 import argparse
@@ -43,13 +53,6 @@ import matplotlib
 matplotlib.use('agg')
 warnings.filterwarnings("ignore", module="matplotlib")
 warnings.filterwarnings("ignore", module="datetime")
-
-# Export these below env variables to avoid font config errors
-if platform.system() == "Linux":
-    os.system("export FONTCONFIG_PATH=$CONDA_PREFIX/etc/fonts/")
-    os.system("export FONTCONFIG_FILE=$CONDA_PREFIX/etc/fonts/fonts.conf")
-    # os.system("export PROJ_LIB=pyproj/proj")
-    os.environ["PROJ_LIB"] = "pyproj/proj"
 
 
 class Wrfplot(object):

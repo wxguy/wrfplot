@@ -27,6 +27,7 @@ import psutil
 import shutil
 from shutil import which
 from wrfplot._version import __version__
+from wrfplot.utils import quote
 
 # Define variables that would be used at later stage
 version = __version__
@@ -65,43 +66,50 @@ elif platform.system() == "Linux":
 # Tested on Miniconda Python 3.10.4
 # This is the place one need to be carefull. For wrfplot project, netcdf, shapely and pyproj modules were not detected
 # automatically. Hence, I added it manually here.
-cmd = ["python -m nuitka",              # Invoke Nutika using existing Python
-       "--assume-yes-for-downloads",    # Yes for downloading necessary remote files by Nutika
-       "--follow-imports",               # Follow all the imports by application, modules, submodules etc.
-       "--standalone",                  # One directory mode that need to be packaged again for distribution. Spped is better
+cmd = ["python -m nuitka",  # Invoke Nutika using existing Python
+       "--assume-yes-for-downloads",  # Yes for downloading necessary remote files by Nutika
+       "--follow-imports",  # Follow all the imports by application, modules, submodules etc.
+       "--standalone",  # One directory mode that need to be packaged again for distribution. Spped is better
        "--remove-output",
-       "--python-flag=-OO",             # Strips comments that are not required for distribution
-       "--noinclude-default-mode=nofollow",  # uncomment this line if you wish to avoid various tests and bloated modules. But test it before release
+       "--python-flag=-OO",  # Strips comments that are not required for distribution
+       "--noinclude-default-mode=nofollow",
+       # uncomment this line if you wish to avoid various tests and bloated modules. But test it before release
        # "--nofollow-import-to=pandas",
-       "--output-dir=" + output_dir,         # Output directory where all build and distribution files are to be dumped
-       "--plugin-enable=numpy",         # Exclusive module support for comples modules such as numpy, pyside6, pyqt etc. See here for complete list https://github.com/Nuitka/Nuitka/blob/develop/Standard-Plugins-Documentation.rst
-       "--show-scons",                  # Show output of scon module. Required for reporting bugs at GitHub
-       "--show-modules",                # Provide a final summary on included modules
-       "--include-module=netCDF4.utils",    # Add necessary modules not included by Nutika. You will get import module error after compilation only
-       "--include-module=colormaps",    # Include missing colormaps module
+       "--output-dir=" + output_dir,  # Output directory where all build and distribution files are to be dumped
+       "--plugin-enable=numpy",
+       # Exclusive module support for comples modules such as numpy, pyside6, pyqt etc. See here for complete list https://github.com/Nuitka/Nuitka/blob/develop/Standard-Plugins-Documentation.rst
+       "--show-scons",  # Show output of scon module. Required for reporting bugs at GitHub
+       "--show-modules",  # Provide a final summary on included modules
+       "--include-module=netCDF4.utils",
+       # Add necessary modules not included by Nutika. You will get import module error after compilation only
+       "--include-module=colormaps",  # Include missing colormaps module
        "--include-package-data=pyproj",  # Add missing data files of modules that are reported during run time
-       "--follow-import-to=pyproj",  # Include puproj data to final directory. Have to patch it later as it did not include automatically
+       "--follow-import-to=pyproj",
+       # Include puproj data to final directory. Have to patch it later as it did not include automatically
        "--follow-import-to=shapely",  # Ensure that nutika include all shapely related modules
        "--include-package=shapely",  # Include missing shapely module
-       "--include-package-data=shapely",  # Include shapely data to final directory. Have to patch it later as it did not include automatically
+       "--include-package-data=shapely",
+       # Include shapely data to final directory. Have to patch it later as it did not include automatically
        "--include-data-dir=wrfplot/data=data",  # Include data directory that are part of wrfplot project
        "--include-data-dir=wrfplot/colormaps/colormaps=colormaps/colormaps",
-       "--include-data-dir=" + pyproj_lib_src_dir + "=" + pyproj_lib_trgt_dir,  # Include missing data files of pyproj module
+       "--include-data-dir=" + pyproj_lib_src_dir + "=" + pyproj_lib_trgt_dir,
+       # Include missing data files of pyproj module
        # "--include-data-file=" + geos_dll_files + "=" + geos_trgt_dir,   # Include libgeos* files to proper destination
-       app_src_py_path]            # Actual file from which Nutika will take on
+       app_src_py_path]  # Actual file from which Nutika will take on
 
 # Frame full command line options from above list
 nuitka_cmd = " ".join(cmd)
 
 test_cmd_options = ["build/linux/wrfplot/wrfplot",
-            "--input",
-            "../../WRF_TEST_FILES/wrfout_d02_2016-03-31_00_00_00",
-            "--var",
-            "T2",
-            "--output",
-            "~/Documents/wrfplot_output"]
+                    "--input",
+                    "../../WRF_TEST_FILES/wrfout_d02_2016-03-31_00_00_00",
+                    "--var",
+                    "T2",
+                    "--output",
+                    "~/Documents/wrfplot_output"]
 
 test_cmd = " ".join(test_cmd_options)
+
 
 # Simple wrapper command to execute command and check the exit status
 def execute_cmd(cmd):
@@ -173,7 +181,7 @@ def convertSeconds(seconds):
     s = seconds - (h * 60 * 60) - (m * 60)
 
     # return [h, m, s]
-    return("%d hours, %d minutes, %d seconds" % (h, m, s))
+    return ("%d hours, %d minutes, %d seconds" % (h, m, s))
 
 
 def create_makeself():
@@ -199,7 +207,8 @@ def create_makeself():
         print("Creating Linux installer...")
         shutil.copy("installer.sh", output_dir)
         print("Executing makeself command to create archive...")
-        execute_cmd("bash " + makeself_path + " " + os.path.join(output_dir) + " " + os.path.join(output_dir, "wrfplot.run") + " wrfplot_Linux_Installer " + "./installer.sh")
+        execute_cmd("bash " + makeself_path + " " + os.path.join(output_dir) + " " + os.path.join(output_dir,
+                                                                                                  "wrfplot-linux-64bit.run") + " wrfplot_Linux_Installer " + "./installer.sh")
         if os.path.exists(os.path.join(output_dir, "wrfplot.run")):
             print("Please find the final Linux installer at: " + os.path.join(output_dir, "wrfplot.run"))
         else:
@@ -239,9 +248,10 @@ def copy_files():
     elif platform.system() == "Windows":
         shaply_target_lib_dir = os.path.join(output_dir, 'wrfplot.dist', 'shapely', 'DLLs')
         if not os.path.exists(shaply_target_lib_dir):
-            print("Making DLL directory at", shaply_target_lib_dir)
-            os.makedirs(shaply_target_lib_dir)
-            print("Copying necessary GEOS libraries to shapely libs directory...")
+            if not os.path.exists(shaply_target_lib_dir):
+                print("Making DLL directory at", shaply_target_lib_dir)
+                os.makedirs(shaply_target_lib_dir)
+            print("Copying necessary GEOS libraries to shapely DLLs directory...")
             shutil.copy(os.path.join(output_dir, 'wrfplot.dist', 'geos.dll'), shaply_target_lib_dir)
             shutil.copy(os.path.join(output_dir, 'wrfplot.dist', 'geos_c.dll'), shaply_target_lib_dir)
 
@@ -261,11 +271,12 @@ def create_linux_exe():
 def create_nsis_installer():
     if platform.system() == 'Windows':
         print("Still work in progress...")
-        # nsis = os.path.join("C:\\", "Program Files (x86)", "NSIS", "makensis.exe")
-        # nsi_installer_path = "installer.nsi"
-        print("C:\\Program Files (x86)\\NSIS\\makensis.exe installer.nsi")
-        # execute_cmd(os.path.join(nsis) + " " + nsi_installer_path)
-        execute_cmd(r'"C:\Program Files (x86)\NSIS\makensis.exe installer.nsi"')
+        nsis = os.path.join("C:\\", "Program Files (x86)", "NSIS", "makensis.exe")
+        nsi_installer_path = "installer.nsi"
+        print("Executing ==>", os.path.join(quote(nsis)) + " " + nsi_installer_path)
+        # print(os.path.join(quote(nsis)) + " " + nsi_installer_path)
+        if execute_cmd(os.path.join(quote(nsis)) + " " + nsi_installer_path) is True:
+            print("makensis.exe is successfully executed")
 
 
 def is_tool(name):
@@ -297,8 +308,8 @@ def check_linux_exes():
 def main():
     if platform.system() == "Windows":
         print("Creating distribution files under Windows...\n\n")
-        # create_win_exe()
-        # copy_files()
+        create_win_exe()
+        copy_files()
         create_nsis_installer()
 
     elif platform.system() == "Linux":
@@ -315,7 +326,7 @@ def main():
         else:
             print("Using pyinstaller as backend for creating final executable...")
             execute_cmd("pyinstaller --noconfirm --distpath " + output_dir + " wrfplot.spec")
-        
+
         test_wrfplt_exe()
         create_makeself()
 

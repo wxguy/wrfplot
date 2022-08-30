@@ -7,7 +7,7 @@
 !define PRODUCT_VERSION "0.1.0"
 !define BITNESS "64"
 !define ARCH_TAG ".amd64"
-!define INSTALLER_NAME "wrfplot-setup.exe"
+!define INSTALLER_NAME "wrfplot-windows-64bit.exe"
 !define PRODUCT_ICON "${PY_APP_DIR}\data\dist\wxguy.ico"
 BrandingText 'WRFPLOT by WxGuy'
 
