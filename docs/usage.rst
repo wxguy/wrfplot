@@ -60,7 +60,7 @@ Now, lets go ahead and start plotting the variable "2m Relative Humidity" named 
         Plotting "rh2" for Time: 30-03-2016_00:00                                                                        
           Image saved at : "/home/wxguy/Documents/wrfplot_output/rh2_30-03-2016_00_00.png"                              
         Plotting "rh2" for Time: 30-03-2016_06:01                                                                        
-	Plotting "rh2":   8%|█████▎                                                               | 1/13 [00:06<01:23,  6.96s/it]
+	Plotting "rh2":   1%|                                                               | 1/13 [00:06<01:23,  6.96s/it]
 
 In the above command, we have provided three options where:
 
@@ -75,4 +75,3 @@ When the wrfplot start plotting the variable for all times, you can see the prog
   :alt: Alternative text
 
 You can see from the above image that all the required fields such as title, colour map, colour bar range, model cycle and forecast validity are automatically picked up by wrfplot. Now onwards, you can only change the ``--var`` with different name to plot new variables.
-

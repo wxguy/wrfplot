@@ -1,3 +1,5 @@
+[![Documentation Status](https://readthedocs.org/projects/wrfplot/badge/?version=latest)](https://wrfplot.readthedocs.io/en/latest/?badge=latest)
+
 ## About wrfplot
 
 **wrfplot** is a command line application written in Python programming language to plot set of diagnostic variables from World Research and Forecasting (WRF) atmospheric model output file. Though, WRF model output files are simple NetCDF, it requires one to install various software and libraries to plot a few variables.  Python has many modules that can deal with WRF model output data set. However, setting up theses libraries, plotting variables through reading lot of documentation is tedious process. **wrfplot** aims to fill this gap by proving an application that is easy to install and use. 
@@ -27,7 +29,7 @@ wrfplot --version
 
 ### Linux
 
- Go to https://github.com/wxguy/wrfplot/releases and look for latest release. The Windows setup executable will have name `wrfplot-linux-64bit.run`. Click on the link and download it to local disk. Thereafter execute the below command (assuming that the Linux installer is downloaded at `~/Downloads`):
+ Go to https://github.com/wxguy/wrfplot/releases and look for latest release. The Linux installer will have name `wrfplot-linux-64bit.run`. Click on the link and download it to local disk. Thereafter execute the below command (assuming that the Linux installer is downloaded at `~/Downloads`):
 
  ```
  bash ~/Downloads/wrfplot-linux-64bit.run
@@ -54,6 +56,11 @@ Once installed Check if installation is successful by typing following command i
 wrfplot --version
 0.1.0
 ```
+
+## How to use?
+
+Please refer to https://wrfplot.readthedocs.io for complete documentation on how to use `wrfplot` application.
+
 
 ## Author
 

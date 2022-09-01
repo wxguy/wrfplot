@@ -62,7 +62,8 @@ release = __version__
 extensions = ['sphinx.ext.autodoc',
               'sphinx.ext.viewcode',
               'sphinx.ext.napoleon',
-              'sphinx.ext.autosummary']
+              'sphinx.ext.autosummary',
+              'sphinx.ext.imgconverter']
 
 
 # Turn off code and image links for embedded mpl plots
