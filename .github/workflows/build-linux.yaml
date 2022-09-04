@@ -53,8 +53,10 @@ jobs:
         shell: bash -l {0}
         run: |
           echo -e "===== Executing nuitka to build Linux binary ====="
-          ls /usr/share/miniconda/envs/wrfplot/
-          /usr/share/miniconda/envs/wrfplot/bin/python -m nuitka --assume-yes-for-downloads --follow-imports --output-dir=dist --standalone --python-flag=-OO --plugin-enable=numpy --show-scons --noinclude-default-mode=nofollow --include-package-data=pyproj --show-scons --show-modules --include-module=netCDF4.utils --include-data-dir=wrfplot/data=data --include-data-dir=$CONDA_PREFIX/share/proj=pyproj/proj wrfplot/wrfplot.py
+          ls /usr/share/miniconda/envs/wrfplot/share
+          ls $CONDA_PREFIX/share/
+          /usr/share/miniconda/envs/wrfplot/bin/python -m nuitka --assume-yes-for-downloads --follow-imports --output-dir=dist --standalone --python-flag=-OO --plugin-enable=numpy --show-scons --noinclude-default-mode=nofollow --include-package-data=pyproj --show-scons --show-modules --include-module=netCDF4.utils --include-data-dir=wrfplot/data=data wrfplot/wrfplot.py
+          # --include-data-dir=$CONDA_PREFIX/share/proj=pyproj/proj 
       - name: Copying necessary files at destination
         run: |
           echo -e "===== Creating directory at shapely destination ====="
