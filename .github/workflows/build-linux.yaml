@@ -34,12 +34,12 @@ jobs:
       - name: Initialising conda shell
         shell: bash -l {0}
         run: |
-          $CONDA/bin/conda init $SHELL
+          conda init bash
       - name: Activate wrfplot environment
         shell: bash -l {0}
         run: |
           echo -e "===== Activating wrfplot environment ====="
-          $CONDA/bin/conda activate wrfplot
+          conda activate wrfplot
       - name: Conda info
         shell: bash -l {0}
         run: |
