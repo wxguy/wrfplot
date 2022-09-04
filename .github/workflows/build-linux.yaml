@@ -31,7 +31,7 @@ jobs:
           echo -e "Listing conda info"
           conda info
 
-        python -m nuitka --assume-yes-for-downloads --follow-imports --output-dir=dist --standalone --python-flag=-OO --plugin-enable=numpy --show-scons --noinclude-default-mode=nofollow --include-package-data=pyproj --show-scons --show-modules --include-module=netCDF4.utils --include-data-dir=wrfplot/data=data --include-data-dir=$CONDA_PREFIX/share/proj=pyproj/proj wrfplot/wrfplot.py
-        mkdir -p dist/wrfplot.dist/shapely/.libs
-        cp -rf dist/wrfplot.dist/libgeos*so.* dist/wrfplot.dist/shapely/.libs/
-        dist/wrfplot.dist/wrfplot --version
+          python -m nuitka --assume-yes-for-downloads --follow-imports --output-dir=dist --standalone --python-flag=-OO --plugin-enable=numpy --show-scons --noinclude-default-mode=nofollow --include-package-data=pyproj --show-scons --show-modules --include-module=netCDF4.utils --include-data-dir=wrfplot/data=data --include-data-dir=$CONDA_PREFIX/share/proj=pyproj/proj wrfplot/wrfplot.py
+          mkdir -p dist/wrfplot.dist/shapely/.libs
+          cp -rf dist/wrfplot.dist/libgeos*so.* dist/wrfplot.dist/shapely/.libs/
+          dist/wrfplot.dist/wrfplot --version
