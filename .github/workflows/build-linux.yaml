@@ -18,20 +18,24 @@ jobs:
       - name: Install dependencies
         run: |
           # $CONDA is an environment variable pointing to the root of the miniconda directory
-          echo -e "Updating OS"
+          echo -e "===== Updating OS ====="
           sudo apt-get update
-          echo -e "Installing dependencies"
+          echo -e "===== Installing dependencies ====="
           sudo apt-get install patchelf gdb ccache libfuse2 build-essential gcc-7 -y
-          echo -e "Setting up GCC environment variable"
+          echo -e "===== Setting up GCC environment variable ====="
           export CC=gcc-7
-          echo -e "Installing conda environment"
+          echo -e "===== Installing conda environment ====="
           $CONDA/bin/conda env create -f environment.yml
-          echo -e "Activating wrfplot environment"
-          conda activate wrfplot
-          echo -e "Listing conda info"
-          conda info
+          echo -e "===== Activating wrfplot environment ====="
+          $CONDA/bin/conda activate wrfplot
+          echo -e "===== Listing conda info ====="
+          $CONDA/bin/conda info
 
+          echo -e "===== Executing nuitka to build Linux binary ====="
           python -m nuitka --assume-yes-for-downloads --follow-imports --output-dir=dist --standalone --python-flag=-OO --plugin-enable=numpy --show-scons --noinclude-default-mode=nofollow --include-package-data=pyproj --show-scons --show-modules --include-module=netCDF4.utils --include-data-dir=wrfplot/data=data --include-data-dir=$CONDA_PREFIX/share/proj=pyproj/proj wrfplot/wrfplot.py
+          echo -e "===== Creating directory at shapely destination ====="
           mkdir -p dist/wrfplot.dist/shapely/.libs
+          echo -e "===== Copying shapely so files ====="
           cp -rf dist/wrfplot.dist/libgeos*so.* dist/wrfplot.dist/shapely/.libs/
+          echo -e "===== Checkig if file build correctly ====="
           dist/wrfplot.dist/wrfplot --version
