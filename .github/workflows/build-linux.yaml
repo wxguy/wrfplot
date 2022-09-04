@@ -27,17 +27,21 @@ jobs:
           echo -e "===== Setting up GCC environment variable ====="
           export CC=gcc-7
       - name: Install wrfplot conda environment
+        shell: bash -l {0}
         run: |
           echo -e "===== Installing conda environment ====="
           $CONDA/bin/conda env create -f environment.yml
       - name: Initialising conda shell
+        shell: bash -l {0}
         run: |
           $CONDA/bin/conda init $SHELL
       - name: Activate wrfplot environment
+        shell: bash -l {0}
         run: |
           echo -e "===== Activating wrfplot environment ====="
           $CONDA/bin/conda activate wrfplot
       - name: Conda info
+        shell: bash -l {0}
         run: |
           echo -e "===== Listing conda info ====="
           $CONDA/bin/conda info
