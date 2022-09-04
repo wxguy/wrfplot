@@ -1,0 +1,35 @@
+name: "Build Linux installer for wrfplot"
+# This workflow is triggered on pushes to the repository.
+on: [push]
+
+jobs:
+  build-linux:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v4
+    - name: Set up Python 3.8
+      - uses: conda-incubator/setup-miniconda@v2
+      with:
+        auto-activate-base: true
+        activate-environment: ""
+    - name: Install dependencies
+      run: |
+        # $CONDA is an environment variable pointing to the root of the miniconda directory
+        echo -e "Updating OS"
+        sudo apt-get update
+        echo -e "Installing dependencies"
+        sudo apt-get install patchelf gdb ccache libfuse2 build-essential gcc-7 -y
+        echo -e "Setting up GCC environment variable"
+        export CC=gcc-7
+        echo -e "Installing conda environment"
+        $CONDA/bin/conda env create -f environment.yml
+        echo -e "Activating wrfplot environment"
+        conda activate wrfplot
+        echo -e "Listing conda info"
+        conda info
+
+        python -m nuitka --assume-yes-for-downloads --follow-imports --output-dir=dist --standalone --python-flag=-OO --plugin-enable=numpy --show-scons --noinclude-default-mode=nofollow --include-package-data=pyproj --show-scons --show-modules --include-module=netCDF4.utils --include-data-dir=wrfplot/data=data --include-data-dir=$CONDA_PREFIX/share/proj=pyproj/proj wrfplot/wrfplot.py
+        mkdir -p dist/wrfplot.dist/shapely/.libs
+        cp -rf dist/wrfplot.dist/libgeos*so.* dist/wrfplot.dist/shapely/.libs/
+        dist/wrfplot.dist/wrfplot --version
