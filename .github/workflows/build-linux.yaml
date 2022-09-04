@@ -52,11 +52,13 @@ jobs:
       - name: Running nuitka
         shell: bash -l {0}
         run: |
+          export CC=gcc-7
           echo -e "===== Executing nuitka to build Linux binary ====="
           ls /usr/share/miniconda/envs/wrfplot/share
           ls $CONDA_PREFIX/share/
-          /usr/share/miniconda/envs/wrfplot/bin/python -m nuitka --assume-yes-for-downloads --follow-imports --output-dir=dist --standalone --python-flag=-OO --plugin-enable=numpy --show-scons --noinclude-default-mode=nofollow --include-package-data=pyproj --show-scons --show-modules --include-module=netCDF4.utils --include-data-dir=wrfplot/data=data wrfplot/wrfplot.py
-          # --include-data-dir=$CONDA_PREFIX/share/proj=pyproj/proj 
+          export pyproj_dir=$(/usr/share/miniconda/envs/wrfplot/bin/python -c "import pyproj ; print(pyproj.datadir.get_data_dir())")
+          /usr/share/miniconda/envs/wrfplot/bin/python -m nuitka --assume-yes-for-downloads --follow-imports --output-dir=dist --standalone --python-flag=-OO --plugin-enable=numpy --show-scons --noinclude-default-mode=nofollow --include-package-data=pyproj --show-scons --show-modules --include-module=netCDF4.utils --include-data-dir=$pyproj_dir=pyproj/proj --include-data-dir=wrfplot/data=data wrfplot/wrfplot.py
+          # --include-data-dir=$pyproj_dir=pyproj/proj 
       - name: Copying necessary files at destination
         run: |
           echo -e "===== Creating directory at shapely destination ====="
