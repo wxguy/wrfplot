@@ -13,8 +13,8 @@ jobs:
       - name: Set up Python 3.8
         uses: conda-incubator/setup-miniconda@v2
         with:
-          auto-activate-base: true
-          activate-environment: ""
+          auto-activate-base: ""
+          activate-environment: wrfplot
       - name: Install dependencies
         run: |
           # $CONDA is an environment variable pointing to the root of the miniconda directory
@@ -46,9 +46,14 @@ jobs:
           echo -e "===== Listing conda info ====="
           conda info
           conda info --envs
+          conda list
+          echo "conda prefix is..."
+          echo $CONDA_PREFIX
       - name: Running nuitka
+        shell: bash -l {0}
         run: |
           echo -e "===== Executing nuitka to build Linux binary ====="
+          ls /usr/share/miniconda/envs/wrfplot/
           /usr/share/miniconda/envs/wrfplot/python -m nuitka --assume-yes-for-downloads --follow-imports --output-dir=dist --standalone --python-flag=-OO --plugin-enable=numpy --show-scons --noinclude-default-mode=nofollow --include-package-data=pyproj --show-scons --show-modules --include-module=netCDF4.utils --include-data-dir=wrfplot/data=data --include-data-dir=$CONDA_PREFIX/share/proj=pyproj/proj wrfplot/wrfplot.py
       - name: Copying necessary files at destination
         run: |
