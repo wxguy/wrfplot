@@ -26,11 +26,11 @@ jobs:
         shell: pwsh
         run: |
           conda env create -f environment.yml
-          conda activate pwsh
+          conda activate wrfplot
       - name: Running nuitka
         shell: pwsh
         run: |
-          conda activate pwsh
+          conda activate wrfplot
           python build_exe.py
       - name: Create installer
         uses: joncloud/makensis-action@v3.7
