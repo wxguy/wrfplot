@@ -28,4 +28,3 @@ jobs:
           $CONDA_PREFIX\envs\wrfplot\bin\python build_exe.py
       - name: Create installer
         uses: joncloud/makensis-action@v3.7
-        script-file: "installer.nsi"
