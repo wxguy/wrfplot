@@ -21,7 +21,7 @@ jobs:
           echo -e "===== Updating OS ====="
           sudo apt-get update
           echo -e "===== Installing dependencies ====="
-          sudo apt-get install patchelf gdb ccache libfuse2 build-essential gcc-7 -y
+          sudo apt-get install patchelf gdb ccache patchelf libfuse2 build-essential gcc-7 -y
       - name: Export GCC to gcc-7
         run: |
           echo -e "===== Setting up GCC environment variable ====="
