@@ -18,6 +18,7 @@ dependencies:
   - conda-forge::wrapt
   - conda-forge::psutil
   #- conda-forge::patchelf
+  - conda-forge::scons
   - conda-forge::pip
   - conda-forge::tqdm
   - pip:
