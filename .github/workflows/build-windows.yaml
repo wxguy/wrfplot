@@ -15,16 +15,22 @@ jobs:
         with:
           auto-activate-base: true
           activate-environment: ""
+          auto-update-conda: true
+      - name: Conda list
+        shell: pwsh
+        run: |
+          conda list
+          conda info
+          conda info --envs
       - name: Install wrfplot conda environment
+        shell: pwsh
         run: |
-          $CONDA\bin\conda env create -f environment.yml
-      - name: Conda info
-        run: |
-          $CONDA\bin\conda info
-          $CONDA\bin\conda info --envs
-          $CONDA\bin\conda list
+          conda env create -f environment.yml
+          conda activate pwsh
       - name: Running nuitka
+        shell: pwsh
         run: |
-          $CONDA_PREFIX\envs\wrfplot\bin\python build_exe.py
+          conda activate pwsh
+          python build_exe.py
       - name: Create installer
         uses: joncloud/makensis-action@v3.7
