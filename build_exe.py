@@ -54,6 +54,7 @@ if platform.system() == "Windows":
     pyproj_lib_src_dir = os.path.join(conda_prefix, "Library", "share", "proj")
     geos_dll_files = conda_prefix + "\\Lib\\Library\\bin\\geos*.dll"
     geos_trgt_dir = os.path.join("shapely", "DLLs", "\\")
+    compiler = "--mingw64"
 
 elif platform.system() == "Linux":
     output_dir = os.path.join(project_root, 'build', 'linux')
@@ -62,6 +63,7 @@ elif platform.system() == "Linux":
     pyproj_lib_src_dir = os.path.join(conda_prefix, "share", "proj")
     geos_dll_files = conda_prefix + "/lib/libgeos\*so.\*"
     geos_trgt_dir = "shapely/.libs/"
+    compiler = ""
 
 # Tested on Miniconda Python 3.10.4
 # This is the place one need to be carefull. For wrfplot project, netcdf, shapely and pyproj modules were not detected
@@ -93,6 +95,7 @@ cmd = ["python -m nuitka",  # Invoke Nutika using existing Python
        "--include-data-dir=wrfplot/data=data",  # Include data directory that are part of wrfplot project
        "--include-data-dir=wrfplot/colormaps/colormaps=colormaps/colormaps",
        "--include-data-dir=" + pyproj_lib_src_dir + "=" + pyproj_lib_trgt_dir,
+       compiler,
        # Include missing data files of pyproj module
        # "--include-data-file=" + geos_dll_files + "=" + geos_trgt_dir,   # Include libgeos* files to proper destination
        app_src_py_path]  # Actual file from which Nutika will take on
