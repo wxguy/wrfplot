@@ -14,9 +14,9 @@ jobs:
       - name: Download EnVar plugin for NSIS
         uses: carlosperate/download-file-action@v1.0.3
         with:
-        file-url: https://nsis.sourceforge.io/mediawiki/images/7/7f/EnVar_plugin.zip
-        file-name: envar_plugin.zip
-        location: ${{ github.workspace }}
+          file-url: https://nsis.sourceforge.io/mediawiki/images/7/7f/EnVar_plugin.zip
+          file-name: envar_plugin.zip
+          location: ${{ github.workspace }}
       - name: Extract EnVar plugin
         run: 7z x "${{ github.workspace }}/envar_plugin.zip" -o"C:\Program Files (x86)\NSIS"
       # Setup conda Python
