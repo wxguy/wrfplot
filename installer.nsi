@@ -8,7 +8,7 @@
 !define BITNESS "64"
 !define ARCH_TAG ".amd64"
 !define INSTALLER_NAME "wrfplot-windows-64bit.exe"
-!define PRODUCT_ICON "${PY_APP_DIR}\data\dist\wxguy.ico"
+!define PRODUCT_ICON "${PY_APP_DIR}\data\wxguy.ico"
 BrandingText 'WRFPLOT by WxGuy'
 
 ; Marker file to tell the uninstaller that it's a user installation
@@ -34,8 +34,8 @@ SetCompressor lzma
 ; Modern UI installer stuff
 !include "MUI2.nsh"
 !define MUI_ABORTWARNING
-!define MUI_ICON "${PY_APP_DIR}\data\dist\wxguy.ico"
-!define MUI_UNICON "${PY_APP_DIR}\data\dist\wxguy.ico"
+!define MUI_ICON "${PY_APP_DIR}\data\wxguy.ico"
+!define MUI_UNICON "${PY_APP_DIR}\data\wxguy.ico"
 
 ; UI pages
 !insertmacro MUI_PAGE_WELCOME
@@ -76,7 +76,7 @@ Section "!${PRODUCT_NAME}" sec_app
   ; Install shortcuts
   ; The output path becomes the working directory for shortcuts
   SetOutPath "%HOMEDRIVE%\%HOMEPATH%"
-    CreateShortCut "$SMPROGRAMS\wrfplot.lnk" "$INSTDIR\wrfplot.exe" "$INSTDIR\data\dist\wxguy.ico"
+    CreateShortCut "$SMPROGRAMS\wrfplot.lnk" "$INSTDIR\wrfplot.exe" "$INSTDIR\data\wxguy.ico"
   SetOutPath "$INSTDIR"
 
     DetailPrint "Setting up command-line launcher..."
