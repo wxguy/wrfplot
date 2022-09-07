@@ -2,7 +2,7 @@
 History
 =======
 
-v0.1.0 (2022-09-08)
+v0.1.0 (2022-09-07)
 ------------------------
 * Automated build process using GitHub actions
 * Documentation now lives at https://wrfplot.readthedocs.io/
