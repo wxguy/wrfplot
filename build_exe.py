@@ -190,6 +190,11 @@ def convertSeconds(seconds):
 def create_makeself():
     """ Create makeself self executable app distribution under Linux """
 
+    if not os.path.exists(makeself_path):
+        makeself = "makeself"
+    else:
+        makeself = "bash " + makeself_path
+
     if os.path.exists(os.path.join(output_dir, "wrfplot.run")):
         print("Deleting old 'wrfplot.run' file...")
         os.remove(os.path.join(output_dir, "wrfplot.run"))
@@ -210,8 +215,7 @@ def create_makeself():
         print("Creating Linux installer...")
         shutil.copy("installer.sh", output_dir)
         print("Executing makeself command to create archive...")
-        execute_cmd("bash " + makeself_path + " " + os.path.join(output_dir) + " " + os.path.join(output_dir,
-                                                                                                  "wrfplot-linux-64bit.run") + " wrfplot_Linux_Installer " + "./installer.sh")
+        execute_cmd(makeself + " " + os.path.join(output_dir) + " " + os.path.join(output_dir, "wrfplot-linux-64bit.run") + " wrfplot_Linux_Installer " + "./installer.sh")
         if os.path.exists(os.path.join(output_dir, "wrfplot.run")):
             print("Please find the final Linux installer at: " + os.path.join(output_dir, "wrfplot.run"))
         else:
@@ -330,7 +334,7 @@ def main():
             print("Using pyinstaller as backend for creating final executable...")
             execute_cmd("pyinstaller --noconfirm --distpath " + output_dir + " wrfplot.spec")
 
-        test_wrfplt_exe()
+        # test_wrfplt_exe()
         create_makeself()
 
 

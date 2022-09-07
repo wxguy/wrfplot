@@ -15,57 +15,47 @@ jobs:
         with:
           auto-activate-base: true
           activate-environment: ""
-      - name: Install dependencies
+          auto-update-conda: true
+      - name: Install Linux Dependencies
+        shell: bash -l {0}
         run: |
           # $CONDA is an environment variable pointing to the root of the miniconda directory
-          echo -e "===== Updating OS ====="
           sudo apt-get update
-          echo -e "===== Installing dependencies ====="
-          sudo apt-get install patchelf gdb ccache patchelf libfuse2 build-essential gcc-7 -y
-      - name: Export GCC to gcc-7
-        run: |
-          echo -e "===== Setting up GCC environment variable ====="
-          export CC=gcc-7
+          sudo apt-get install patchelf gdb ccache patchelf makeself libfuse2 build-essential gcc-7 -y
       - name: Install wrfplot conda environment
         shell: bash -l {0}
         run: |
-          echo -e "===== Installing conda environment ====="
-          $CONDA/bin/conda env create -f environment.yml
-      - name: Initialising conda shell
+          conda env create -f environment.yml
+      - name: Building Linux Executable
         shell: bash -l {0}
         run: |
-          conda init bash
-      - name: Activate wrfplot environment
-        shell: bash -l {0}
-        run: |
-          echo -e "===== Activating wrfplot environment ====="
           conda activate wrfplot
-      - name: Conda info
-        shell: bash -l {0}
-        run: |
-          echo -e "===== Listing conda info ====="
-          conda info
-          conda info --envs
-          conda list
-          echo "conda prefix is..."
-          echo $CONDA_PREFIX
-      - name: Running nuitka
-        shell: bash -l {0}
-        run: |
           export CC=gcc-7
-          echo -e "===== Executing nuitka to build Linux binary ====="
-          ls /usr/share/miniconda/envs/wrfplot/share
-          ls $CONDA_PREFIX/share/
-          export pyproj_dir=$(/usr/share/miniconda/envs/wrfplot/bin/python -c "import pyproj ; print(pyproj.datadir.get_data_dir())")
-          /usr/share/miniconda/envs/wrfplot/bin/python -m nuitka --assume-yes-for-downloads --follow-imports --output-dir=dist --standalone --python-flag=-OO --plugin-enable=numpy --show-scons --noinclude-default-mode=nofollow --include-package-data=pyproj --show-scons --show-modules --include-module=netCDF4.utils --include-data-dir=$pyproj_dir=pyproj/proj --include-data-dir=wrfplot/data=data wrfplot/wrfplot.py
+          #export pyproj_dir=$(/usr/share/miniconda/envs/wrfplot/bin/python -c "import pyproj ; print(pyproj.datadir.get_data_dir())")
+          #/usr/share/miniconda/envs/wrfplot/bin/python -m nuitka --assume-yes-for-downloads --follow-imports --output-dir=dist --standalone --python-flag=-OO --plugin-enable=numpy --show-scons --noinclude-default-mode=nofollow --include-package-data=pyproj --show-scons --show-modules --include-module=netCDF4.utils --include-data-dir=$pyproj_dir=pyproj/proj --include-data-dir=wrfplot/data=data wrfplot/wrfplot.py
           # --include-data-dir=$pyproj_dir=pyproj/proj 
-      - name: Copying necessary files at destination
-        run: |
-          echo -e "===== Creating directory at shapely destination ====="
-          mkdir -p dist/wrfplot.dist/shapely/.libs
-          echo -e "===== Copying shapely so files ====="
-          cp -rf dist/wrfplot.dist/libgeos*so.* dist/wrfplot.dist/shapely/.libs/
-      - name: Check final Linux binary
-        run: |
-          echo -e "===== Checkig if file build correctly ====="
-          dist/wrfplot.dist/wrfplot --version
+          python build_exe.py
+      #- name: Copying necessary files at destination
+      #  run: |
+      #    echo -e "===== Creating directory at shapely destination ====="
+      #    mkdir -p dist/wrfplot.dist/shapely/.libs
+      #    echo -e "===== Copying shapely so files ====="
+      #    cp -rf dist/wrfplot.dist/libgeos*so.* dist/wrfplot.dist/shapely/.libs/
+      #- name: Check final Linux binary
+      #  run: |
+      #    echo -e "===== Checkig if file build correctly ====="
+      #    dist/wrfplot.dist/wrfplot --version
+      - name: Generate Changelog from HISTORY file
+        run: sed -n '/v0/,/^$/{/^$/q;p;}' HISTORY.rst > ${{ github.workspace }}-CHANGELOG.txt
+      - name: Release Process
+        uses: softprops/action-gh-release@v1
+        if: startsWith(github.ref, 'refs/tags/')
+        with:
+          body_path: ${{ github.workspace }}-CHANGELOG.txt
+          files: |
+            build/linux/wrfplot-linux-64bit.run
+          # note you'll typically need to create a personal access token
+          # with permissions to create releases in the other repo
+          token: ${{ secrets.CUSTOM_GITHUB_TOKEN }}
+        env:
+          GITHUB_REPOSITORY: wxguy/wrfplot
