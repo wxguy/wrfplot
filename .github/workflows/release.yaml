@@ -38,7 +38,7 @@ jobs:
       - name: Extract EnVar plugin
         run: 7z x "${{ github.workspace }}/envar_plugin.zip" -o"C:\Program Files (x86)\NSIS"
         if: matrix.os == 'windows-latest'
-      - name: Install wrfplot conda environment on Windows
+      - name: Building on Windows
         shell: pwsh
         run: |
           conda env create -f environment.yml
@@ -46,8 +46,8 @@ jobs:
           python build_exe.py
       - name: Generate Changelog from HISTORY file
         run: sed -n '/v0/,/^$/{/^$/q;p;}' HISTORY.rst > ${{ github.workspace }}-CHANGELOG.txt
-        if: matrix.os == 'ubuntu-20.04'
       - name: Release Process
+        if: matrix.os == 'windows-latest'
         uses: softprops/action-gh-release@v1
         if: startsWith(github.ref, 'refs/tags/')
         with:
