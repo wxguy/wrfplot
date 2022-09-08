@@ -5,7 +5,7 @@ on: [push]
 jobs:
   build-linux:
     name: Building Linux binary
-    runs-on: [ubuntu-20.04, windows-latest]
+    runs-on: ubuntu-20.04
 
     steps:
       - name: checkout code
@@ -32,6 +32,12 @@ jobs:
           conda activate wrfplot
           export CC=gcc-7
           python build_exe.py
+  build-windows:
+    name: Building Windows setup file
+    runs-on: windows-latest
+    steps:
+      - name: checkout code
+        uses: actions/checkout@v2
       - name: Download EnVar plugin for NSIS
         uses: carlosperate/download-file-action@v1.0.3
         with:
@@ -50,6 +56,11 @@ jobs:
         run: |
           conda activate wrfplot
           python build_exe.py
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
       - name: Generate Changelog from HISTORY file
         run: sed -n '/v0/,/^$/{/^$/q;p;}' HISTORY.rst > ${{ github.workspace }}-CHANGELOG.txt
       - name: Release Process
