@@ -37,6 +37,7 @@ jobs:
           conda env create -f environment.yml
           conda activate wrfplot
           python build_exe.py
+        if: matrix.os == 'windows-latest'
       - name: Upload Windows Executable
         uses: actions/upload-artifact@v3
         if: matrix.os == 'windows-latest'
@@ -52,6 +53,7 @@ jobs:
           conda activate wrfplot
           export CC=gcc-7
           python build_exe.py
+        if: matrix.os == 'ubuntu-20.04'
       - name: Upload Windows Executable
         uses: actions/upload-artifact@v3
         if: matrix.os == 'ubuntu-20.04'
