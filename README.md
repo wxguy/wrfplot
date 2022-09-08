@@ -62,6 +62,19 @@ wrfplot --version
 Please refer to https://wrfplot.readthedocs.io for complete documentation on how to use `wrfplot` application.
 
 
+## TODO
+
+Add following command line options:
+
+* `--levels `   :   To plot upper level data as per user defined levels
+* `--cmap`      :   Use user provided colour map
+* `--contours`  :   Control contour levels
+* `--animation` :   Create animation for specific variable(s) in GIF for max compatibility
+* `--fig-format`:   Save image in specific file format
+* `--list-fig-format`   :   List all supported image file format
+* `--title`     :   Custom title for the plot
+* `--title-font-size`   :   Specify title font size
+
 ## Author
 
 J Sundar aka WxGuy (wrf.guy@gmail.com)
