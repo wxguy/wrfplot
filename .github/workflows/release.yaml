@@ -1,0 +1,79 @@
+name: "Build and Release"
+# This workflow is triggered on push with tag to the repository.
+on:
+  push:
+    tags:
+      - "v*"
+
+jobs:
+  build:
+    strategy:
+      matrix:
+        os: [ubuntu-20.04, windows-latest]
+
+    runs-on: ${{ matrix.os }}
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v2
+      - name: Setting up Miniconda
+        uses: conda-incubator/setup-miniconda@v2
+        with:
+          auto-activate-base: true
+          activate-environment: ""
+          auto-update-conda: true
+      - name: Downloading NSIS Plugin
+        uses: carlosperate/download-file-action@v1.1.1
+        with:
+          file-url: https://nsis.sourceforge.io/mediawiki/images/7/7f/EnVar_plugin.zip
+          file-name: envar_plugin.zip
+          location: ${{ github.workspace }}
+      - name: Installing EnVar Plugin
+        if: matrix.os == 'windows-latest'
+        run: 7z x "${{ github.workspace }}/envar_plugin.zip" -o"C:\Program Files (x86)\NSIS"
+      - name: Building Windows Executable
+        shell: pwsh
+        run: |
+          conda env create -f environment.yml
+          conda activate wrfplot
+          python build_exe.py
+      - name: Upload Windows Executable
+        uses: actions/upload-artifact@v3
+        if: matrix.os == 'windows-latest'
+        with:
+          name: wrfplot-windows-64bit.exe
+          path: build\windows\wrfplot-windows-64bit.exe
+      - name: Build Linux Binary
+        shell: bash -l {0}
+        run: |
+          sudo apt-get update
+          sudo apt-get install patchelf gdb ccache patchelf makeself libfuse2 build-essential gcc-7 -y
+          conda env create -f environment.yml
+          conda activate wrfplot
+          export CC=gcc-7
+          python build_exe.py
+      - name: Upload Windows Executable
+        uses: actions/upload-artifact@v3
+        if: matrix.os == 'ubuntu-20.04'
+        with:
+          name: wrfplot-linux-64bit.run
+          path: build/linux/wrfplot-linux-64bit.run
+      
+  release:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download Binaries
+        uses: actions/download-artifact@v3
+
+      - name: Display Downloaded Executables
+        run: ls -R
+
+      - name: Release Process
+        uses: "marvinpinto/action-automatic-releases@latest"
+        with:
+          repo_token: "${{ secrets.GITHUB_TOKEN }}"
+          prerelease: false
+          files: |
+            wrfplot-windows-64bit.exe
+            wrfplot-linux-64bit.run

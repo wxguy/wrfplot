@@ -1,4 +1,8 @@
-[![Documentation Status](https://readthedocs.org/projects/wrfplot/badge/?version=latest)](https://wrfplot.readthedocs.io/en/latest/?badge=latest)  ![Windows Build](https://github.com/wxguy/wrfplot/actions/workflows/release-windows.yaml/badge.svg)  ![Linux Build](https://github.com/wxguy/wrfplot/actions/workflows/release-linux.yaml/badge.svg)
+[![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
+
+[![Documentation Status](https://readthedocs.org/projects/wrfplot/badge/?version=latest)](https://wrfplot.readthedocs.io/en/latest/?badge=latest)  
+
+![Build and Release](https://github.com/wxguy/wrfplot/actions/workflows/release.yaml/badge.svg)
 
 ## About wrfplot
 
