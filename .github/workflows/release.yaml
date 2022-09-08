@@ -47,7 +47,6 @@ jobs:
       - name: Generate Changelog from HISTORY file
         run: sed -n '/v0/,/^$/{/^$/q;p;}' HISTORY.rst > ${{ github.workspace }}-CHANGELOG.txt
       - name: Release Process
-        if: matrix.os == 'windows-latest'
         uses: softprops/action-gh-release@v1
         if: startsWith(github.ref, 'refs/tags/')
         with:
