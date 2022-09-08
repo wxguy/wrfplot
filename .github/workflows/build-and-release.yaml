@@ -1,4 +1,4 @@
-name: "Build Linux installer for wrfplot"
+name: "Build Exectables for wrfplot"
 # This workflow is triggered on pushes to the repository.
 on: [push]
 
