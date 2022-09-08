@@ -1,0 +1,30 @@
+name: "Build and release wrfplot Linux exectables"
+# This workflow is triggered on pushes to the repository.
+on:
+  push:
+    tags:
+      - "v*"
+
+jobs:
+  build-linux:
+    runs-on: ubuntu-20.04
+    steps:
+      - name: checkout code
+        uses: actions/checkout@v2
+      - name: Setting up Miniconda
+        uses: conda-incubator/setup-miniconda@v2
+        with:
+          auto-activate-base: true
+          activate-environment: ""
+          auto-update-conda: true
+      #- name: Generate Changelog from HISTORY file
+      #  run: sed -n '/v0/,/^$/{/^$/q;p;}' HISTORY.rst > ${{ github.workspace }}-CHANGELOG.txt
+      - name: Release Process
+        uses: "marvinpinto/action-automatic-releases@latest"
+        with:
+          repo_token: "${{ secrets.GITHUB_TOKEN }}"
+          automatic_release_tag: "latest"
+          prerelease: false
+          files: |
+            LICENSE
+          # build/linux/wrfplot-linux-64bit.run
