@@ -3,13 +3,8 @@ name: "Build and release wrfplot exectables"
 on: [push]
 
 jobs:
-  build:
-    strategy:
-      matrix:
-        os: [ubuntu-20.04, windows-latest]
-
-    runs-on: ${{ matrix.os }}
-
+  build-linux:
+    runs-on: ubuntu-20.04
     steps:
       - name: checkout code
         uses: actions/checkout@v2
@@ -28,22 +23,6 @@ jobs:
           conda activate wrfplot
           export CC=gcc-7
           python build_exe.py
-        if: matrix.os == 'ubuntu-20.04'
-      - name: Building on Windows
-        uses: carlosperate/download-file-action@v1.0.3
-        with:
-          file-url: https://nsis.sourceforge.io/mediawiki/images/7/7f/EnVar_plugin.zip
-          file-name: envar_plugin.zip
-          location: ${{ github.workspace }}
-      - name: Extract EnVar plugin
-        run: 7z x "${{ github.workspace }}/envar_plugin.zip" -o"C:\Program Files (x86)\NSIS"
-        if: matrix.os == 'windows-latest'
-      - name: Building on Windows
-        shell: pwsh
-        run: |
-          conda env create -f environment.yml
-          conda activate wrfplot
-          python build_exe.py
       - name: Generate Changelog from HISTORY file
         run: sed -n '/v0/,/^$/{/^$/q;p;}' HISTORY.rst > ${{ github.workspace }}-CHANGELOG.txt
       - name: Release Process
@@ -53,7 +32,6 @@ jobs:
           body_path: ${{ github.workspace }}-CHANGELOG.txt
           files: |
             build/linux/wrfplot-linux-64bit.run
-            build/windows/wrfplot-windows-64bit.exe
           # note you'll typically need to create a personal access token
           # with permissions to create releases in the other repo
           token: ${{ secrets.CUSTOM_GITHUB_TOKEN }}
