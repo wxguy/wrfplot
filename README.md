@@ -1,4 +1,4 @@
-[![Documentation Status](https://readthedocs.org/projects/wrfplot/badge/?version=latest)](https://wrfplot.readthedocs.io/en/latest/?badge=latest)
+[![Documentation Status](https://readthedocs.org/projects/wrfplot/badge/?version=latest)](https://wrfplot.readthedocs.io/en/latest/?badge=latest)  ![Windows Build](https://github.com/wxguy/wrfplot/actions/workflows/release-windows.yaml/badge.svg)  ![Linux Build](https://github.com/wxguy/wrfplot/actions/workflows/release-linux.yaml/badge.svg)
 
 ## About wrfplot
 
