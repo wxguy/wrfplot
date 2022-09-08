@@ -54,7 +54,7 @@ jobs:
           export CC=gcc-7
           python build_exe.py
         if: matrix.os == 'ubuntu-20.04'
-      - name: Upload Windows Executable
+      - name: Upload Linux Executable
         uses: actions/upload-artifact@v3
         if: matrix.os == 'ubuntu-20.04'
         with:
