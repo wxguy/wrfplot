@@ -63,7 +63,9 @@ extensions = ['sphinx.ext.autodoc',
               'sphinx.ext.viewcode',
               'sphinx.ext.napoleon',
               'sphinx.ext.autosummary',
-              'sphinx.ext.imgconverter']
+              'sphinx.ext.imgconverter',
+              'sphinx.ext.intersphinx',
+              'sphinx.ext.mathjax']
 
 
 # Turn off code and image links for embedded mpl plots

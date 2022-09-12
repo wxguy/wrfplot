@@ -25,8 +25,8 @@ import io
 import os
 import sys
 from shutil import rmtree
-
-from setuptools import find_packages, setup, Command
+import glob
+from setuptools import find_packages, setup
 
 # Package meta-data.
 NAME = 'wrfplot'
@@ -34,13 +34,11 @@ DESCRIPTION = 'Command line application to plot WRF model output data'
 URL = 'https://github.com/wxguy/wrfplot'
 EMAIL = 'wrf.guy@gmail.com'
 AUTHOR = 'J Sundar'
-REQUIRES_PYTHON = '>=3.5.0'
+REQUIRES_PYTHON = '>=3.7.0'
 VERSION = None
-LICENSE = 'MIT'
+LICENSE = 'GNU General Public License v3 (GPLv3)'
 # What packages are required for this module to be executed?
-REQUIRED = [
-    'numpy', 'wrapt', 'cartopy', 'xarray', 'matplotlib', 'wrf-python',
-]
+REQUIRED = ['cartopy', 'xarray', 'matplotlib', 'wrf-python>=1.3', 'imageio' 'tqdm']
 
 here = os.path.abspath(os.path.dirname(__file__))
 
@@ -49,82 +47,88 @@ with io.open(os.path.join(here, 'README.md'), encoding='utf-8') as f:
 
 about = {}
 if not VERSION:
-    with open(os.path.join(here, NAME, '__version__.py')) as f:
+    with open(os.path.join(here, NAME, '_version.py')) as f:
         exec(f.read(), about)
 else:
     about['__version__'] = VERSION
 
 
-class UploadCommand(Command):
-    """Support setup.py upload."""
+def list_files(directory):
+    files = []
+    all_files = glob.glob(directory + '/**/*', recursive=True)
+    for _file in all_files:
+        if os.path.isfile(_file) and '.py' not in _file:
+            files.append(_file)
+    return files
 
-    description = 'Build and publish the package.'
-    user_options = []
 
-    @staticmethod
-    def status(s):
-        """Prints things in bold."""
-        print('\033[1m{0}\033[0m'.format(s))
+def _version():
+    from setuptools_scm.version import SEMVER_MINOR, guess_next_simple_semver, release_branch_semver_version
 
-    def initialize_options(self):
-        pass
+    def my_release_branch_semver_version(version):
+        v = release_branch_semver_version(version)
+        if v == version.format_next_version(guess_next_simple_semver, retain=SEMVER_MINOR):
+            return version.format_next_version(guess_next_simple_semver, fmt="{guessed}", retain=SEMVER_MINOR)
+        return v
 
-    def finalize_options(self):
-        pass
-
-    def run(self):
-        try:
-            self.status('Removing previous builds…')
-            rmtree(os.path.join(here, 'dist'))
-        except OSError:
-            pass
-
-        self.status('Building Source and Wheel (universal) distribution…')
-        os.system('{0} setup.py sdist bdist_wheel --universal'.format(sys.executable))
-
-        self.status('Uploading the package to PyPi via Twine…')
-        os.system('twine upload dist/*')
-
-        self.status('Pushing git tags…')
-        os.system('git tag v{0}'.format(about['__version__']))
-        os.system('git push --tags')
-
-        sys.exit()
+    return {
+        'version_scheme': my_release_branch_semver_version,
+        'local_scheme': 'no-local-version',
+    }
 
 
 setup(
     name=NAME,
     version=about['__version__'],
+    use_scm_version=_version,
+    setup_requires=['setuptools_scm'],
     description=DESCRIPTION,
     long_description=long_description,
     author=AUTHOR,
     author_email=EMAIL,
     python_requires=REQUIRES_PYTHON,
     url=URL,
+    keywords=["Scientific", "Engineering", "Atmospheric Science", "Weather Model", "Plotting", "Software Development", "Numerical Weather Prediction", "NWP"],
     py_modules=['wrfplot'],
 
     entry_points={
         'console_scripts': ['wrfplot=wrfplot.wrfplot:main'],
     },
     install_requires=REQUIRED,
-    include_package_data=True,
-    license=LICENSE,
+    # license=LICENSE,
     classifiers=[
         # Full list: https://pypi.python.org/pypi?%3Aaction=list_classifiers
-        'License :: OSI Approved :: GPLv3',
+        'License :: OSI Approved :: GNU General Public License v3 (GPLv3)'
         'Programming Language :: Python',
-        'Programming Language :: Python :: 3',
-        'Programming Language :: Python :: 3.5',
         'Programming Language :: Python :: 3.7',
         'Programming Language :: Python :: 3.8',
         'Programming Language :: Python :: 3.9',
         'Programming Language :: Python :: 3.10',
+        'Operating System :: Unix',
+        'Operating System :: Microsoft :: Windows',
         'Programming Language :: Python :: Implementation :: CPython',
     ],
-    packages=find_packages(
-        exclude=["*.tests", "*.tests.*", "tests.*", "tests"],),
+    packages=find_packages("wrfplot", exclude=['test', 'test.*'],),
+    include_package_data=True,
+    exclude_package_data={'': ['test']},
+    package_dir={'wrfplot': 'wrfplot'},
+    package_data={'wrfplot': ['colormaps/colormaps/cartocolors/*',
+                              'colormaps/colormaps/cmocean/*',
+                              'colormaps/colormaps/colorbrewer/*',
+                              'colormaps/colormaps/colorcet/*',
+                              'colormaps/colormaps/cubehelix/*',
+                              'colormaps/colormaps/ncar_ncl/*',
+                              'colormaps/colormaps/scientific/*',
+                              'colormaps/colormaps/sciviz/*',
+                              'colormaps/colormaps/tableau/*',
+                              'data/*', 'data/natural_earth/cultural/*',
+                              'data/natural_earth/physical/*', 'data/shape/*']},
+    # package_data={'wrfplot': list_files('wrfplot')},
     # $ setup.py publish support.
-    cmdclass={
-        'upload': UploadCommand,
+    # cmdclass={ 'upload': UploadCommand,},
+    project_urls={
+        "Bug Reports": "https://github.com/wxguy/wrfplot/issues",
+        "Source": "https://github.com/wxguy/wrfplot/",
+        "Documentation": "https://wrfplot.readthedocs.io"
     },
 )
