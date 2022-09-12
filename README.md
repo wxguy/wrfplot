@@ -1,6 +1,11 @@
 [![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
 
+[![Linux](https://svgshare.com/i/Zhy.svg)](https://svgshare.com/i/Zhy.svg) [![Windows](https://svgshare.com/i/ZhY.svg)](https://svgshare.com/i/ZhY.svg)
+
 [![Documentation Status](https://readthedocs.org/projects/wrfplot/badge/?version=latest)](https://wrfplot.readthedocs.io/en/latest/?badge=latest)
+
+
+[![PyPI Version](https://badge.fury.io/py/ansicolortags.svg)](https://pypi.python.org/pypi/wrfplot/)
 
 ![Build and Release](https://github.com/wxguy/wrfplot/actions/workflows/release-github.yaml/badge.svg)  ![PyPi Package](https://github.com/wxguy/wrfplot/actions/workflows/release-pip.yaml/badge.svg)
 
