@@ -1,5 +1,5 @@
-name: "Build and Release"
-# This workflow is triggered on push with tag to the repository.
+name: "Github Build"
+
 on:
   push:
     tags:

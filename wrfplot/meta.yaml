@@ -1,0 +1,53 @@
+{% set name = "wrfplot" %}
+{% set version = "0.2.2" %}
+
+package:
+  name: {{ name|lower }}
+  version: {{ version }}
+
+source:
+  url: https://pypi.io/packages/source/{{ name[0] }}/{{ name }}/wrfplot-{{ version }}.tar.gz
+  sha256: 8764102fb26b328f107f71f8444a97a5feb7dcdec34d93b2a2b78517a90a2171
+
+build:
+  entry_points:
+    - wrfplot=wrfplot.wrfplot:main
+  noarch: python
+  script: {{ PYTHON }} -m pip install . -vv
+  number: 0
+
+requirements:
+  host:
+    - python >=3.7
+    - setuptools-scm
+    - pip
+  run:
+    - python >=3.7
+    - cartopy
+    - xarray
+    - matplotlib-base
+    - wrf-python >=1.3
+    - imageio
+    - tqdm
+
+test:
+  imports:
+    - colormaps
+  commands:
+    - pip check
+    - wrfplot --help
+  requires:
+    - pip
+
+about:
+  home: https://github.com/wxguy/wrfplot
+  summary: Command line application to plot WRF model output data
+  dev_url: https://github.com/wxguy/wrfplot/
+  license: GPL-3.0 & GPL-1.0-or-later
+  license_file:
+    - LICENSE
+    - wrfplot/colormaps/colormaps/ncar_ncl/Copyright
+
+extra:
+  recipe-maintainers:
+    - wxguy

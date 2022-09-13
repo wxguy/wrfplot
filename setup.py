@@ -38,7 +38,7 @@ REQUIRES_PYTHON = '>=3.7.0'
 VERSION = None
 LICENSE = 'GNU General Public License v3 (GPLv3)'
 # What packages are required for this module to be executed?
-REQUIRED = ['cartopy', 'xarray', 'matplotlib', 'wrf-python>=1.3', 'imageio' 'tqdm']
+REQUIRED = ['cartopy', 'xarray', 'matplotlib', 'wrf-python>=1.3', 'imageio', 'tqdm', 'netcdf4']
 
 here = os.path.abspath(os.path.dirname(__file__))
 

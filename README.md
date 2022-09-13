@@ -4,7 +4,6 @@
 
 [![Documentation Status](https://readthedocs.org/projects/wrfplot/badge/?version=latest)](https://wrfplot.readthedocs.io/en/latest/?badge=latest)
 
-
 [![PyPI Version](https://badge.fury.io/py/ansicolortags.svg)](https://pypi.python.org/pypi/wrfplot/)
 
 ![Build and Release](https://github.com/wxguy/wrfplot/actions/workflows/release-github.yaml/badge.svg)  ![PyPi Package](https://github.com/wxguy/wrfplot/actions/workflows/release-pip.yaml/badge.svg)
