@@ -92,7 +92,7 @@ setup(
     py_modules=['wrfplot'],
 
     entry_points={
-        'console_scripts': ['wrfplot=wrfplot:main'],
+        'console_scripts': ['wrfplot=wrfplot.wrfplot:main'],
     },
     install_requires=REQUIRED,
     # license=LICENSE,
