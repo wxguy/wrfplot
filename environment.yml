@@ -6,7 +6,6 @@ channels:
   - defaults
 dependencies:
   - python=3.10
-  # - conda-forge::gcc_linux-64=8.5.0
   - conda-forge::libpython-static
   - conda-forge::wrf-python=1.3.4
   - conda-forge::netcdf4
@@ -17,11 +16,12 @@ dependencies:
   - conda-forge::tqdm
   - conda-forge::wrapt
   - conda-forge::psutil
-  #- conda-forge::patchelf
+  # - conda-forge::patchelf
   - conda-forge::scons
   - conda-forge::pip
+  - conda-forge::black  # use it only for code formatting. `black /path/to/python/package`
   - pip:
     - sphinx
     - sphinx_rtd_theme
-    - pyinstaller
+    # - pyinstaller  # Not required as of now as nuitka works fine on Linux and Windows
     

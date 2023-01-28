@@ -4,6 +4,14 @@ History
 
 v0.1.0 (2022-09-07)
 ------------------------
+* Cartopy no more would download shapefile from internet
+* Fixed bug that caused plotting of upper atmospheric data to fail
+* Added test script for automated testing
+* No more crashes when plotting multiple variables (both surface and upper atmosphere data)
+* Refer the Documentation at https://wrfplot.readthedocs.io/
+
+v0.1.0 (2022-09-07)
+------------------------
 * Automated build process using GitHub actions
 * Documentation now lives at https://wrfplot.readthedocs.io/
 

@@ -19,7 +19,7 @@ You should have received a copy of the GNU General Public License
 along with wrfplot. If not, see <http://www.gnu.org/licenses/>.
 """
 
-__author__ = 'J Sundar (wrf.guy@gmail.com)'
+__author__ = "J Sundar (wrf.guy@gmail.com)"
 
 import os
 import argparse
@@ -29,7 +29,7 @@ import colormaps as cmaps
 
 
 def dir_path(path):
-    """ Check if path provided is valid
+    """Check if path provided is valid
 
     Args:
         path (str): Path to directory
@@ -39,18 +39,20 @@ def dir_path(path):
     """
 
     # Convert Linux's '~' to absolute path to make it workable
-    if path.startswith('~'):
+    if path.startswith("~"):
         path = os.path.expanduser(path)
     previous_dir = os.path.dirname(path)
     # Either path to directory or one directory up should be available for saving images
     if os.path.isdir(path) or os.path.isdir(previous_dir):
         return path
     else:
-        raise argparse.ArgumentTypeError(f"Input path provided '{path}' is not a valid directory...")
+        raise argparse.ArgumentTypeError(
+            f"Input path provided '{path}' is not a valid directory..."
+        )
 
 
 def file_path(path):
-    """ Validate if input file provided exist
+    """Validate if input file provided exist
 
     Args:
         path: Path to input file
@@ -62,11 +64,13 @@ def file_path(path):
     if os.path.isfile(path):
         return path
     else:
-        raise argparse.ArgumentTypeError(f"Input path provided '{path}' is not a valid file...")
+        raise argparse.ArgumentTypeError(
+            f"Input path provided '{path}' is not a valid file..."
+        )
 
 
 def validate_vars(input_vars):
-    """ Validate user provided input variables and return only variables that are supported by the application
+    """Validate user provided input variables and return only variables that are supported by the application
 
     Args:
         input_vars (list): List of variables for plotting
@@ -78,45 +82,57 @@ def validate_vars(input_vars):
     final_vars = []
     non_supported = []
     config = configparser.ConfigParser()
-    config.read(os.path.join(utils.data_dir(), 'wrf_variables.ini'))
+    config.read(os.path.join(utils.data_dir(), "wrf_variables.ini"))
     # Check if input variable contain multiple paramters
-    if ',' not in input_vars:
+    if "," not in input_vars:
         if input_vars in config.sections():
             return input_vars
         else:
-            raise argparse.ArgumentTypeError(f"Input variable(s) provided '{input_vars}' is not valid...")
+            raise argparse.ArgumentTypeError(
+                f"Input variable(s) provided '{input_vars}' is not valid..."
+            )
     # Split the variables in to list and check for
-    vars = input_vars.split(',')
+    vars = input_vars.split(",")
     for var in vars:
         if var in config.sections():
             final_vars.append(var)
         else:
             non_supported.append(var)
     if not final_vars:
-        raise argparse.ArgumentTypeError(f"Input variable(s) provided '{input_vars}' is not valid...")
+        raise argparse.ArgumentTypeError(
+            f"Input variable(s) provided '{input_vars}' is not valid..."
+        )
     if non_supported:
-        print(f"ArugmentWarning: variable(s)", ','.join(non_supported), 'are not supported. Skipping..')
+        print(
+            f"ArugmentWarning: variable(s)",
+            ",".join(non_supported),
+            "are not supported. Skipping..",
+        )
+
 
     return final_vars
 
 
 def list_vars():
-    """ List supported variable names on terminal
-    """
+    """List supported variable names on terminal"""
 
     config = configparser.ConfigParser()
-    config.read(os.path.join(utils.data_dir(), 'wrf_variables.ini'))
+    config.read(os.path.join(utils.data_dir(), "wrf_variables.ini"))
     print("\n****    ****    ****    ****    ****    ****    ****")
-    print("Variables starting with 'u_' are upper air variable availabe at 925, 850, 700, 600, 500, 400, 300 and 200 hPa heights...")
+    print(
+        "Variables starting with 'u_' are upper air variable availabe at 925, 850, 700, 600, 500, 400, 300 and 200 hPa heights..."
+    )
     print("****    ****    ****    ****    ****    ****    ****\n")
     for var in config.sections():
-        print("Variable " + utils.quote(var), "  --> " + config.get(var, "title") + ' (' + config.get(var, "unit") + ')')
+        print(
+            "Variable " + utils.quote(var),
+            "  --> " + config.get(var, "title") + " (" + config.get(var, "unit") + ")",
+        )
     print("")
 
 
 def list_cmaps():
-    """ Print list of available colormaps on terminal
-    """
+    """Print list of available colormaps on terminal"""
     cmap_methods = dir(cmaps)
     print(cmap_methods)
     """

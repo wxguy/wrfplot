@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-__author__ = 'J Sundar (wrf.guy@gmail.com)'
+__author__ = "J Sundar (wrf.guy@gmail.com)"
 
 """Make python treat directory as package
 
@@ -22,10 +22,10 @@ referred.
 """
 import sys
 import os
+
 # Ensure that package directory is added in to system path so that it works on
 # development and post install mode
 sys.path.append(os.path.dirname(os.path.realpath(__file__)))
 sys.path.append(os.path.join(os.path.dirname(os.path.realpath(__file__)), os.pardir))
 
-name = 'wrfplot'
-
+name = "wrfplot"

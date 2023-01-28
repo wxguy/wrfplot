@@ -23,7 +23,7 @@ import numpy as np
 
 
 def wind_spddir_to_uv(wspd, wdir):
-    """ calculated the u and v wind components from wind speed and direction
+    """calculated the u and v wind components from wind speed and direction
 
     Args:
         wspd (ndarray): wind speed
@@ -34,7 +34,7 @@ def wind_spddir_to_uv(wspd, wdir):
         v (ndarray): v wind component
     """
 
-    rad = 4.0 * np.arctan(1) / 180.
+    rad = 4.0 * np.arctan(1) / 180.0
     u = -wspd * np.sin(rad * wdir)
     v = -wspd * np.cos(rad * wdir)
 
@@ -42,7 +42,7 @@ def wind_spddir_to_uv(wspd, wdir):
 
 
 def wind_uv_to_dir(U, V):
-    """ Calculates the wind direction from the u and v component of wind.
+    """Calculates the wind direction from the u and v component of wind.
 
     Takes into account the wind direction coordinates is different than the
     trig unit circle coordinate. If the wind direction is 360 then returns zero
@@ -78,7 +78,7 @@ def wind_uv_to_spd(U, V):
 
 
 def pa_to_hpa(pres):
-    """ Convert pa to hPa
+    """Convert pa to hPa
 
     Args:
         pres (ndarray): Pressure in (Pa)
@@ -92,7 +92,7 @@ def pa_to_hpa(pres):
 
 
 def k_to_c(tempk):
-    """ Convert kelvin to celcius
+    """Convert kelvin to celcius
 
     Args:
         tempk (ndarray): Temp in deg (K)
@@ -106,7 +106,7 @@ def k_to_c(tempk):
 
 
 def k_to_f(tempk):
-    """ Convert kelvin to fahreinheit
+    """Convert kelvin to fahreinheit
 
     Args:
         tempk (ndarray): Temp in deg (K)
@@ -116,12 +116,12 @@ def k_to_f(tempk):
     """
 
     tempc = k_to_c(tempk)
-    tempf = tempc * (9. / 5.) + 32.
+    tempf = tempc * (9.0 / 5.0) + 32.0
     return tempf
 
 
 def c_to_f(tempc):
-    """ Convert deg Cencius to Fahreinheit
+    """Convert deg Cencius to Fahreinheit
 
     Args:
         tempc (ndarray): Temp in deg (C)
@@ -130,12 +130,12 @@ def c_to_f(tempc):
         ndarrary: Temp in (F)
     """
 
-    tempf = tempc * (9. / 5.) + 32.
+    tempf = tempc * (9.0 / 5.0) + 32.0
     return tempf
 
 
 def ms_to_kts(spd):
-    """ Convert ms^-1 to Kts
+    """Convert ms^-1 to Kts
 
     Args:
         spd (ndarray): Speed in (ms^-1)
@@ -149,7 +149,7 @@ def ms_to_kts(spd):
 
 
 def mm_to_in(ppn):
-    """ Convert mm to inch
+    """Convert mm to inch
 
     Args:
         ppn (ndarray): Precipitation in (mm)
@@ -163,7 +163,7 @@ def mm_to_in(ppn):
 
 
 def theta_to_temp(theta, totalp):
-    """ Convert data from theta to temperature
+    """Convert data from theta to temperature
 
     Args:
         theta (ndarray): Potential temperature (K)
@@ -173,6 +173,8 @@ def theta_to_temp(theta, totalp):
         ndarrary: Temperature (K)
     """
 
-    tempsfac = ((totalp * 0.01) / 1000.) ** (8.314462618 / 1004.)  # factor to multiply theta by
-    temps = (theta * tempsfac)
+    tempsfac = ((totalp * 0.01) / 1000.0) ** (
+        8.314462618 / 1004.0
+    )  # factor to multiply theta by
+    temps = theta * tempsfac
     return temps

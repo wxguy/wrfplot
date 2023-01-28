@@ -19,7 +19,7 @@ You should have received a copy of the GNU General Public License
 along with wrfplot. If not, see <http://www.gnu.org/licenses/>.
 """
 
-__author__ = 'J Sundar (wrf.guy@gmail.com)'
+__author__ = "J Sundar (wrf.guy@gmail.com)"
 
 import numpy as np
 import matplotlib.pyplot as plt
@@ -29,7 +29,7 @@ import colormaps as cmaps
 
 
 def get_cmap(name):
-    """ Get colour map for a specific string name
+    """Get colour map for a specific string name
     Args:
         name (str): Name of the colour map
 
@@ -48,38 +48,63 @@ def get_cmap(name):
 
 
 # These are the list of projections supported by cartopy module
-cartopy_proj = ['Mercator', 'PlateCarree', 'LambertConformal', 'LambertCylindrical', 'Miller', 'Mollweide',
-                'Orthographic', 'Robinson', 'Stereographic', 'TransverseMercator', 'InterruptedGoodeHomolosine',
-                'RotatedPole', 'OSGB', 'EuroPP', 'Geostationary', 'Gnomonic', 'NorthPolarStereo', 'OSNI',
-                'SouthPolarStereo']
+cartopy_proj = [
+    "Mercator",
+    "PlateCarree",
+    "LambertConformal",
+    "LambertCylindrical",
+    "Miller",
+    "Mollweide",
+    "Orthographic",
+    "Robinson",
+    "Stereographic",
+    "TransverseMercator",
+    "InterruptedGoodeHomolosine",
+    "RotatedPole",
+    "OSGB",
+    "EuroPP",
+    "Geostationary",
+    "Gnomonic",
+    "NorthPolarStereo",
+    "OSNI",
+    "SouthPolarStereo",
+]
 
 
 def list_proj():
     # https://www.icsm.gov.au/education/fundamentals-mapping/projections/commonly-used-map-projections
     # https://pro.arcgis.com/en/pro-app/2.8/help/mapping/properties/plate-carree.htm
-    print("merc\t: 'Mercator'. Best Used in areas around the Equator and for marine navigation")
-    print("pltcre\t: 'PlateCarree'. Used for simple portrayals of the world or regions with minimal geographic data and those not requiring accurate areas.")
-    print("lc: 'LambertConformal'. Best suitable for mid-latitudes e.g. USA, Europe and Australia")
-    print("stc\t: 'Stereographic'. Best used in areas over the Poles or for small scale continental mapping")
+    print(
+        "merc\t: 'Mercator'. Best Used in areas around the Equator and for marine navigation"
+    )
+    print(
+        "pltcre\t: 'PlateCarree'. Used for simple portrayals of the world or regions with minimal geographic data and those not requiring accurate areas."
+    )
+    print(
+        "lc: 'LambertConformal'. Best suitable for mid-latitudes e.g. USA, Europe and Australia"
+    )
+    print(
+        "stc\t: 'Stereographic'. Best used in areas over the Poles or for small scale continental mapping"
+    )
 
     return True
 
 
 def quote(_str):
-    """ Quote a give string
+    """Quote a give string
 
     Args:
         _str (str): String which need to be quoted
 
     Returns:
         str: Quoted argument as string
-     """
+    """
 
     return '"{}"'.format(_str)
 
 
 def get_auto_resolution(data):
-    """ Find optimum multiplication factor to extract correct amount of data from numpy array
+    """Find optimum multiplication factor to extract correct amount of data from numpy array
 
     Args:
         data (ndarray): Any numpy array
@@ -98,7 +123,7 @@ def get_auto_resolution(data):
 
 
 def get_auto_range_calc(max, min, step):
-    """ Calculate range of data according to input data and not list
+    """Calculate range of data according to input data and not list
 
     Args:
         max: Max value of data
@@ -114,7 +139,7 @@ def get_auto_range_calc(max, min, step):
 
 
 def dir_to_list_files(path):
-    """ Function to return list of files for a given directory
+    """Function to return list of files for a given directory
 
     Args:
         path (str): Path to directory or file(s) or file
@@ -129,13 +154,13 @@ def dir_to_list_files(path):
         for _file in _files:
             _in_files.append(os.path.join(path, _file))
     else:
-        _in_files = path.split(',')
+        _in_files = path.split(",")
 
     return _in_files
 
 
 def get_auto_clevel(data, scale=12, slp=False):
-    """ Calculate automatic clevels from input data
+    """Calculate automatic clevels from input data
 
     Args:
         data (ndarray): Input data in numpy format
@@ -163,7 +188,7 @@ def get_auto_clevel(data, scale=12, slp=False):
 
 
 def c_level_ascending(c_level):
-    """ Make the contour level in ascending form
+    """Make the contour level in ascending form
 
     Args:
         c_level (list): List containing values in assorted order
@@ -178,7 +203,7 @@ def c_level_ascending(c_level):
 
 
 def internet():
-    """ Check if internet exist on a host machine by pinging google domain
+    """Check if internet exist on a host machine by pinging google domain
 
     Returns:
         bool: True if internet exist or else False
@@ -196,9 +221,9 @@ def internet():
 
 
 def data_dir():
-    """ Get data directory
+    """Get data directory
 
     Returns:
         str: Path to data directory
-     """
-    return os.path.join(os.path.dirname(__file__), 'data')
+    """
+    return os.path.join(os.path.dirname(__file__), "data")
