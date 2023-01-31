@@ -18,7 +18,7 @@ jobs:
         pip install setuptools wheel twine setuptools_scm build
     - name: Build Package
       run: |
-        python setup.py sdist
+        python -m build --sdist
     - name: Publish to PyPi
       uses: pypa/gh-action-pypi-publish@release/v1.5
       with:
