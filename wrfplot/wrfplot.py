@@ -52,11 +52,14 @@ import utils
 import plot
 import convert
 import warnings
+from importlib.metadata import version, PackageNotFoundError
+
 try:
-    from . import _version
-except ImportError:
-    import _version
-__version__ = _version.get_versions()['version']
+    __version__ = version("wrfplot")
+except PackageNotFoundError:
+    # package is not installed
+    pass
+
 import matplotlib
 matplotlib.use("agg")
 warnings.filterwarnings("ignore", module="matplotlib")

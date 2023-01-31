@@ -2,7 +2,18 @@
 History
 =======
 
-v0.3.1 (2023-01-31)
+v0.3.3 (2023-01-31)
+------------------------
+* Updated pyproject.toml to make use of "build" module (finding it much simpler to use)
+* Fix for rub time versioning
+* Removed setup.cfg file from source
+* Removed versioneer as dependency
+
+v0.3.2 (2023-01-31)
+------------------------
+Not released. Due to various internal bugs.
+
+v0.3.1 (2023-01-30)
 ------------------------
 * Shifted compilation backend to pyinstaller for automatic release process
 * Fix for colormaps module to work with latest version of matplotlib

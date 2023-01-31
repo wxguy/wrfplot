@@ -27,7 +27,13 @@ import sys
 from shutil import rmtree
 import glob
 from setuptools import find_packages, setup
-import versioneer
+#import versioneer
+
+"""
+versioneer.versionfile_build = 'wrfplot/_version.py'
+versioneer.tag_prefix = 'v' # tags are like v1.2.0
+versioneer.parentdir_prefix = 'wrfplot-' # dirname like 'myproject-1.2.0'
+"""
 
 # Package meta-data.
 NAME = 'wrfplot'
@@ -62,29 +68,11 @@ def list_files(directory):
             files.append(_file)
     return files
 
-
-def _version():
-    from setuptools_scm.version import SEMVER_MINOR, guess_next_simple_semver, release_branch_semver_version
-
-    def my_release_branch_semver_version(version):
-        v = release_branch_semver_version(version)
-        if v == version.format_next_version(guess_next_simple_semver, retain=SEMVER_MINOR):
-            return version.format_next_version(guess_next_simple_semver, fmt="{guessed}", retain=SEMVER_MINOR)
-        return v
-
-    return {
-        'version_scheme': my_release_branch_semver_version,
-        'local_scheme': 'no-local-version',
-    }
-
-
 setup(
     name=NAME,
-    # version=about['__version__'],
-    version=versioneer.get_version(),
-    cmdclass=versioneer.get_cmdclass(),
-    # use_scm_version=_version,
-    # setup_requires=['setuptools_scm'],
+    version=about['__version__'],
+    use_scm_version={'version_scheme': 'python-simplified-semver'},
+    setup_requires=['setuptools_scm'],
     description=DESCRIPTION,
     long_description=long_description,
     author=AUTHOR,
