@@ -2,7 +2,15 @@
 History
 =======
 
-v0.1.0 (2022-09-07)
+v0.3.1 (2023-01-31)
+------------------------
+* Shifted compilation backend to pyinstaller for automatic release process
+* Fix for colormaps module to work with latest version of matplotlib
+* Included versioneer for managing app version
+* Fix for crash while including frameon parameter with latest version of matplotlib
+* Refer the Documentation at https://wrfplot.readthedocs.io/
+
+v0.2.7 (2022-09-07)
 ------------------------
 * Cartopy no more would download shapefile from internet
 * Fixed bug that caused plotting of upper atmospheric data to fail

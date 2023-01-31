@@ -1,5 +1,7 @@
 # conda env create -f environment.yml
-# conda env remove -n ENV_NAME
+# conda activate wrfplot
+# conda env remove -n wrfplot
+
 name: wrfplot
 channels:
   - conda-forge
@@ -11,15 +13,19 @@ dependencies:
   - conda-forge::netcdf4
   - conda-forge::cartopy
   - conda-forge::imageio
-  - conda-forge::nuitka=0.8.4
+  - conda-forge::nuitka
   - conda-forge::ordered-set
   - conda-forge::tqdm
   - conda-forge::wrapt
   - conda-forge::psutil
   # - conda-forge::patchelf
   - conda-forge::scons
+  - conda-forge::shapely
   - conda-forge::pip
   - conda-forge::black  # use it only for code formatting. `black /path/to/python/package`
+  - conda-forge::nsis
+  - conda-forge::pyinstaller
+  - conda-forge::versioneer
   - pip:
     - sphinx
     - sphinx_rtd_theme

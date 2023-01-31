@@ -1,10 +1,20 @@
 [build-system]
-requires = ["setuptools>=45", "setuptools_scm[toml]>=6.2", "wheel"]
+#requires = ["setuptools>=45", "setuptools_scm[toml]>=6.2", "wheel"]
+requires = ["setuptools>=45", "versioneer[toml]", "wheel"]
 build-backend = "setuptools.build_meta"
 
-[tool.setuptools_scm]
-write_to = "wrfplot/_version.py"
-version_scheme = "python-simplified-semver"
+#[tool.setuptools_scm]
+#write_to = "wrfplot/_version.py"
+#version_scheme = "python-simplified-semver"
+
+[tool.versioneer]
+VCS = "git"
+style = "pep440"
+versionfile_source = "wrfplot/_version.py"
+versionfile_build = "wrfplot/_version.py"
+tag_prefix = ""
+parentdir_prefix = "wrfplot-"
+
 
 [project]
 dynamic = ["version",]

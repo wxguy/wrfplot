@@ -27,6 +27,7 @@ import sys
 from shutil import rmtree
 import glob
 from setuptools import find_packages, setup
+import versioneer
 
 # Package meta-data.
 NAME = 'wrfplot'
@@ -79,9 +80,11 @@ def _version():
 
 setup(
     name=NAME,
-    version=about['__version__'],
-    use_scm_version=_version,
-    setup_requires=['setuptools_scm'],
+    # version=about['__version__'],
+    version=versioneer.get_version(),
+    cmdclass=versioneer.get_cmdclass(),
+    # use_scm_version=_version,
+    # setup_requires=['setuptools_scm'],
     description=DESCRIPTION,
     long_description=long_description,
     author=AUTHOR,
@@ -121,8 +124,8 @@ setup(
                               'colormaps/colormaps/scientific/*',
                               'colormaps/colormaps/sciviz/*',
                               'colormaps/colormaps/tableau/*',
-                              'data/*', 'data/natural_earth/cultural/*',
-                              'data/natural_earth/physical/*', 'data/shape/*']},
+                              'data/*', 'data/shapefiles/natural_earth/cultural/*',
+                              'data/shapefiles/natural_earth/physical/*', 'data/shape/*']},
     # package_data={'wrfplot': list_files('wrfplot')},
     # $ setup.py publish support.
     # cmdclass={ 'upload': UploadCommand,},

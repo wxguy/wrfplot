@@ -36,7 +36,7 @@ jobs:
         run: |
           conda env create -f environment.yml
           conda activate wrfplot
-          python build_exe.py
+          python build_exe.py pyinstaller
         if: matrix.os == 'windows-latest'
       - name: Upload Windows Executable
         uses: actions/upload-artifact@v3
@@ -52,7 +52,7 @@ jobs:
           conda env create -f environment.yml
           conda activate wrfplot
           export CC=gcc-7
-          python build_exe.py
+          python build_exe.py pyinstaller
         if: matrix.os == 'ubuntu-20.04'
       - name: Upload Linux Executable
         uses: actions/upload-artifact@v3

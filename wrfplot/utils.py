@@ -23,6 +23,7 @@ __author__ = "J Sundar (wrf.guy@gmail.com)"
 
 import numpy as np
 import matplotlib.pyplot as plt
+from matplotlib import cm
 import os
 import socket
 import colormaps as cmaps
@@ -36,13 +37,20 @@ def get_cmap(name):
     Returns:
         cmap: Maplotlib's cmap instance
     """
+    all_cmap = dir(cmaps)
+    if name in all_cmap:
+        getattr(cmaps, name)
 
     if isinstance(name, list):
         return name
     try:
         cmap = getattr(cmaps, name)
+        #cmap = getattr(cmaps, name)
+        # cm.get_cmap("Spectral")
     except AttributeError:
-        cmap = cmaps.gui_default
+        # cmap = cmaps.gui_default
+        cmap = cm.get_cmap('rainbow')
+        # cm.get_cmap('rainbow')
 
     return cmap
 

@@ -26,7 +26,7 @@ import platform
 import psutil
 import shutil
 from shutil import which
-from wrfplot._version import __version__
+from wrfplot import __version__
 from wrfplot.utils import quote
 
 # Define variables that would be used at later stage
@@ -55,6 +55,7 @@ if platform.system() == "Windows":
     geos_dll_files = conda_prefix + "\\Lib\\Library\\bin\\geos*.dll"
     geos_trgt_dir = os.path.join("shapely", "DLLs", "\\")
     compiler = "--mingw64"
+    nutika_exe_name = 'wrfplot.exe'  # os.path.join(output_dir, 'wrfplot.dist', 'wrfplot.exe')
 
 elif platform.system() == "Linux":
     output_dir = os.path.join(project_root, 'build', 'linux')
@@ -64,6 +65,7 @@ elif platform.system() == "Linux":
     geos_dll_files = conda_prefix + "/lib/libgeos\*so.\*"
     geos_trgt_dir = "shapely/.libs/"
     compiler = ""
+    nutika_exe_name =  'wrfplot' #os.path.join(output_dir, 'wrfplot.dist', 'wrfplot')
 
 # Tested on Miniconda Python 3.10.4
 # This is the place one need to be carefull. For wrfplot project, netcdf, shapely and pyproj modules were not detected
@@ -83,6 +85,7 @@ cmd = ["python -m nuitka",  # Invoke Nutika using existing Python
        "--show-scons",  # Show output of scon module. Required for reporting bugs at GitHub
        "--show-modules",  # Provide a final summary on included modules
        "--include-module=netCDF4.utils",
+       "--include-module=cftime._strptime",
        # Add necessary modules not included by Nutika. You will get import module error after compilation only
        "--include-module=colormaps",  # Include missing colormaps module
        "--include-package-data=pyproj",  # Add missing data files of modules that are reported during run time
@@ -279,6 +282,8 @@ def create_nsis_installer():
     if platform.system() == 'Windows':
         print("Still work in progress...")
         nsis = os.path.join("C:\\", "Program Files (x86)", "NSIS", "makensis.exe")
+        if not os.path.exists(nsis):
+            nsis = "makensis.exe"
         nsi_installer_path = "installer.nsi"
         print("Executing ==>", os.path.join(quote(nsis)) + " " + nsi_installer_path)
         # print(os.path.join(quote(nsis)) + " " + nsi_installer_path)
@@ -315,9 +320,17 @@ def check_linux_exes():
 def main():
     if platform.system() == "Windows":
         print("Creating distribution files under Windows...\n\n")
-        create_win_exe()
-        copy_files()
-        create_nsis_installer()
+        if compile_module == 'nuitka':
+            create_win_exe()
+            copy_files()
+            create_nsis_installer()
+        else:
+            print("Using pyinstaller as backend for creating final executable...")
+            execute_cmd("pyinstaller --noconfirm --distpath " + output_dir + " wrfplot.spec")
+            if os.path.exists(os.path.join("build", "windows", "wrfplot", 'wrfplot.exe')): 
+                print("wrfplot.exe successfully created at :", os.path.exists(os.path.join("build", "windows", "wrfplot", 'wrfplot.exe')))
+                print("Creating setup file using NSIS...")
+                create_nsis_installer()
 
     elif platform.system() == "Linux":
         # execute_cmd("pyinstaller --noconfirm --distpath " + pyinst_dest_path + " wrfplot.spec")

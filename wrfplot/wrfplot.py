@@ -51,10 +51,13 @@ import fileio
 import utils
 import plot
 import convert
-from _version import __version__
 import warnings
+try:
+    from . import _version
+except ImportError:
+    import _version
+__version__ = _version.get_versions()['version']
 import matplotlib
-
 matplotlib.use("agg")
 warnings.filterwarnings("ignore", module="matplotlib")
 warnings.filterwarnings("ignore", module="datetime")
@@ -346,6 +349,7 @@ class Wrfplot(object):
             plot_map.plot_var()
         except Exception as err:
             tqdm.write(str(err))
+            tqdm.write(traceback.format_exc())
             exc_type, exc_obj, exc_tb = sys.exc_info()
             fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
             tqdm.write(
@@ -471,7 +475,7 @@ def main():
                     wrfplt.plot_variables()
                 print("Plotting process completed...\n")
             except Exception as e:
-                print(e)
+                # print(e)
                 print(traceback.format_exc())
                 print("Failed to plot one or some variables...")
 

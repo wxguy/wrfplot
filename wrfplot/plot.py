@@ -297,7 +297,7 @@ class MakePlot(object):
             os.path.join(self.output_dir, filename),
             bbox_inches="tight",
             dpi=self.dpi,
-            frameon=True,
+            # frameon=True,  # option depreciated in latest matplotlib
         )
         if os.path.exists(os.path.join(self.output_dir, filename)):
             tqdm.write(

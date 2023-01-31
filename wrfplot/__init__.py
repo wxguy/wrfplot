@@ -22,6 +22,7 @@ referred.
 """
 import sys
 import os
+from ._version import get_versions
 
 # Ensure that package directory is added in to system path so that it works on
 # development and post install mode
@@ -29,3 +30,9 @@ sys.path.append(os.path.dirname(os.path.realpath(__file__)))
 sys.path.append(os.path.join(os.path.dirname(os.path.realpath(__file__)), os.pardir))
 
 name = "wrfplot"
+
+__version__ = get_versions()['version']
+del get_versions
+
+from . import _version
+__version__ = _version.get_versions()['version']
