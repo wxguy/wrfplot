@@ -85,8 +85,6 @@ def _version():
 
 setup(
     name=NAME,
-    # version=about['__version__'],
-    # use_scm_version={'version_scheme': 'no-guess-dev'},
     use_scm_version=_version,
     setup_requires=['setuptools_scm'],
     description=DESCRIPTION,
