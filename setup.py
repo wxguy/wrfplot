@@ -69,7 +69,7 @@ def list_files(directory):
     return files
 
 def _version():
-    from setuptools_scm.version import SEMVER_MINOR, guess_next_simple_semver, release_branch_semver_version
+    from setuptools_scm.version import SEMVER_MINOR, guess_next_simple_semver, release_branch_semver_version, simplified_semver_version
 
     def my_release_branch_semver_version(version):
         v = release_branch_semver_version(version)

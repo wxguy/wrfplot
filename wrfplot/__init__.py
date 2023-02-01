@@ -29,11 +29,3 @@ sys.path.append(os.path.dirname(os.path.realpath(__file__)))
 sys.path.append(os.path.join(os.path.dirname(os.path.realpath(__file__)), os.pardir))
 
 name = "wrfplot"
-
-from _version import __version__
-
-__all__ = ["__version__", "wrfplot"]
-
-
-#from . import _version
-#__version__ = _version.get_versions()['version']
