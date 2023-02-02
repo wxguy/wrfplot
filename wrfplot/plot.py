@@ -202,8 +202,9 @@ class MakePlot(object):
     def get_cmap(self):
         """Get cmap from variable.ini file"""
         cmap_name = "None"
-        if self.cmap is not None:
+        if self.cmap is not False:
             self.cmap = utils.get_cmap(self.cmap)
+            return True
         else:
             cmap_name = json.loads(self.config.get(self.var_name, "cmap"))
         if cmap_name == "None":
@@ -230,7 +231,7 @@ class MakePlot(object):
     def plot_data(self):
         """Plot 2D data on a Map"""
         # We need to normalise the colour map with data levels. Otherwise, colourmap will be squed
-        # SLP data does not reqire to have colour fill
+        # SLP data does not require to have colour fill
         if self.var_name == "slp":
             self.cs = plt.contour(
                 self.lons,

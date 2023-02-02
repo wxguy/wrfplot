@@ -2,6 +2,14 @@
 History
 =======
 
+v0.8.0 (2023-02-02)
+------------------------
+* Included '--cmap' command line argument/ option to allow user to specify their own colormap (list supported by wrfplot )
+* Shifted to 'setuptools-git-versioning' module to automate release
+* Corrected bug that prevented GitHub build process
+* Reduced shapely version to 1.8.5 make it compatible with binary and module versions
+* Improvements to build_exe.py script to make the release process smother
+
 v0.3.3 (2023-01-31)
 ------------------------
 * Updated pyproject.toml to make use of "build" module (finding it much simpler to use)

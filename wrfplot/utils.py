@@ -39,18 +39,15 @@ def get_cmap(name):
     """
     all_cmap = dir(cmaps)
     if name in all_cmap:
-        getattr(cmaps, name)
+        return getattr(cmaps, name)
 
     if isinstance(name, list):
         return name
     try:
         cmap = getattr(cmaps, name)
-        #cmap = getattr(cmaps, name)
-        # cm.get_cmap("Spectral")
     except AttributeError:
-        # cmap = cmaps.gui_default
+        print("Defaulting to 'rainbow' colormap.")
         cmap = cm.get_cmap('rainbow')
-        # cm.get_cmap('rainbow')
 
     return cmap
 

@@ -53,26 +53,27 @@ import plot
 import convert
 import warnings
 from importlib.metadata import version, PackageNotFoundError
+import _version
+import matplotlib
+matplotlib.use("agg")
+warnings.filterwarnings("ignore", module="matplotlib")
+warnings.filterwarnings("ignore", module="datetime")
 
 try:
     __version__ = version("wrfplot")
 except PackageNotFoundError:
     import _version
-    __version__ = _version.__version__
     # package is not installed
+    # Get the version from local file
+    __version__ = _version.__version__
     pass
-
-import matplotlib
-matplotlib.use("agg")
-warnings.filterwarnings("ignore", module="matplotlib")
-warnings.filterwarnings("ignore", module="datetime")
 
 
 class Wrfplot(object):
     """Main class to deal with WRF input data"""
 
     def __init__(
-        self, input_path, output_path=None, variables=[], ulevels=None, dpi=150
+        self, input_path, output_path=None, variables=[], ulevels=None, dpi=150, cmap=False
     ):
         self.input_file = input_path
         self.nc_fh = None
@@ -93,6 +94,7 @@ class Wrfplot(object):
         self.config = ConfigParser()
         self.config.read(os.path.join(utils.data_dir(), "wrf_variables.ini"))
         self.dpi = dpi
+        self.cmap = cmap
         self.U = None
         self.V = None
         self.rainc = None
@@ -335,6 +337,7 @@ class Wrfplot(object):
                     output_dir=self.output,
                     dpi=self.dpi,
                     config_file=self.config,
+                    cmap=self.cmap
                 )
             else:
                 plot_map = plot.MakePlot(
@@ -350,6 +353,7 @@ class Wrfplot(object):
                     output_dir=self.output,
                     dpi=self.dpi,
                     config_file=self.config,
+                    cmap=self.cmap
                 )
             plot_map.plot_var()
         except Exception as err:
@@ -439,6 +443,12 @@ def _praser():
         help="List colour maps (cmaps) supported by wrfplot.",
     )
     parser.add_argument(
+        "--cmap",
+        metavar="<cmap-name>",
+        type=arguments.validate_cmap,
+        help="Valid colormap name to fill colors. Use '--list-cmaps' option to see list of supported colormaps. Must have minimum 11 colors, else will lead to error.",
+    )
+    parser.add_argument(
         "--version",
         action="store_true",
         help="Print version information of application and exit.",
@@ -463,7 +473,7 @@ def main():
         file = fileio.FileIO(args.input)
         if file.is_wrf():
             wrfplt = Wrfplot(
-                input_path=args.input, output_path=args.output, dpi=args.dpi
+                input_path=args.input, output_path=args.output, dpi=args.dpi, cmap=args.cmap
             )
             try:
                 wrfplt.read_file(args.input)

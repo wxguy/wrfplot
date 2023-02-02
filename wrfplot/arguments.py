@@ -135,6 +135,7 @@ def list_cmaps():
     """Print list of available colormaps on terminal"""
     cmap_methods = dir(cmaps)
     print(cmap_methods)
+    return cmap_methods
     """
     for method in cmap_methods:
         try:
@@ -143,3 +144,20 @@ def list_cmaps():
         except AttributeError:
             pass
     """
+
+def validate_cmap(cmap):
+    """Validate user colormap name
+
+    Args:
+        cmap (ste): Name of colormap
+
+    Results:
+        str: Name of colormap if supported
+    """
+    if not cmap in dir(cmaps):
+        print("\nColormap", utils.quote(cmap), "is nor supported by wrfplot. Use '--list-cmaps' option to find list of supported colormaps.")
+        return False
+    else:
+        print("\nUsing user provided colormap :", utils.quote(cmap))
+
+        return cmap
