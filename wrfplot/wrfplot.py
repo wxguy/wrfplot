@@ -57,6 +57,8 @@ from importlib.metadata import version, PackageNotFoundError
 try:
     __version__ = version("wrfplot")
 except PackageNotFoundError:
+    import _version
+    __version__ = _version.__version__
     # package is not installed
     pass
 

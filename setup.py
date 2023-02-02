@@ -85,8 +85,10 @@ def _version():
 
 setup(
     name=NAME,
-    use_scm_version=_version,
-    setup_requires=['setuptools_scm'],
+    # use_scm_version=_version,
+    # setup_requires=['setuptools_scm'],
+    #setuptools_git_versioning={"enabled": True,},
+    #setup_requires=["setuptools-git-versioning<2"],
     description=DESCRIPTION,
     long_description=long_description,
     author=AUTHOR,
