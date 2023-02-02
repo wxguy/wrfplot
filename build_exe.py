@@ -356,7 +356,7 @@ def main():
 def clean_dirs():
     if os.path.isdir('wrfplot.egg-info'):
         shutil.rmtree('wrfplot.egg-info')
-    if len(os.listdir(os.path.join(project_root, 'build'))) > 0:
+    if os.path.exists(os.path.join(project_root, 'build')) and len(os.listdir(os.path.join(project_root, 'build'))) > 0:
         files = glob.glob(os.path.join(project_root, 'build', '*'))
         for f in files:
             if os.path.isdir(f):
