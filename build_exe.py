@@ -219,6 +219,7 @@ def create_makeself():
     if os.path.exists(os.path.join(output_dir, "wrfplot")):
         print("Creating Linux installer...")
         shutil.copy("installer.sh", output_dir)
+        os.system("chmod +x " + os.path.join(output_dir, "installer.sh"))
         print("Executing makeself command to create archive...")
         execute_cmd(makeself + " " + os.path.join(output_dir) + " " + os.path.join(output_dir, "wrfplot-linux-64bit.run") + " wrfplot_Linux_Installer " + "./installer.sh")
         if os.path.exists(os.path.join(output_dir, "wrfplot.run")):
