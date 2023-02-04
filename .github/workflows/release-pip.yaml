@@ -15,10 +15,10 @@ jobs:
     - name: Install Dependencies
       run: |
         python -m pip install --upgrade pip
-        pip install setuptools wheel twine setuptools_scm build
+        pip install setuptools wheel twine setuptools-git-versioning build
     - name: Build Package
       run: |
-        python -m build --sdist
+        build_s_dist.sh
     - name: Publish to PyPi
       uses: pypa/gh-action-pypi-publish@release/v1.5
       with:

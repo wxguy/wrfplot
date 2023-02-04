@@ -60,12 +60,14 @@ warnings.filterwarnings("ignore", module="matplotlib")
 warnings.filterwarnings("ignore", module="datetime")
 
 try:
-    __version__ = version("wrfplot")
-except PackageNotFoundError:
     import _version
+    __version__ = _version.__version__
+    
+except:
+    __version__ = version("wrfplot")
     # package is not installed
     # Get the version from local file
-    __version__ = _version.__version__
+finally:
     pass
 
 
@@ -446,6 +448,7 @@ def _praser():
         "--cmap",
         metavar="<cmap-name>",
         type=arguments.validate_cmap,
+        default=False,
         help="Valid colormap name to fill colors. Use '--list-cmaps' option to see list of supported colormaps. Must have minimum 11 colors, else will lead to error.",
     )
     parser.add_argument(

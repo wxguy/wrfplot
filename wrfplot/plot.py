@@ -203,6 +203,7 @@ class MakePlot(object):
         """Get cmap from variable.ini file"""
         cmap_name = "None"
         if self.cmap is not False:
+            
             self.cmap = utils.get_cmap(self.cmap)
             return True
         else:
