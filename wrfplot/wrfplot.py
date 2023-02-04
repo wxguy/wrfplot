@@ -59,15 +59,17 @@ matplotlib.use("agg")
 warnings.filterwarnings("ignore", module="matplotlib")
 warnings.filterwarnings("ignore", module="datetime")
 
+VERSION = 'unknown'
+
 try:
-    import _version
-    __version__ = _version.__version__
-    
-except:
     __version__ = version("wrfplot")
+except:
     # package is not installed
     # Get the version from local file
+    import _version
+    __version__ = _version.__version__
 finally:
+    # Do nothing
     pass
 
 
