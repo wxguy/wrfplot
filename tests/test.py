@@ -64,6 +64,16 @@ def plot_upper(input_path, output_dir):
         print('Failed to complete upper atmospheric plots successfully...')
         return False
 
+def test(input_path, output_dir):
+    cmd_options = [wrfplot_path, '--vars', 'u_winds,dummy,u_rh', '--ulevels', '900,450,dummy', '--input', input_path, '--output', output_dir]
+    if os.system('python ' + " ".join(cmd_options)) == 0:
+        print('Successfully completed upper atmospheric plots...')
+        return True
+    else:
+        print('Failed to complete upper atmospheric plots successfully...')
+        return False
+    
+
 if __name__ == "__main__":
     test_file_path = os.path.realpath(__file__)
     wrf_input_path = os.path.join(os.path.dirname(test_file_path), '..', '..', '..', 'WRF_TEST_FILES', 'wrfout_d02_2016-03-31_00_00_00')
@@ -74,4 +84,5 @@ if __name__ == "__main__":
     clean_cartopy_data_dir()
     plot_sfc_data(input_path=wrf_input_path, output_dir=output_plot_dir)
     plot_upper(input_path=wrf_input_path, output_dir=output_plot_dir)
+    test(input_path=wrf_input_path, output_dir=output_plot_dir)
     

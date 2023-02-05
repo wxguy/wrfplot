@@ -12,6 +12,9 @@ install_env.txt
 dev/
 test/
 release_check_list*
+
+# Version file is generated during release process in GitHub
+_version.py
 # docs/
 
 # Distribution / packaging

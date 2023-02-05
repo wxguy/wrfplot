@@ -161,3 +161,48 @@ def validate_cmap(cmap):
         print("\nUsing user provided colormap :", utils.quote(cmap))
 
         return cmap
+
+
+def valid_range(ulevel):
+    """ Validate input pressure level """
+    if ulevel > 1000:
+        print("Upper level" + utils.quote(str(ulevel)) + " can not be more than 1000")
+        return False
+    elif ulevel < 50:
+        print("Upper level" + utils.quote(str(ulevel)) + " can not be less than 1000")
+        return False
+    else:
+        return True
+
+        
+def validate_ulevels(ulevels):
+    """Validate user provided upper atmospheric levels
+    
+    Args:
+        ulevels (list): list of levels provided by user
+    Results:
+        list:   List of filtered levels. None is returned if nothing compatible with wrfplot
+    """
+    filtered_ulevels = []
+    if ',' not in str(ulevels):
+        if ulevels.isdigit():
+            if valid_range(float(ulevels)) is True:
+                filtered_ulevels.append(float(ulevels))
+        elif isinstance(ulevels, str):
+            print("Upper level can not have string in it. Omitting " + utils.quote(ulevels))
+    else:
+        for level in ulevels.split(','):
+            if level.isdigit():
+                if valid_range(float(level)) is True:
+                    filtered_ulevels.append(float(level))
+            elif isinstance(level, str):
+                print("Upper level can not have string in it. Omitting " + utils.quote(level))
+
+    if len(filtered_ulevels) > 0:
+        output_str_lst = [str(x) for x in filtered_ulevels]
+        print("Using user provided upper level(s) : " + utils.quote(",".join(output_str_lst)))
+        return filtered_ulevels
+    else:
+        print("\nNone of the levels are valid upper levels.")
+        print("Defaulting to levels '925, 850, 700, 600, 500, 400, 300 & 200hPa' supported by wrfplot.")
+        return None

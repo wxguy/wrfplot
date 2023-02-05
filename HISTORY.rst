@@ -2,6 +2,12 @@
 History
 =======
 
+v0.8.6 (2023-02-05)
+------------------------
+* Included '--ulevels' command line argument/ option to allow user to specify their own list of levels. It should be between 50-1000hPa levels only.
+* Removed `_version.py` file from the source. This would be created automatically during build process.
+* Update to Documentation to reflect two added options.
+
 v0.8.0 (2023-02-02)
 ------------------------
 * Included '--cmap' command line argument/ option to allow user to specify their own colormap (list supported by wrfplot )

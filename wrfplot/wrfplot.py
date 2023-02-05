@@ -305,7 +305,7 @@ class Wrfplot(object):
                 if self.U is not None and self.V is not None:
                     self.U = interplevel(u_var_u_data, pressure, self.ulevel)
                     self.V = interplevel(u_var_v_data, pressure, self.ulevel)
-                tqdm.write("\t  at level" + utils.quote(self.ulevel))
+                tqdm.write("\t  at level " + utils.quote(self.ulevel) + " hPa")
                 pbar_lvl.set_description("Plotting Level :", refresh=True)
                 self.plot_wrf_data(_time=_time, index=index, data_plot=self.var_data, level=self.ulevel)
         tqdm.write("\nPlotting of " + utils.quote(self.var) + " completed...\n")
@@ -409,7 +409,7 @@ def _praser():
         "Command line application to plot static WRF model prognostic products..."
     )
     parser = argparse.ArgumentParser(
-        description=prog_name, epilog="\u00a9 J Sundar, wrf.guy@gmail.com, 2022"
+        description=prog_name, epilog="\u00a9 J Sundar, wrf.guy@gmail.com, 2023"
     )
     parser.add_argument(
         "--list-vars", action="store_true", help="List variables supported by wrfplot."
@@ -444,7 +444,7 @@ def _praser():
     parser.add_argument(
         "--list-cmaps",
         action="store_true",
-        help="List colour maps (cmaps) supported by wrfplot.",
+        help="List colour maps (cmaps) supported by wrfplot. Refer https://pratiman-91.github.io/colormaps for information on each colourmaps.",
     )
     parser.add_argument(
         "--cmap",
@@ -452,6 +452,12 @@ def _praser():
         type=arguments.validate_cmap,
         default=False,
         help="Valid colormap name to fill colors. Use '--list-cmaps' option to see list of supported colormaps. Must have minimum 11 colors, else will lead to error.",
+    )
+    parser.add_argument(
+        "--ulevels",
+        metavar="<upper-levels>",
+        type=arguments.validate_ulevels,
+        help="Provide custom upper level(s) when plotting upper atmospheric data. Each level is to be seperated by ',' i.e., '925,850,700'. Use '--list-vars' to know list of supported upper level variables.",
     )
     parser.add_argument(
         "--version",
@@ -478,7 +484,7 @@ def main():
         file = fileio.FileIO(args.input)
         if file.is_wrf():
             wrfplt = Wrfplot(
-                input_path=args.input, output_path=args.output, dpi=args.dpi, cmap=args.cmap
+                input_path=args.input, output_path=args.output, dpi=args.dpi, cmap=args.cmap, ulevels=args.ulevels
             )
             try:
                 wrfplt.read_file(args.input)

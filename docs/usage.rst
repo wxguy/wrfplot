@@ -2,6 +2,9 @@
 How to use wrfplot
 ==================
 
+Basic Usage
+~~~~~~~~~~~~
+
 The first step in plotting diagnostic variable to find what all variables are supported by ``wrfplot`` application. This is required as the application would accept variable names only in certain string format. Therefore, you should list and review the name of variable by issuing  following command in terminal::
 
 	$ wrfplot --list-vars
@@ -53,7 +56,7 @@ Looking at the above output, you will understand that it looks similar to what i
 
 Now, lets go ahead and start plotting the variable "2m Relative Humidity" named as "rh2"::
 
-	python wrfplot.py --input ../../test/wrfout_d01_2016-03-30_00_00_00 --var "rh2" --output ~/Documents/wrfplot_output
+	python wrfplot.py --input ../../test/wrfout_d01_2016-03-30_00_00_00 --vars "rh2" --output ~/Documents/wrfplot_output
                                                                                                                          
 	*** Initialising plotting for variable : "rh2" ***
 
@@ -66,7 +69,7 @@ In the above command, we have provided three options where:
 
 * ``--input`` is the path to WRF model output NetCDF file.
 * ``--output`` is the path to output directory where the plotted images are required to be saved. If the path to directory does not exist, then wrfplot will try to create it.
-* ``--var`` is the variable name we need the wrfplot to plot.
+* ``--vars`` is the variable name we need the wrfplot to plot.
 
 When the wrfplot start plotting the variable for all times, you can see the progress of operation through progress bar at the bottom of terminal. The plotted output for variable will look like below:
 
@@ -74,4 +77,19 @@ When the wrfplot start plotting the variable for all times, you can see the prog
   :width: 800
   :alt: Alternative text
 
-You can see from the above image that all the required fields such as title, colour map, colour bar range, model cycle and forecast validity are automatically picked up by wrfplot. Now onwards, you can only change the ``--var`` with different name to plot new variables.
+You can see from the above image that all the required fields such as title, colour map, colour bar range, model cycle and forecast validity are automatically picked up by wrfplot. Now onwards, you can only change the ``--vars`` with different name to plot new variables.
+
+Plotting Upper Atmospheric Variables
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+`wrfplot` supports a few upper atmospheric variables. These variables are indicated with ``u_`` tag for ease of identification. By default, the plot for upper atmospheric variables would be plotted for ``925, 850, 700, 600, 500, 400, 300 & 200hPa``. The upper levels can be controlled using ``--ulevels`` though. If you want to plot upper winds, you can specify the variable with following command::
+
+	$ wrfplot --vars "u_winds" --input ../../test/wrfout_d01_2016-03-30_00_00_00 --vars "rh2" --output ~/Documents/wrfplot_output
+
+Note that the wrf output file resolution is very high. However, `wrfplot` automatically calculates the correct resolution and size to fit the wind barbs within plot area. The above command would produce the plot as indicated above. Only 400hPa level plot is indicated below to ensure that page is not loaded with only images.
+
+.. image:: _static/images/u_winds_400hpa.png
+  :width: 800
+  :alt: Alternative text
+
+You can also control various par of plotting with additional command line options. They are described in next page.
