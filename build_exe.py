@@ -372,17 +372,13 @@ def clean_dirs():
 
 def build_sdist():
     if os.system("python -m build --sdist") == 0:
-        print("Successfully built source distribution package under 'build directory'...")
+        print("Successfully built source distribution package under 'dist' directory...")
         return True
     else:
         sys.exit("Failure to build source distribution package.\n Please correct the issue and build the executable again.")
 
 def update_verion():
-    if which("setuptools-git-versioning"):
-        VERSION = subprocess.check_output(["setuptools-git-versioning"]).strip().decode("utf-8").replace("v", "")
-    else:
-        VERSION = subprocess.check_output(["git", "describe", "--tags"]).strip().decode("utf-8").replace("v", "")
-    
+    VERSION = os.listdir(os.path.join(project_root, 'dist'))[0].replace("wrfplot-", "").replace(".tar.gz", "")
     print("Updating varion information to file with :", VERSION)
     print("Version information will be updated in : " + frozen_version_file)
     with open(frozen_version_file, "w") as _file:

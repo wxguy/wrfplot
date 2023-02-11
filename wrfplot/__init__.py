@@ -30,3 +30,14 @@ sys.path.append(os.path.join(os.path.dirname(os.path.realpath(__file__)), os.par
 
 name = "wrfplot"
 
+try:
+    __version__ = version("wrfplot")
+except:
+    # package is not installed
+    # Get the version from local file
+    import _version
+    __version__ = _version.__version__
+finally:
+    # Do nothing
+    pass
+
