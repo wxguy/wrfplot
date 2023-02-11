@@ -14,7 +14,7 @@ test/
 release_check_list*
 
 # Version file is generated during release process in GitHub
-_version.py
+wrfplot/_version.py
 # docs/
 
 # Distribution / packaging

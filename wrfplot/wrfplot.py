@@ -50,6 +50,7 @@ from configparser import ConfigParser
 import fileio
 import utils
 import plot
+import animation
 import convert
 import warnings
 from importlib.metadata import version, PackageNotFoundError
@@ -77,7 +78,7 @@ class Wrfplot(object):
     """Main class to deal with WRF input data"""
 
     def __init__(
-        self, input_path, output_path=None, variables=[], ulevels=None, dpi=150, cmap=False
+        self, input_path, output_path=None, variables=[], ulevels=None, dpi=150, cmap=False, animation=False, animation_speed=0.5,
     ):
         self.input_file = input_path
         self.nc_fh = None
@@ -103,6 +104,8 @@ class Wrfplot(object):
         self.V = None
         self.rainc = None
         self.rainnc = None
+        self.animation = animation
+        self.speed = animation_speed
 
     def read_file(self, input_path):
         """Read input NetCDF file
@@ -247,6 +250,7 @@ class Wrfplot(object):
             + " ***\n"
         )
         data_plot = None
+        images = []
         for index in pbar:
             _time = self.date_time[index]
             if self.var == "slp":
@@ -260,10 +264,18 @@ class Wrfplot(object):
 
             pbar.write("\tPlotting " + utils.quote(self.var) + " for Time: " + _time)
             pbar.set_description("Plotting " + utils.quote(self.var), refresh=True)
-            self.plot_wrf_data(_time, index, data_plot=data_plot)
+            path = self.plot_wrf_data(_time, index, data_plot=data_plot)
+            if path:
+                images.append(path)
         tqdm.write(
             "\nPlotting of variable " + utils.quote(self.var) + " completed...\n"
         )
+        if self.animation is not False:
+            if len(images) > 0:
+                output_gif_name = os.path.join(os.path.dirname(images[0]), self.var) + '.gif'
+                animation.make_animation(images, output_gif_name, speed=self.speed)
+            else:
+                print("Does not have enough images to make GIF image...\n")
 
     def plot_upper(self):
         """Plot only upper atmospheric data"""
@@ -285,6 +297,7 @@ class Wrfplot(object):
             + utils.quote(self.var)
             + " ***\n"
         )
+        images = []
         for index in pbar_var:
             _time = self.date_time[index]
             # Must initialise the bar inside time loop so that range is set every time entering into outer loop
@@ -307,8 +320,16 @@ class Wrfplot(object):
                     self.V = interplevel(u_var_v_data, pressure, self.ulevel)
                 tqdm.write("\t  at level " + utils.quote(self.ulevel) + " hPa")
                 pbar_lvl.set_description("Plotting Level :", refresh=True)
-                self.plot_wrf_data(_time=_time, index=index, data_plot=self.var_data, level=self.ulevel)
+                path = self.plot_wrf_data(_time=_time, index=index, data_plot=self.var_data, level=self.ulevel)
+                if path:
+                    images.append(path)
         tqdm.write("\nPlotting of " + utils.quote(self.var) + " completed...\n")
+        if self.animation is not False:
+            if len(images) > 0:
+                output_gif_name = os.path.join(os.path.dirname(images[0]), self.var) + '.gif'
+                animation.make_animation(images, output_gif_name, speed=self.speed)
+            else:
+                print("Does not have enough images to make GIF image...\n")
 
     def plot_wrf_data(self, _time, index, data_plot=None, level=None):
         """A wrapper function to call main plot method from plot class"""
@@ -359,7 +380,9 @@ class Wrfplot(object):
                     config_file=self.config,
                     cmap=self.cmap
                 )
-            plot_map.plot_var()
+            img_path = plot_map.plot_var()
+            if os.path.exists(img_path):
+                return img_path
         except Exception as err:
             tqdm.write(str(err))
             tqdm.write(traceback.format_exc())
@@ -412,34 +435,32 @@ def _praser():
         description=prog_name, epilog="\u00a9 J Sundar, wrf.guy@gmail.com, 2023"
     )
     parser.add_argument(
-        "--list-vars", action="store_true", help="List variables supported by wrfplot."
+        "--list-vars", action="store_true", help="Show list of variables supported by wrfplot and exit."
     )
     parser.add_argument(
         "--input",
         metavar="<input_file>",
         type=arguments.file_path,
-        help="Mandatory path to WRF generated netCDF.",
+        help="Path to WRF generated netCDF.",
     )
     parser.add_argument(
         "--output",
         metavar="<output_dir>",
         type=arguments.dir_path,
         default=False,
-        help="Path to output directory for saving images.",
+        help="Path to output directory for saving plotted images.",
     )
     parser.add_argument(
         "--vars",
         metavar="<variable(s)>",
         type=arguments.validate_vars,
-        help="Name of the variable to be plotted. Multiple variables are to be separated with"
-        " ','. Use '--list-vars' option to see list of supported variables.",
+        help="Name of the variable to be plotted. Multiple variables are to be separated with ','. Use '--list-vars' option to see list of supported variables.",
     )
     parser.add_argument(
-        "--dpi",
-        metavar="<value>",
-        type=int,
-        help="Increase or decrease the plotted image resolution. Default is 125. More is higher resolution and"
-        " less is course resolution. Higher values will reduce the speed of plot .",
+        "--ulevels",
+        metavar="<upper-levels>",
+        type=arguments.validate_ulevels,
+        help="Provide custom upper level(s) when plotting upper atmospheric data. Each level is to be seperated by ',' i.e., '925,850,700'. Use '--list-vars' to know list of supported upper level variables.",
     )
     parser.add_argument(
         "--list-cmaps",
@@ -454,10 +475,23 @@ def _praser():
         help="Valid colormap name to fill colors. Use '--list-cmaps' option to see list of supported colormaps. Must have minimum 11 colors, else will lead to error.",
     )
     parser.add_argument(
-        "--ulevels",
-        metavar="<upper-levels>",
-        type=arguments.validate_ulevels,
-        help="Provide custom upper level(s) when plotting upper atmospheric data. Each level is to be seperated by ',' i.e., '925,850,700'. Use '--list-vars' to know list of supported upper level variables.",
+        "--dpi",
+        metavar="<value>",
+        type=int,
+        help="Increase or decrease the plotted image resolution. Default is 125. More is higher resolution and less is course resolution. Higher values will reduce the speed of plot.",
+    )
+    parser.add_argument(
+        "--gif", 
+        action="store_true",
+        default=False,
+        help="If applied, creates an animated GIF image. GIF image will be saved same location as other images with a name specifed in '--vars' option."
+    )
+    parser.add_argument(
+        "--gif-speed",
+        metavar="<seconds>", 
+        type=arguments.validate_gif_speed,
+        default=int,
+        help="Set speed of GIF frame in seconds. Default is 0.5 sec. Lower value increases the speed of animation. To be used with '--gif' option to take effect."
     )
     parser.add_argument(
         "--version",
@@ -484,7 +518,7 @@ def main():
         file = fileio.FileIO(args.input)
         if file.is_wrf():
             wrfplt = Wrfplot(
-                input_path=args.input, output_path=args.output, dpi=args.dpi, cmap=args.cmap, ulevels=args.ulevels
+                input_path=args.input, output_path=args.output, dpi=args.dpi, cmap=args.cmap, ulevels=args.ulevels, animation=args.gif, animation_speed=args.gif_speed
             )
             try:
                 wrfplt.read_file(args.input)

@@ -155,7 +155,9 @@ class MakePlot(object):
         self.plot_title()
         if not self.var_name == "slp":
             self.plot_cbar()
-        self.save_fig()
+        path = self.save_fig()
+        if path is not None:
+            return path
 
     def get_clevels(self):
         """Get contour levels"""
@@ -306,8 +308,12 @@ class MakePlot(object):
                 "\t  Image saved at : "
                 + utils.quote(os.path.join(self.output_dir, filename))
             )
-        self.fig.canvas.flush_events()
-        plt.close()
+            
+            self.fig.canvas.flush_events()
+            plt.close()
+            return os.path.join(self.output_dir, filename)
+        else:
+            return None
 
     def animation(self, input_dir, variable, level=False, speed=0.5, loop=0):
         """

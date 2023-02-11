@@ -27,13 +27,6 @@ import sys
 from shutil import rmtree
 import glob
 from setuptools import find_packages, setup
-#import versioneer
-
-"""
-versioneer.versionfile_build = 'wrfplot/_version.py'
-versioneer.tag_prefix = 'v' # tags are like v1.2.0
-versioneer.parentdir_prefix = 'wrfplot-' # dirname like 'myproject-1.2.0'
-"""
 
 # Package meta-data.
 NAME = 'wrfplot'
@@ -44,6 +37,7 @@ AUTHOR = 'J Sundar'
 REQUIRES_PYTHON = '>=3.7.0'
 VERSION = None
 LICENSE = 'GNU General Public License v3 (GPLv3)'
+
 # What packages are required for this module to be executed?
 REQUIRED = ['cartopy', 'xarray', 'matplotlib', 'wrf-python>=1.3', 'imageio', 'tqdm', 'netcdf4']
 
@@ -85,10 +79,8 @@ def _version():
 
 setup(
     name=NAME,
-    # use_scm_version=_version,
-    # setup_requires=['setuptools_scm'],
-    # setuptools_git_versioning={"enabled": True,},
-    # setup_requires=["setuptools-git-versioning<2"],
+    use_scm_version=True, # _version
+    setup_requires=['setuptools_scm'],
     description=DESCRIPTION,
     long_description=long_description,
     author=AUTHOR,
@@ -102,7 +94,7 @@ setup(
         'console_scripts': ['wrfplot=wrfplot.wrfplot:main'],
     },
     install_requires=REQUIRED,
-    # license=LICENSE,
+    license=LICENSE,
     classifiers=[
         # Full list: https://pypi.python.org/pypi?%3Aaction=list_classifiers
         'License :: OSI Approved :: GNU General Public License v3 (GPLv3)'
@@ -112,8 +104,12 @@ setup(
         'Programming Language :: Python :: 3.9',
         'Programming Language :: Python :: 3.10',
         'Operating System :: Unix',
+        'Operating System :: MacOS',
+        'Operating System :: POSIX :: Linux',
         'Operating System :: Microsoft :: Windows',
         'Programming Language :: Python :: Implementation :: CPython',
+        'Topic :: Scientific/Engineering :: Atmospheric Science',
+        'Topic :: Scientific/Engineering :: Visualization',
     ],
     packages=find_packages("wrfplot", exclude=['test', 'test.*'],),
     include_package_data=True,

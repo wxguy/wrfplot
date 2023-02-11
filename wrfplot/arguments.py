@@ -206,3 +206,20 @@ def validate_ulevels(ulevels):
         print("\nNone of the levels are valid upper levels.")
         print("Defaulting to levels '925, 850, 700, 600, 500, 400, 300 & 200hPa' supported by wrfplot.")
         return None
+
+
+def validate_gif_speed(seconds):
+    """Validate user provided gif animation speed
+    
+    Args:
+        seconds: Number of seconds to indicate gif speed
+    Result:
+        int: Number of seconds after validation or else 0.5
+    """
+    if seconds.replace('.', '').isdigit():
+        print("\nUsing user provided gif speed:", utils.quote(seconds))
+        return seconds
+    else:
+        print("\nInvalid gif speed:", utils.quote(seconds))
+        print("Defaulting to GIF animation speed to '0.5' seconds.")
+        return 0.5
