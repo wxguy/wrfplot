@@ -24,6 +24,7 @@ __author__ = "J Sundar (wrf.guy@gmail.com)"
 import os
 import cartopy
 import shutil
+from pathlib import Path
 
 
 def clean_cartopy_data_dir():
@@ -70,14 +71,32 @@ def test(input_path, output_dir):
         print('Successfully completed upper atmospheric plots...')
         return True
     else:
-        print('Failed to complete upper atmospheric plots successfully...')
+        ('Failed to complete upper atmospheric plots successfully...')
+        return False
+
+def plot_animation(input_path, output_dir):
+    cmd_options = [wrfplot_path, '--vars', 'T2,dummy,u_rh', '--gif', '--input', input_path, '--output', output_dir]
+    if os.system('python ' + " ".join(cmd_options)) == 0:
+        print('Successfully completed animation plot...')
+        return True
+    else:
+        print('Failed to create animation plot...')
+        return False
+
+def plot_animation_with_speed(input_path, output_dir):
+    cmd_options = [wrfplot_path, '--vars', 'T2,dummy', '--gif', '--gif-speed', '0.25'', --input', input_path, '--output', output_dir]
+    if os.system('python ' + " ".join(cmd_options)) == 0:
+        print('Successfully completed animation plot...')
+        return True
+    else:
+        print('Failed to create animation plot...')
         return False
     
-
 if __name__ == "__main__":
+    home = str(Path.home())
     test_file_path = os.path.realpath(__file__)
-    wrf_input_path = os.path.join(os.path.dirname(test_file_path), '..', '..', '..', 'WRF_TEST_FILES', 'wrfout_d02_2016-03-31_00_00_00')
-    output_plot_dir = os.path.join(os.path.dirname(test_file_path), '..', '..', '..', 'WRF_TEST_FILES', 'output_images')
+    wrf_input_path = os.path.join(os.path.dirname(test_file_path), 'wrfout_data', 'wrfout_d01_2021-05-13_00_00_00')
+    output_plot_dir = os.path.join(home, 'Documents', 'test_output_images')
     cartopy_data_dir = os.path.abspath(cartopy.config['data_dir'])
     wrfplot_path = os.path.join(os.path.dirname(test_file_path), '..', 'wrfplot', 'wrfplot.py')
     print('Utilising WRF model data from :', wrf_input_path)
@@ -85,4 +104,6 @@ if __name__ == "__main__":
     plot_sfc_data(input_path=wrf_input_path, output_dir=output_plot_dir)
     plot_upper(input_path=wrf_input_path, output_dir=output_plot_dir)
     test(input_path=wrf_input_path, output_dir=output_plot_dir)
+    plot_animation(input_path=wrf_input_path, output_dir=output_plot_dir)
+    plot_animation_with_speed(input_path=wrf_input_path, output_dir=output_plot_dir)
     

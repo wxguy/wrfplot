@@ -490,7 +490,7 @@ def _praser():
         "--gif-speed",
         metavar="<seconds>", 
         type=arguments.validate_gif_speed,
-        default=int,
+        default=False,
         help="Set speed of GIF frame in seconds. Default is 0.5 sec. Lower value increases the speed of animation. To be used with '--gif' option to take effect."
     )
     parser.add_argument(

@@ -98,7 +98,7 @@ Add following command line options:
 * ~~`--cmap`      :   Use user provided colour map~~
 * ~~`--ulevels `   :   To plot upper level data as per user defined upper levels~~
 * `--clevels `   :   Control contour levels
-* `--animation` :   Create animation for specific variable(s) in GIF for max compatibility
+* ~~`--animation` :   Create animation for specific variable(s) in GIF for max compatibility~~. The animation option is implemented through `--gif` and `--gif-speed` options. Completed.
 * `--save-format`:   Save image in specific file format
 * `--list-save-format`   :   List all supported image file format
 * `--title`     :   Custom title for the plot

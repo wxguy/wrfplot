@@ -20,9 +20,9 @@ Use Cases
 A typical use case of wrfplot would be to include as part of your WRF model run framework to plotting of variables immediately after the model run is completed. The other use case would be to use it for producing publication quality 2D maps which does not much tweaking for your publication.
 
 .. note::
-  wrfplot is a new application. If you find any issues related to plotting variables or documentation, please open an issue in Github as given here :doc:`support`
+  wrfplot is a new application. If you find any issues related to plotting variables or documentation, please open an issue in GitHub as given here :doc:`support`
 
-The best way to explore the application is to read and execute the extensive examples from :doc:`examples`.
+The best way to explore the application is to read and execute the extensive examples from :doc:`usage`.
 
 For complete list of options, execute following command in terminal or cmd window::
 
@@ -35,7 +35,9 @@ For complete list of options, execute following command in terminal or cmd windo
    install
    variables
    usage
-   examples
+   ulevels
+   cmap
+   animation
    support
    contributing
    authors

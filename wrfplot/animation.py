@@ -53,9 +53,12 @@ def filter_images(image_paths, type='png'):
     return None
 
 
-def make_animation(image_paths, outPut_file_path, speed=0.5, file_type='png', loop=True):
+def make_animation(image_paths, outPut_file_path, speed=False, file_type='png', loop=True):
     """Create GIF file from list of images"""
-    duration_sec = float(speed) * 1000
+    if speed is False:
+        duration_sec = 0.5 * 1000
+    else:
+        duration_sec = speed * 1000
     images = filter_images(image_paths, type=file_type)
     if images is not None:
         try:

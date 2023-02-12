@@ -12,7 +12,7 @@ The first step in plotting diagnostic variable to find what all variables are su
 Invoking the above command will produce the following output::
 
 	****    ****    ****    ****    ****    ****    ****
-	Variables starting with 'u_' are upper air variable availabe at 925, 850, 700, 600, 500, 400, 300 and 200 hPa heights...
+	Variables starting with 'u_' are upper air variable available at 925, 850, 700, 600, 500, 400, 300 and 200 hPa heights...
 	****    ****    ****    ****    ****    ****    ****
 
 	Variable "slp"   --> "Mean Sea Level Pressure" ("hPa")
@@ -77,19 +77,5 @@ When the wrfplot start plotting the variable for all times, you can see the prog
   :width: 800
   :alt: Alternative text
 
-You can see from the above image that all the required fields such as title, colour map, colour bar range, model cycle and forecast validity are automatically picked up by wrfplot. Now onwards, you can only change the ``--vars`` with different name to plot new variables.
+You can see from the above image that all the required fields such as title, colormap, color bar range, model cycle and forecast validity are automatically picked up by wrfplot. Now onward, you can only change the ``--vars`` with different name to plot new variables.
 
-Plotting Upper Atmospheric Variables
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-`wrfplot` supports a few upper atmospheric variables. These variables are indicated with ``u_`` tag for ease of identification. By default, the plot for upper atmospheric variables would be plotted for ``925, 850, 700, 600, 500, 400, 300 & 200hPa``. The upper levels can be controlled using ``--ulevels`` though. If you want to plot upper winds, you can specify the variable with following command::
-
-	$ wrfplot --vars "u_winds" --input ../../test/wrfout_d01_2016-03-30_00_00_00 --vars "rh2" --output ~/Documents/wrfplot_output
-
-Note that the wrf output file resolution is very high. However, `wrfplot` automatically calculates the correct resolution and size to fit the wind barbs within plot area. The above command would produce the plot as indicated above. Only 400hPa level plot is indicated below to ensure that page is not loaded with only images.
-
-.. image:: _static/images/u_winds_400hpa.png
-  :width: 800
-  :alt: Alternative text
-
-You can also control various par of plotting with additional command line options. They are described in next page.

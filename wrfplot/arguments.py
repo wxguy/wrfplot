@@ -218,7 +218,7 @@ def validate_gif_speed(seconds):
     """
     if seconds.replace('.', '').isdigit():
         print("\nUsing user provided gif speed:", utils.quote(seconds))
-        return seconds
+        return float(seconds)
     else:
         print("\nInvalid gif speed:", utils.quote(seconds))
         print("Defaulting to GIF animation speed to '0.5' seconds.")
