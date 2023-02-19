@@ -224,14 +224,22 @@ class Wrfplot(object):
     def get_time_period(self):
         """Extract times of the WRF output file"""
         dates = self.var_data.Time
-        for _date in dates:
-            if not np.isnat(_date):
-                date_time = self.to_datetime(_date)
-                year = date_time.strftime("%Y")
-                month = date_time.strftime("%m")
-                day = date_time.strftime("%d")
-                _time = date_time.strftime("%H:%M")
-                self.date_time.append(day + "-" + month + "-" + year + "_" + _time)
+        if dates.size == 1:
+            date_time = self.to_datetime(dates)
+            year = date_time.strftime("%Y")
+            month = date_time.strftime("%m")
+            day = date_time.strftime("%d")
+            _time = date_time.strftime("%H:%M")
+            self.date_time.append(day + "-" + month + "-" + year + "_" + _time)
+        else:
+            for _date in dates:
+                if not np.isnat(_date):
+                    date_time = self.to_datetime(_date)
+                    year = date_time.strftime("%Y")
+                    month = date_time.strftime("%m")
+                    day = date_time.strftime("%d")
+                    _time = date_time.strftime("%H:%M")
+                    self.date_time.append(day + "-" + month + "-" + year + "_" + _time)
 
         if self.date_time:
             self.cycle = self.date_time[0]
@@ -333,6 +341,11 @@ class Wrfplot(object):
 
     def plot_wrf_data(self, _time, index, data_plot=None, level=None):
         """A wrapper function to call main plot method from plot class"""
+        # print(data_plot.size, data_plot.shape, data_plot.ndim)
+        # The wrfout data for single time will not have time. Hence required to extract the whole array. Make it automated here.
+        if data_plot.ndim == 2:
+            index = np.index_exp[:]
+        
         # For rainfall data we need to extract previous time data with current time data
         if self.var == "ppn":
             current = self.rainnc[index] + self.rainc[index]
