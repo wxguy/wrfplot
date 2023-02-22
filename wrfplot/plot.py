@@ -65,7 +65,7 @@ class MakePlot(object):
         u_level=None,
         proj=None,
         cmap=None,
-        clevels=None,
+        clevels=False,
         fig_format="png",
         output_dir=None,
         dpi=150,
@@ -161,7 +161,11 @@ class MakePlot(object):
 
     def get_clevels(self):
         """Get contour levels"""
-        if self.clevels == "auto":
+        if self.clevels is not False and isinstance (self.clevels, list):
+            return self.clevels
+        elif self.clevels is not False and isinstance (self.clevels, str):
+            self.clevels = utils.get_auto_clevel(self.data, scale=int(self.clevels))
+        elif self.clevels == "auto":
             self.clevels = utils.get_auto_clevel(self.data)
 
     def plot_title(self):
@@ -233,7 +237,7 @@ class MakePlot(object):
 
     def plot_data(self):
         """Plot 2D data on a Map"""
-        # We need to normalise the colour map with data levels. Otherwise, colourmap will be squed
+        # We need to normalise the colour map with data levels. Otherwise, colourmap will be skewed
         # SLP data does not require to have colour fill
         if self.var_name == "slp":
             self.cs = plt.contour(

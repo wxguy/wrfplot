@@ -54,7 +54,7 @@ wrfplot --version
 
 ### Linux Only
 
- You must have at least `Ubuntu 22.04` or above for this to work. There is no additional packages or admin rights are required to install this package. Go to https://github.com/wxguy/wrfplot/releases and look for latest release. The Linux installer will have name `wrfplot-linux-64bit.run`. Click on the link and download it to local disk. Thereafter execute the below command (assuming that the Linux installer is downloaded at `~/Downloads`):
+ You must have at least `Ubuntu 22.04` , `Red Hat 8.x` or above for this to work. There is no additional packages or admin rights are required to install this package. Go to https://github.com/wxguy/wrfplot/releases and look for latest release. The Linux installer will have name `wrfplot-linux-64bit.run`. Click on the link and download it to local disk. Thereafter execute the below command (assuming that the Linux installer is downloaded at `~/Downloads`):
 
  ```
  bash ~/Downloads/wrfplot-linux-64bit.run

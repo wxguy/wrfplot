@@ -208,6 +208,46 @@ def validate_ulevels(ulevels):
         return None
 
 
+def validate_clevels(clevels):
+    """Validate user provided contour levels
+    
+    Args:
+        ulevels (list or int): list or no of levels provided by user 
+    Results:
+        list or int:   List of filtered contour levels. False is returned if invalid levels are provided.
+    """
+    filtered_clevels = []
+    if ',' not in clevels:
+        if clevels.isdigit():
+            if int(clevels) > 12:
+                print("\nContour levels number must be kept maximum as 12. Defaulting to " , utils.quote("12"))
+                return "12"
+            else:
+                print("\nUsing user provided upper clevel : " + utils.quote(clevels))
+                return clevels
+        elif isinstance(clevels, str):
+            print("\nContour level can not have string in it. Omitting " + utils.quote(clevels))
+            return False
+    else:
+        for level in clevels.split(','):
+            if level.strip().isdigit():
+                if int(level) in filtered_clevels:
+                    print("\nContour level", level, "already exist. Not repeating it.")
+                else:
+                    filtered_clevels.append(int(level))
+            elif isinstance(level, str):
+                print("Contour levels can not have string in it. Omitting " + utils.quote(level))
+    
+    if len(filtered_clevels) == 0:
+        print("Reverting to automatic contour levels supported by wrfplot.")
+        return False
+    else:
+        output_str_lst = [str(x) for x in filtered_clevels]
+        print("Using user provided contour levels : " + utils.quote(",".join(sorted(output_str_lst))))
+        return sorted(filtered_clevels)
+                
+            
+
 def validate_gif_speed(seconds):
     """Validate user provided gif animation speed
     

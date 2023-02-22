@@ -78,7 +78,7 @@ class Wrfplot(object):
     """Main class to deal with WRF input data"""
 
     def __init__(
-        self, input_path, output_path=None, variables=[], ulevels=None, dpi=150, cmap=False, animation=False, animation_speed=0.5,
+        self, input_path, output_path=None, variables=[], ulevels=None, dpi=150, cmap=False, animation=False, animation_speed=0.5, clevels=False,
     ):
         self.input_file = input_path
         self.nc_fh = None
@@ -93,7 +93,7 @@ class Wrfplot(object):
         self.ulevels = ulevels
         self.ulevel = None
         self.proj = None
-        self.clevels = []
+        # self.clevels = []
         self.cycle = None
         self.file = fileio.FileIO(self.input_file)
         self.config = ConfigParser()
@@ -106,6 +106,7 @@ class Wrfplot(object):
         self.rainnc = None
         self.animation = animation
         self.speed = animation_speed
+        self.clevels = clevels
 
     def read_file(self, input_path):
         """Read input NetCDF file
@@ -191,8 +192,14 @@ class Wrfplot(object):
             self.var_data = getvar(self.nc_fh, var, ALL_TIMES)
 
     def read_latlons(self):
-        """Extract lat & lon data and update ``self.lats`` and ``self.lons`` instance variables accordingly"""
-        self.lats, self.lons = latlon_coords(self.var_data)
+        """Extract lat & lon data and update ``self.lats`` and ``self.lons`` variables accordingly"""
+        lats, lons = latlon_coords(self.var_data)
+        if lats.ndim == 3:
+            self.lats = lats[0] 
+            self.lons = lons[0]
+        else:
+            self.lats = lats
+            self.lons = lons
 
     def plot_variables(self):
         """A wrapper function to redirect plotting to surface and upper air variables to respective function"""
@@ -264,7 +271,7 @@ class Wrfplot(object):
             if self.var == "slp":
                 self.var_data = smooth2d(self.var_data, 3, cenweight=4)
                 self.clevels = utils.get_auto_clevel(self.var_data, slp=True)
-            else:
+            elif self.clevels is False:
                 self.clevels = json.loads(self.config.get(self.var, "clevels"))
 
             if data_plot is None:
@@ -436,7 +443,12 @@ class Wrfplot(object):
     def get_proj(self):
         """Get projection details from data extracted"""
         if self.proj is None:
-            self.proj = get_cartopy(self.var_data)
+            if self.var_data.ndim == 3:
+                self.proj = get_cartopy(self.var_data[0])
+            elif self.var_data.ndim == 4:
+                self.proj = get_cartopy(self.var_data[0, 0])
+            else:
+                self.proj = get_cartopy(self.var_data)
 
 
 def _praser():
@@ -488,6 +500,13 @@ def _praser():
         help="Valid colormap name to fill colors. Use '--list-cmaps' option to see list of supported colormaps. Must have minimum 11 colors, else will lead to error.",
     )
     parser.add_argument(
+        "--clevels",
+        metavar="<contour-levels>",
+        type=arguments.validate_clevels,
+        default=False,
+        help="Provide custom contour level(s) to highlight data. Levels are to be in ascending order and seperated by ',' i.e., '24,26,28'. If single value is provided, clevels will be automatically calculated.",
+    )
+    parser.add_argument(
         "--dpi",
         metavar="<value>",
         type=int,
@@ -525,13 +544,13 @@ def main():
         sys.exit(print(__version__))
     elif not all([args.input, args.vars, args.output]):
         sys.exit(
-            "You must provide path to WRF model output file using '--input' option, output directory for saving image files using '--output' option and must provide at least one variable name using '--var' option to process.\nTypical usage will be \"wrfplot --input filename' --output 'path/to/output/dir' --var 'slp'\""
+            "You must provide path to WRF model output file using '--input' option, output directory for saving image files using '--output' option and must provide at least one variable name using '--vars' option to process.\nTypical usage will be \"wrfplot --input filename' --output 'path/to/output/dir' --vars 'slp'\""
         )
     elif all([args.input, args.vars, args.output]):
         file = fileio.FileIO(args.input)
         if file.is_wrf():
             wrfplt = Wrfplot(
-                input_path=args.input, output_path=args.output, dpi=args.dpi, cmap=args.cmap, ulevels=args.ulevels, animation=args.gif, animation_speed=args.gif_speed
+                input_path=args.input, output_path=args.output, dpi=args.dpi, cmap=args.cmap, ulevels=args.ulevels, animation=args.gif, animation_speed=args.gif_speed, clevels=args.clevels
             )
             try:
                 wrfplt.read_file(args.input)
