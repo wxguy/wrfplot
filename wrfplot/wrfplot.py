@@ -40,7 +40,7 @@ import platform
 import sys
 import argparse
 from tqdm import tqdm
-import netCDF4 as nc
+import netCDF4 as nc            
 import numpy as np
 import arguments
 from datetime import datetime
@@ -56,6 +56,7 @@ import warnings
 from importlib.metadata import version, PackageNotFoundError
 import _version
 import matplotlib
+from concurrent.futures import ProcessPoolExecutor, as_completed
 matplotlib.use("agg")
 warnings.filterwarnings("ignore", module="matplotlib")
 warnings.filterwarnings("ignore", module="datetime")
@@ -98,6 +99,7 @@ class Wrfplot(object):
         self.file = fileio.FileIO(self.input_file)
         self.config = ConfigParser()
         self.config.read(os.path.join(utils.data_dir(), "wrf_variables.ini"))
+        self.wrf_var_dict = {s: dict(self.config.items(s)) for s in self.config.sections()} 
         self.dpi = dpi
         self.cmap = cmap
         self.U = None
@@ -253,26 +255,21 @@ class Wrfplot(object):
 
     def plot_sfc(self):
         """Plot only surface data"""
-        pbar = tqdm(
-            range(0, len(self.date_time)),
-            desc="Plotting Variable : ",
-            leave=False,
-            colour="green",
-        )
-        pbar.write(
-            "\n*** Initialising plotting for variable : "
-            + utils.quote(self.var)
-            + " ***\n"
-        )
+        pbar = tqdm(range(0, len(self.date_time)), desc="Plotting Variable : ", leave=False, colour="green")
+        pbar.write("\n*** Initialising plotting for variable : {_var} ***\n".format(_var=utils.quote(self.var)))
         data_plot = None
         images = []
+        
         for index in pbar:
             _time = self.date_time[index]
             if self.var == "slp":
                 self.var_data = smooth2d(self.var_data, 3, cenweight=4)
                 self.clevels = utils.get_auto_clevel(self.var_data, slp=True)
             elif self.clevels is False:
-                self.clevels = json.loads(self.config.get(self.var, "clevels"))
+                default_clevels = self.config.get(self.var, "clevels")
+                if ',' in default_clevels:
+                    default_clevels = list(map(int, default_clevels.split(',')))
+                self.clevels = default_clevels      
 
             if data_plot is None:
                 data_plot = self.var_data
@@ -295,38 +292,24 @@ class Wrfplot(object):
     def plot_upper(self):
         """Plot only upper atmospheric data"""
         pressure = getvar(self.nc_fh, "pressure", ALL_TIMES)
-        self.clevels = json.loads(self.config.get(self.var, "clevels"))
+        # self.clevels = self.config.get(self.var, "clevels")
+        if self.clevels is False:
+            default_clevels = self.config.get(self.var, "clevels")
+            if ',' in default_clevels:
+                default_clevels = list(map(int, default_clevels.split(',')))
+            self.clevels = default_clevels
         u_var_data = self.var_data
         if self.U is not None and self.V is not None:
             u_var_u_data = self.U
             u_var_v_data = self.V
-        pbar_var = tqdm(
-            range(0, len(self.date_time)),
-            desc="Plotting Variable : ",
-            leave=False,
-            position=0,
-            colour="green",
-        )
-        pbar_var.write(
-            "\n*** Initialising plotting for variable : "
-            + utils.quote(self.var)
-            + " ***\n"
-        )
+        pbar_var = tqdm(range(0, len(self.date_time)), desc="Plotting Variable : ", leave=False, position=0, colour="green")
+        pbar_var.write("\n*** Initialising plotting for variable : {_var} ***\n".format(_var=utils.quote(self.var)))
         images = []
         for index in pbar_var:
             _time = self.date_time[index]
             # Must initialise the bar inside time loop so that range is set every time entering into outer loop
-            pbar_lvl = tqdm(
-                self.ulevels,
-                desc="Plotting Level : ",
-                leave=False,
-                position=1,
-                colour="blue",
-            )
-
-            pbar_var.write(
-                "\tPlotting " + utils.quote(self.var) + " for Time: " + _time
-            )
+            pbar_lvl = tqdm(self.ulevels, desc="Plotting Level : ", leave=False, position=1, colour="blue")
+            pbar_var.write("\tPlotting " + utils.quote(self.var) + " for Time: " + _time)
             pbar_var.set_description("Overall Progress :", refresh=True)
             for self.ulevel in pbar_lvl:
                 self.var_data = interplevel(u_var_data, pressure, self.ulevel)
@@ -423,7 +406,7 @@ class Wrfplot(object):
             return convert.k_to_c(data)
         elif self.var in ["low_cloudfrac", "mid_cloudfrac", "high_cloudfrac"]:
             return np.round(data * 100)
-        elif self.var == "winds":
+        elif self.var in ["winds", 'u_winds']:
             return convert.ms_to_kts(data)
         else:
             return data
@@ -434,7 +417,7 @@ class Wrfplot(object):
 
     def get_title(self, var):
         """Get title from config file"""
-        return json.loads(self.config.get(var, "title"))
+        return self.config.get(var, "title")
 
     def get_unit(self):
         """Get unit from config file"""

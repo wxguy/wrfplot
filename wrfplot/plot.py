@@ -127,8 +127,10 @@ class MakePlot(object):
     def add_cartopy_features(self):
         """Add cartopy features only for specific variables"""
         if self.var_name in ["slp", "mslp"]:
-            self.ax.add_feature(cf.LAND)
-            self.ax.add_feature(cf.OCEAN)
+            # self.ax.add_feature(cf.LAND)
+            # self.ax.add_feature(cf.OCEAN)
+            # Background colour is not made uniform. Hence removing it. 
+            pass
 
     def add_grids(self):
         """Add grid lines to plot"""
@@ -163,14 +165,14 @@ class MakePlot(object):
         """Get contour levels"""
         if self.clevels is not False and isinstance (self.clevels, list):
             return self.clevels
-        elif self.clevels is not False and isinstance (self.clevels, str):
+        elif self.clevels is not False and isinstance (self.clevels, int):
             self.clevels = utils.get_auto_clevel(self.data, scale=int(self.clevels))
         elif self.clevels == "auto":
             self.clevels = utils.get_auto_clevel(self.data)
 
     def plot_title(self):
         """Plot title for the given variable"""
-        title = json.loads(self.config.get(self.var_name, "title"))
+        title = self.config.get(self.var_name, "title")
         unit = self.config.get(self.var_name, "unit").replace('"', "")
         if self.ulevel is not None:
             title_text = (
@@ -179,9 +181,9 @@ class MakePlot(object):
                 + unit
                 + ") at "
                 + str(self.ulevel)
-                + " hPa\nModel Run Hr : "
+                + " hPa\nCycle : "
                 + self.cycle
-                + " UTC  |  Fcst Hr : "
+                + " UTC  |  Validity : "
                 + self.fcst_hr
                 + " UTC"
             )
@@ -190,9 +192,9 @@ class MakePlot(object):
                 title
                 + " ("
                 + unit
-                + ")\nModel Run Hr : "
+                + ")\nCycle  : "
                 + self.cycle
-                + " UTC  |  Fcst Hr : "
+                + " UTC  |  Validity : "
                 + self.fcst_hr
                 + " UTC"
             )
@@ -213,7 +215,7 @@ class MakePlot(object):
             self.cmap = utils.get_cmap(self.cmap)
             return True
         else:
-            cmap_name = json.loads(self.config.get(self.var_name, "cmap"))
+            cmap_name = self.config.get(self.var_name, "cmap")
         if cmap_name == "None":
             self.cmap = None
         else:

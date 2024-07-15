@@ -25,6 +25,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 from matplotlib import cm
 import os
+import sys
 import socket
 import colormaps as cmaps
 
@@ -175,7 +176,7 @@ def get_auto_clevel(data, scale=12, slp=False):
     Returns:
         list: The c_level in list and in increasing form
     """
-
+    
     c_levels = []
     max = data.max()
     min = data.min()
