@@ -4,7 +4,7 @@
 ; Define the path to directory where Nutika put all our application files and directories
 !define PY_APP_DIR "build\windows\wrfplot" 
 !define PRODUCT_NAME "wrfplot"
-!define PRODUCT_VERSION "0.9.5"
+!define PRODUCT_VERSION "0.9.7"
 !define BITNESS "64"
 !define ARCH_TAG ".amd64"
 !define INSTALLER_NAME "wrfplot-windows-64bit.exe"

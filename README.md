@@ -1,6 +1,8 @@
 Application License [![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
 
-Works on both Linux [![Linux](https://svgshare.com/i/Zhy.svg)](https://svgshare.com/i/Zhy.svg) and Windows [![Windows](https://svgshare.com/i/ZhY.svg)](https://svgshare.com/i/ZhY.svg). Mac OS [![macOS](https://svgshare.com/i/ZjP.svg)](https://svgshare.com/i/ZjP.svg) support is available via `conda`.
+Works on both Linux [![Linux](https://skillicons.dev/icons?i=linux)](https://github.com/wxguy/wrfplot/releases) and Windows [![Windows](https://skillicons.dev/icons?i=windows)](https://github.com/wxguy/wrfplot/releases). 
+
+Mac OS [![macOS](https://skillicons.dev/icons?i=apple)](https://anaconda.org/search?q=wrfplot) support is available via `conda`.
 
 Status of Documentation [![Documentation Status](https://readthedocs.org/projects/wrfplot/badge/?version=latest)](https://wrfplot.readthedocs.io/en/latest/?badge=latest)
 
