@@ -279,9 +279,7 @@ class Wrfplot(object):
             path = self.plot_wrf_data(_time, index, data_plot=data_plot)
             if path:
                 images.append(path)
-        tqdm.write(
-            "\nPlotting of variable " + utils.quote(self.var) + " completed...\n"
-        )
+        tqdm.write("\nPlotting of variable " + utils.quote(self.var) + " completed...\n")
         if self.animation is not False:
             if len(images) > 0:
                 output_gif_name = os.path.join(os.path.dirname(images[0]), self.var) + '.gif'
@@ -402,7 +400,7 @@ class Wrfplot(object):
 
     def convert_unit(self, data):
         """Convert data to other unit"""
-        if self.var in ["T2", "u_temp", "u_theta", "u_tv", "u_twb"]:
+        if self.var in ["T2", "u_temp", "u_theta", "u_tv", "u_twb"]:                    
             return convert.k_to_c(data)
         elif self.var in ["low_cloudfrac", "mid_cloudfrac", "high_cloudfrac"]:
             return np.round(data * 100)
