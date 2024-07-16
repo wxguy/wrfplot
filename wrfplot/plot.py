@@ -33,7 +33,6 @@ from mpl_toolkits.axes_grid1 import make_axes_locatable
 import matplotlib.axes as maxes
 from tqdm import tqdm
 from matplotlib.colors import BoundaryNorm
-import json
 from cartopy.mpl.gridliner import LONGITUDE_FORMATTER, LATITUDE_FORMATTER
 import utils
 import warnings

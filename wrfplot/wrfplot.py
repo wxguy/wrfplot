@@ -45,7 +45,6 @@ import numpy as np
 import arguments
 from datetime import datetime
 from wrf import getvar, smooth2d, get_cartopy, interplevel, latlon_coords, ALL_TIMES
-import json
 from configparser import ConfigParser
 import fileio
 import utils
@@ -438,7 +437,7 @@ def _praser():
         "Command line application to plot static WRF model prognostic products..."
     )
     parser = argparse.ArgumentParser(
-        description=prog_name, epilog="\u00a9 J Sundar, wrf.guy@gmail.com, 2023"
+        description=prog_name, epilog="\u00a9 J Sundar, wrf.guy@gmail.com, 2024"
     )
     parser.add_argument(
         "--list-vars", action="store_true", help="Show list of variables supported by wrfplot and exit."

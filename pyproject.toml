@@ -29,7 +29,7 @@ classifiers = [
     "Programming Language :: Python :: Implementation :: CPython",
 ]
 
-dependencies = ['cartopy', 'xarray', 'matplotlib', 'wrf-python>=1.3', 'imageio', 'tqdm', 'netcdf4', 'colormaps']
+dependencies = ['cartopy', 'xarray', 'matplotlib', 'wrf-python>=1.3', 'tqdm', 'netcdf4', 'colormaps']
 
 [project.entry-points."wrfplot.wrfplot"]
 wrfplot = "wrfplot:main"
@@ -47,10 +47,9 @@ include-package-data = false
 # find = {}
 
 [tool.setuptools.packages.find]
-exclude = ["wrfplot.tests*"]
 namespaces = false
+exclude = ["docs*", "tests*"    ]
 
 [tool.setuptools.exclude-package-data]
-"wrfplot" = [".gitattributes", "dist", "installer.iss", "test", "docs", "installer.nsi", "environment.yml", "installer.sh", "release_check_list.py", 
+"wrfplot" = [".gitattributes", "dist", "installer.iss", "tests", "docs", "installer.nsi", "environment.yml", "installer.sh", "release_check_list.py", 
 "wrfplot.egg-info", "dev", "install_env.txt", " __pycache__"]
-
