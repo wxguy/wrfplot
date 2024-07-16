@@ -30,14 +30,15 @@ py_files = include_files('wrfplot', '.', endswith='.py')
 # Convert name list path to list to string
 mpl_toolkits_dir = list(importlib.import_module('mpl_toolkits').__path__)[0]
 mpl_toolkits_module = include_files(mpl_toolkits_dir, 'mpl_toolkits')
+colormaps_module =  os.path.dirname(importlib.machinery.PathFinder().find_module("colormaps").get_filename())
 
 
 a = Analysis(
     ['wrfplot/wrfplot.py'],
     pathex=[],
     binaries=[],
-    datas=[('./wrfplot/data', 'data'), ('./wrfplot/colormaps', 'colormaps')] + libos_files + py_files + mpl_toolkits_module,
-    hiddenimports=[],
+    datas=[('./wrfplot/data', 'data'), (colormaps_module, 'colormaps')] + libos_files + py_files + mpl_toolkits_module,
+    hiddenimports=['colormaps'],
     hookspath=[],
     hooksconfig={},
     runtime_hooks=[],

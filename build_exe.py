@@ -200,6 +200,7 @@ def create_makeself():
     if not os.path.exists(makeself_path):
         makeself = "makeself"
     else:
+        os.system('chmod +x ' + makeself_path)
         makeself = "bash " + makeself_path
 
     if os.path.exists(os.path.join(output_dir, "wrfplot.run")):
@@ -331,11 +332,13 @@ def main():
             create_nsis_installer()
         else:
             print("Using pyinstaller as backend for creating final executable...")
-            execute_cmd("pyinstaller --noconfirm --distpath " + output_dir + " wrfplot.spec")
+            execute_cmd("pyinstaller --noconfirm --distpath " + output_dir + " wrfplot.spec")            
             if os.path.exists(os.path.join("build", "windows", "wrfplot", 'wrfplot.exe')): 
                 print("wrfplot.exe successfully created at :", os.path.exists(os.path.join("build", "windows", "wrfplot", 'wrfplot.exe')))
                 print("Creating setup file using NSIS...")
                 create_nsis_installer()
+            else:
+                print('Failed to create wrfplot windows executable...')
 
     elif platform.system() == "Linux":
         # execute_cmd("pyinstaller --noconfirm --distpath " + pyinst_dest_path + " wrfplot.spec")
