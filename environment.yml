@@ -1,6 +1,6 @@
 # conda env create -f environment.yml
 # conda activate wrfplot
-# conda env remove -n wrfplot
+    # conda env remove -n wrfplot
 
 name: wrfplot
 channels:
@@ -12,23 +12,20 @@ dependencies:
   - conda-forge::wrf-python
   - conda-forge::netcdf4
   - conda-forge::cartopy
-  #- conda-forge::imageio
-  #- conda-forge::nuitka
   - conda-forge::ordered-set
   - conda-forge::tqdm
   - conda-forge::wrapt
   - conda-forge::psutil
-  # - conda-forge::patchelf
-  #- conda-forge::scons
   - conda-forge::shapely
   - conda-forge::pip
-  - conda-forge::black  # use it only for code formatting. `black /path/to/python/package`
   - conda-forge::nsis
-  - conda-forge::pyinstaller  # Have to rely on this as nutika gave a headache :-((
+  - conda-forge::pyinstaller
   - conda-forge::colormaps
+  - conda-forge::python-build
+  - conda-forge::setuptools_scm
   - pip:
     - sphinx
     - sphinx_rtd_theme
-    - build
+    # - build
     - setuptools-git-versioning
     # - pyinstaller  # Not required as of now as nuitka works fine on Linux and Windows

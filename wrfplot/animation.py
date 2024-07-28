@@ -5,24 +5,22 @@
 """
 This file is part of wrfplot application.
 
-wrfplot is free software: you can redistribute it and/or modify
-it under the terms of the GNU General Public License as published by
-the Free Software Foundation, either version 3 of the License, or
-any later version.
+wrfplot is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as
+ published by the Free Software Foundation, either version 3 of the License, or any later version. 
+ 
+wrfplot is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty 
+of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
 
-wrfplot is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU General Public License for more details.
-
-You should have received a copy of the GNU General Public License
-along with wrfplot. If not, see <http://www.gnu.org/licenses/>.
+You should have received a copy of the GNU General Public License along with wrfplot. If not, 
+see <http://www.gnu.org/licenses/>.
 """
 
 from PIL import Image
 import os
 import traceback
+from tqdm import tqdm
 import utils
+
 
 def check_img(filename):
     """ Check if given input files are valid image files"""
@@ -53,7 +51,7 @@ def filter_images(image_paths, type='png'):
     return None
 
 
-def make_animation(image_paths, outPut_file_path, speed=False, file_type='png', loop=True):
+def make_animation(image_paths, output_file_path, speed=False, file_type='png', loop=True):
     """Create GIF file from list of images"""
     if speed is False:
         duration_sec = 0.5 * 1000
@@ -63,10 +61,11 @@ def make_animation(image_paths, outPut_file_path, speed=False, file_type='png', 
     if images is not None:
         try:
             img = images[0]  # next(images)
-            img.save(fp=outPut_file_path, format='GIF', append_images=images, save_all=True, duration=duration_sec, loop=0, optimize=True)
-            if os.path.exists(outPut_file_path):
-                print("Animation (GIF) file created at " + utils.quote(outPut_file_path), '\n')
+            img.save(fp=output_file_path, format='GIF', append_images=images, save_all=True, duration=duration_sec,
+                     loop=0, optimize=True)
+            if os.path.exists(output_file_path):
+                tqdm.write(f"\nAnimation (GIF) file created at : {utils.quote(output_file_path)}")
         except Exception as e:
-            print(traceback.format_exc())
-            print("Failed to create animation...")
+            tqdm.write(traceback.format_exc())
+            tqdm.write(f"Failed to create animation. {e}...")
 

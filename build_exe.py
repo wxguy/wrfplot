@@ -58,7 +58,7 @@ if platform.system() == "Windows":
     geos_trgt_dir = os.path.join("shapely", "DLLs", "\\")
     compiler = "--mingw64"
     nutika_exe_name = 'wrfplot.exe'  # os.path.join(output_dir, 'wrfplot.dist', 'wrfplot.exe')
-    frozen_version_file = os.path.join(project_root, "build", "windows", "wrfplot", "_version.py")
+    frozen_version_file = os.path.join(project_root, "build", "windows", "wrfplot", "_internal", "_version.py")
 
 elif platform.system() == "Linux":
     output_dir = os.path.join(project_root, 'build', 'linux')
@@ -68,8 +68,8 @@ elif platform.system() == "Linux":
     geos_dll_files = conda_prefix + "/lib/libgeos\*so.\*"
     geos_trgt_dir = "shapely/.libs/"
     compiler = ""
-    nutika_exe_name =  'wrfplot' #os.path.join(output_dir, 'wrfplot.dist', 'wrfplot')
-    frozen_version_file = os.path.join(project_root, "build", "linux", "wrfplot", "_version.py")
+    nutika_exe_name = 'wrfplot' #os.path.join(output_dir, 'wrfplot.dist', 'wrfplot')
+    frozen_version_file = os.path.join(project_root, "build", "linux", "wrfplot", "_internal", "_version.py")
 
 # Tested on Miniconda Python 3.10.4
 # This is the place one need to be carefull. For wrfplot project, netcdf, shapely and pyproj modules were not detected
@@ -224,7 +224,9 @@ def create_makeself():
         shutil.copy("installer.sh", output_dir)
         os.system("chmod +x " + os.path.join(output_dir, "installer.sh"))
         print("Executing makeself command to create archive...")
-        execute_cmd(makeself + " " + os.path.join(output_dir) + " " + os.path.join(output_dir, "wrfplot-linux-64bit.run") + " wrfplot_Linux_Installer " + "./installer.sh")
+        execute_cmd(makeself + " " + os.path.join(output_dir) + " " +
+                    os.path.join(output_dir, "wrfplot-linux-64bit.run") +
+                    " wrfplot_Linux_Installer " + "./installer.sh")
         if os.path.exists(os.path.join(output_dir, "wrfplot.run")):
             print("Please find the final Linux installer at: " + os.path.join(output_dir, "wrfplot.run"))
         else:
@@ -373,12 +375,14 @@ def clean_dirs():
                 print("Removing file", quote(f))
                 os.remove(f)
 
+
 def build_sdist():
     if os.system("python -m build --sdist") == 0:
         print("Successfully built source distribution package under 'dist' directory...")
         return True
     else:
         sys.exit("Failure to build source distribution package.\n Please correct the issue and build the executable again.")
+
 
 def update_verion():
     VERSION = os.listdir(os.path.join(project_root, 'dist'))[0].replace("wrfplot-", "").replace(".tar.gz", "")

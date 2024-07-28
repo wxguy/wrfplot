@@ -31,7 +31,7 @@ classifiers = [
 
 dependencies = ['cartopy', 'xarray', 'matplotlib', 'wrf-python>=1.3', 'tqdm', 'netcdf4', 'colormaps']
 
-[project.entry-points."wrfplot.wrfplot"]
+[project.entry-points."wrfplot.main"]
 wrfplot = "wrfplot:main"
 
 [project.urls]
@@ -51,5 +51,9 @@ namespaces = false
 exclude = ["docs*", "tests*"    ]
 
 [tool.setuptools.exclude-package-data]
-"wrfplot" = [".gitattributes", "dist", "installer.iss", "tests", "docs", "installer.nsi", "environment.yml", "installer.sh", "release_check_list.py", 
+"wrfplot" = [".gitattributes", "dist", "installer.iss", "tests", "docs", "installer.nsi", "environment.yml", "installer.sh", "release_check_list.py",
 "wrfplot.egg-info", "dev", "install_env.txt", " __pycache__"]
+
+[tool.pyright]
+venvPath = "$HOME/miniconda3/envs"
+venv = "wrfplot"

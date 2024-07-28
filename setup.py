@@ -5,32 +5,26 @@
 """
 This file is part of wrfplot application.
 
-wrfplot is free software: you can redistribute it and/or modify
-it under the terms of the GNU General Public License as published by
-the Free Software Foundation, either version 3 of the License, or
-any later version.
+wrfplot is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as
+ published by the Free Software Foundation, either version 3 of the License, or any later version. 
+ 
+wrfplot is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty 
+of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
 
-wrfplot is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU General Public License for more details.
-
-You should have received a copy of the GNU General Public License
-along with wrfplot. If not, see <http://www.gnu.org/licenses/>.
+You should have received a copy of the GNU General Public License along with wrfplot. If not, 
+see <http://www.gnu.org/licenses/>.
 """
 
 __author__ = 'J Sundar (wrf.guy@gmail.com)'
 
 import io
 import os
-import sys
-from shutil import rmtree
 import glob
 from setuptools import find_packages, setup
 
 # Package meta-data.
 NAME = 'wrfplot'
-DESCRIPTION = 'Command line application to plot WRF model output data'
+DESCRIPTION = 'Command line application to plot WRF model output data...'
 URL = 'https://github.com/wxguy/wrfplot'
 EMAIL = 'wrf.guy@gmail.com'
 AUTHOR = 'J Sundar'
@@ -39,7 +33,7 @@ VERSION = None
 LICENSE = 'GNU General Public License v3 (GPLv3)'
 
 # What packages are required for this module to be executed?
-REQUIRED = ['cartopy', 'xarray', 'matplotlib', 'wrf-python>=1.3', 'imageio', 'tqdm', 'netcdf4']
+REQUIRED = ['cartopy', 'xarray', 'matplotlib', 'wrf-python>=1.3', 'tqdm', 'netcdf4']
 
 here = os.path.abspath(os.path.dirname(__file__))
 
@@ -61,6 +55,7 @@ def list_files(directory):
         if os.path.isfile(_file) and '.py' not in _file:
             files.append(_file)
     return files
+
 
 def _version():
     from setuptools_scm.version import SEMVER_MINOR, guess_next_simple_semver, release_branch_semver_version, simplified_semver_version
@@ -87,7 +82,8 @@ setup(
     author_email=EMAIL,
     python_requires=REQUIRES_PYTHON,
     url=URL,
-    keywords=["Scientific", "Engineering", "Atmospheric Science", "Weather Model", "Plotting", "Software Development", "Numerical Weather Prediction", "NWP"],
+    keywords=["Scientific", "Engineering", "Atmospheric Science", "Weather Model", "Plotting", "Software Development",
+              "Numerical Weather Prediction", "NWP", "Weather Research and Forecast", "WRF"],
     py_modules=['wrfplot'],
 
     entry_points={
@@ -103,12 +99,15 @@ setup(
         'Programming Language :: Python :: 3.8',
         'Programming Language :: Python :: 3.9',
         'Programming Language :: Python :: 3.10',
+        'Programming Language :: Python :: 3.11',
         'Operating System :: Unix',
         'Operating System :: MacOS',
         'Operating System :: POSIX :: Linux',
         'Operating System :: Microsoft :: Windows',
         'Programming Language :: Python :: Implementation :: CPython',
         'Topic :: Scientific/Engineering :: Atmospheric Science',
+        'Topic :: Scientific/Engineering :: Numerical Weather Model',
+        'Topic :: Scientific/Engineering :: WRF',
         'Topic :: Scientific/Engineering :: Visualization',
     ],
     packages=find_packages("wrfplot", exclude=['test', 'test.*'],),

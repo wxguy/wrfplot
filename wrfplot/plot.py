@@ -5,26 +5,23 @@
 """
 This file is part of wrfplot application.
 
-wrfplot is free software: you can redistribute it and/or modify
-it under the terms of the GNU General Public License as published by
-the Free Software Foundation, either version 3 of the License, or
-any later version.
+wrfplot is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as
+ published by the Free Software Foundation, either version 3 of the License, or any later version. 
+ 
+wrfplot is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty 
+of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
 
-wrfplot is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU General Public License for more details.
-
-You should have received a copy of the GNU General Public License
-along with wrfplot. If not, see <http://www.gnu.org/licenses/>.
+You should have received a copy of the GNU General Public License along with wrfplot. If not, 
+see <http://www.gnu.org/licenses/>.
 """
 
 __author__ = "J Sundar (wrf.guy@gmail.com)"
 
 import matplotlib.pyplot as plt
 import os
-from wrf import to_np
+from wrf import to_np, cartopy_xlim, cartopy_ylim, smooth2d
 import cartopy
+import numpy as np
 from cartopy import feature as cf
 from cartopy.feature import ShapelyFeature
 from cartopy.io.shapereader import Reader
@@ -48,58 +45,44 @@ warnings.filterwarnings("ignore", category=UserWarning)
 cartopy.config["pre_existing_data_dir"] = os.path.abspath(utils.data_dir())
 
 
-class MakePlot(object):
+class PlotMap(object):
     """Plot data on a map with necessary colours and title"""
 
     def __init__(
         self,
         var_name=None,
-        data=None,
-        u_kt=None,
-        v_kt=None,
-        lons=None,
-        lats=None,
-        run_time=None,
-        fcst_hr=None,
         u_level=None,
-        proj=None,
-        cmap=None,
         clevels=False,
         fig_format="png",
         output_dir=None,
         dpi=150,
         config_file=None,
     ):
-        super(MakePlot, self).__init__()
+        super(PlotMap, self).__init__()
         self.var_name = var_name
-        self.data = data
-        self.U = u_kt
-        self.V = v_kt
-        self.lons = lons
-        self.lats = lats
-        self.proj = proj
+        self.proj = None
         self.clevels = clevels
-        self.cycle = run_time
-        self.fcst_hr = fcst_hr
         self.ulevel = u_level
-        self.cmap = cmap
         self.fig = None
         self.ax = None
         self.grd_lns = None  # Grid lines
         self.cf = None  # Contour fill
         self.cs = None  # Contour line
         self.cl = None  # Contour label
+        self.barbs = None
         self.fig_format = fig_format
         self.output_dir = output_dir
         self.dpi = dpi
         self.config = config_file
-        self.c_bar_extend = self.config.get(self.var_name, "c_bar_extend").replace(
-            '"', ""
-        )
-
-    def create_fig(self):
+        self.c_bar_extend = None
+        self.cbar = None
+        self.cax = None
+    
+    def create_fig(self, projection):
         """Create Fig"""
-        if self.ax is not None or self.fig is None:
+        if self.proj is None:
+            self.proj = projection
+        if self.ax is None or self.fig is None:
             self.fig, self.ax = plt.subplots(
                 figsize=(12, 8),
                 subplot_kw=dict(projection=self.proj),
@@ -107,222 +90,136 @@ class MakePlot(object):
                 num=1,
                 clear=True,
             )
+            self.add_shp_features()
+            self.add_grids()
 
     def add_shp_features(self):
         """Read shapefile and add as cartopy features"""
         wld_shp_f = os.path.join(utils.data_dir(), "shape", "world_shape.shp")
-        wld_shp_features = ShapelyFeature(
-            Reader(wld_shp_f).geometries(), ccrs.PlateCarree(), facecolor="none"
-        )
-        self.ax.add_feature(
-            wld_shp_features, linewidth=0.5, edgecolor="black", alpha=0.7
-        )
-        # self.ax.add_feature(cartopy.feature.LAND)
+        wld_shp_features = ShapelyFeature(Reader(wld_shp_f).geometries(), ccrs.PlateCarree(), facecolor="none")
+        self.ax.add_feature(wld_shp_features, linewidth=0.5, edgecolor="black", alpha=0.7)
 
-    def add_background(self):
-        """Add stock image to plot axex"""
-        self.ax.stock_image()
+    def contour(self, var_name, lons, lats, data, title, clevels, fcst_time, colors='blue'):
+        self.clear_plots()
+        if var_name == "slp":
+            data = smooth2d(data, 3, cenweight=4)
+            self.cs = self.ax.contour(lons, lats, data, colors=colors, transform=ccrs.PlateCarree(), linewidths=1.0,
+                                      levels=clevels)
+        else:
+            self.cs = self.ax.contour(lons, lats, data, colors="blue", transform=ccrs.PlateCarree(), linewidths=0.5, levels=self.clevels)
 
-    def add_cartopy_features(self):
-        """Add cartopy features only for specific variables"""
-        if self.var_name in ["slp", "mslp"]:
-            # self.ax.add_feature(cf.LAND)
-            # self.ax.add_feature(cf.OCEAN)
-            # Background colour is not made uniform. Hence removing it. 
-            pass
+        self.cl = self.ax.clabel(self.cs, inline=1, fontsize=10, fmt="%1.0f", inline_spacing=1)
+        self.plot_title(title)
+        # self.set_xy_lim(data)
+
+        return self.save_fig(var=var_name, fcst_time=fcst_time)
+
+    def winds(self, var_name, lons, lats, u_data, v_data, wspd, title, clevels, colors, cmap, fcst_time, level=None):
+        thin = utils.get_auto_resolution(to_np(lats))
+        flip_array = (lats < 0)
+        self.clear_plots()
+        self.contour_fill(var_name=var_name, lons=lons[::thin, ::thin], lats=lats[::thin, ::thin],
+                          data=wspd[::thin, ::thin] , title=title, clevels=clevels, colors=colors, cmap=cmap,
+                          fcst_time=fcst_time)
+
+        self.barbs = self.ax.barbs(to_np(lons)[::thin, ::thin], to_np(lats)[::thin, ::thin],
+                                   to_np(u_data)[::thin, ::thin], to_np(v_data)[::thin, ::thin],
+                                   transform=ccrs.PlateCarree(), length=5.5, sizes={"spacing": 0.2},
+                                   pivot="middle", flip_barb=flip_array[::thin, ::thin])
+
+        return self.save_fig(var=var_name, fcst_time=fcst_time, _level=level)
+
+    def contour_fill(self, var_name, lons, lats, data, title, clevels, colors, cmap, fcst_time, level=None):
+        if isinstance(clevels, int):
+            bnorm = 'linear'
+        else:
+            bnorm = BoundaryNorm(clevels, cmap.N)
+        if self.c_bar_extend is None:
+            self.c_bar_extend = utils.get_cbar_extend(var_name)
+        self.clear_plots()
+        self.cf = self.ax.contourf(lons, lats, data, transform=ccrs.PlateCarree(), cmap=cmap, norm=bnorm,
+                                   levels=clevels, extend=self.c_bar_extend)
+        self.cs = self.ax.contour(self.cf, colors=colors, transform=ccrs.PlateCarree(), linewidths=0.3)
+        self.cl = self.ax.clabel(self.cs, inline=1, fontsize=6, fmt="%1.0f", inline_spacing=1)
+
+        self.plot_title(title)
+        self.set_xy_lim(lons=lons, lats=lats)
+        self.add_cbar(var_name=var_name, clevels=clevels)
+
+        if var_name not in ['winds', 'u_winds']:
+            return self.save_fig(var=var_name, fcst_time=fcst_time, _level=level)
+
+    def plot_title(self, title_text=''): 
+        self.ax.set_title(title_text, fontsize=12, weight="semibold", style="oblique", stretch="normal", family="serif")
+    
+    def add_cbar(self, var_name, clevels):
+        """Plot colorbar next to plotted axes"""
+        # 'neither', 'both', 'min', 'max'
+        if self.c_bar_extend is None:
+            self.c_bar_extend = self.config[var_name]["c_bar_extend"]
+
+        if not self.cbar:
+            # F = plt.gcf()
+            divider = make_axes_locatable(self.ax)
+            self.cax = divider.append_axes("right", size="3.0%", pad=0.2, axes_class=maxes.Axes)
+            self.fig.add_axes(self.cax)
+            self.cbar = plt.colorbar(self.cf, cax=self.cax, orientation="vertical", extend=self.c_bar_extend)
+            unit = self.config[var_name]["unit"].replace('"', "")
+            self.cbar.set_ticks(clevels)
+            self.cbar.ax.tick_params(labelsize=8)
+            self.cbar.set_label(label=unit, size="large", weight="bold")
+            self.cbar.ax.text(0.5, 0, "", va="top", ha="center")
 
     def add_grids(self):
         """Add grid lines to plot"""
         self.grd_lns = self.ax.gridlines(
             draw_labels=True, color="gray", alpha=0.5, linestyle="--"
         )
-        self.grd_lns.xlabels_top = False
-        self.grd_lns.ylabels_right = False
-        self.grd_lns.xformatter = LONGITUDE_FORMATTER
-        self.grd_lns.yformatter = LATITUDE_FORMATTER
-
-    def plot_var(self):
-        """Main function to call other mehtods to plot variable"""
-        if self.fig is None:
-            self.create_fig()
-            self.add_shp_features()
-            self.add_cartopy_features()
-
-        # self.add_background()
-        self.add_grids()
-        self.get_cmap()
-        self.get_clevels()
-        self.plot_data()
-        self.plot_title()
-        if not self.var_name == "slp":
-            self.plot_cbar()
-        path = self.save_fig()
-        if path is not None:
-            return path
-
-    def get_clevels(self):
-        """Get contour levels"""
-        if self.clevels is not False and isinstance (self.clevels, list):
-            return self.clevels
-        elif self.clevels is not False and isinstance (self.clevels, int):
-            self.clevels = utils.get_auto_clevel(self.data, scale=int(self.clevels))
-        elif self.clevels == "auto":
-            self.clevels = utils.get_auto_clevel(self.data)
-
-    def plot_title(self):
-        """Plot title for the given variable"""
-        title = self.config.get(self.var_name, "title")
-        unit = self.config.get(self.var_name, "unit").replace('"', "")
-        if self.ulevel is not None:
-            title_text = (
-                title
-                + " ("
-                + unit
-                + ") at "
-                + str(self.ulevel)
-                + " hPa\nCycle : "
-                + self.cycle
-                + " UTC  |  Validity : "
-                + self.fcst_hr
-                + " UTC"
-            )
-        else:
-            title_text = (
-                title
-                + " ("
-                + unit
-                + ")\nCycle  : "
-                + self.cycle
-                + " UTC  |  Validity : "
-                + self.fcst_hr
-                + " UTC"
-            )
-        self.ax.set_title(
-            title_text,
-            fontsize=12,
-            weight="semibold",
-            style="oblique",
-            stretch="normal",
-            family="serif",
-        )
-
-    def get_cmap(self):
-        """Get cmap from variable.ini file"""
-        cmap_name = "None"
-        if self.cmap is not False:
-            
-            self.cmap = utils.get_cmap(self.cmap)
-            return True
-        else:
-            cmap_name = self.config.get(self.var_name, "cmap")
-        if cmap_name == "None":
-            self.cmap = None
-        else:
-            self.cmap = utils.get_cmap(cmap_name)
-
-    def plot_cbar(self):
-        """Plot colorbar next to plotted axes"""
-        # 'neither', 'both', 'min', 'max'
-        F = plt.gcf()
-        divider = make_axes_locatable(self.ax)
-        cax = divider.append_axes("right", size="3.0%", pad=0.2, axes_class=maxes.Axes)
-        F.add_axes(cax)
-        bar = plt.colorbar(
-            self.cf, cax=cax, orientation="vertical", extend=self.c_bar_extend
-        )
-        unit = self.config.get(self.var_name, "unit").replace('"', "")
-        bar.set_ticks(self.clevels)
-        bar.ax.tick_params(labelsize=8)
-        bar.set_label(label=unit, size="large", weight="bold")
-        bar.ax.text(0.5, 0, "", va="top", ha="center")
-
-    def plot_data(self):
-        """Plot 2D data on a Map"""
-        # We need to normalise the colour map with data levels. Otherwise, colourmap will be skewed
-        # SLP data does not require to have colour fill
-        if self.var_name == "slp":
-            self.cs = plt.contour(
-                self.lons,
-                self.lats,
-                self.data,
-                colors="blue",
-                transform=ccrs.PlateCarree(),
-                linewidths=0.5,
-                levels=self.clevels,
-            )
-            self.cl = plt.clabel(
-                self.cs, inline=1, fontsize=10, fmt="%1.0f", inline_spacing=1
-            )
-        else:
-            norm = BoundaryNorm(self.clevels, self.cmap.N)
-            self.cf = self.ax.contourf(
-                self.lons,
-                self.lats,
-                self.data,
-                transform=ccrs.PlateCarree(),
-                cmap=self.cmap,
-                norm=norm,
-                levels=self.clevels,
-                extend=self.c_bar_extend,
-            )  # colors=('lime', 'limegreen', 'darkgreen', 'yellow', 'orange', 'red', 'purple')
-            self.cs = self.ax.contour(
-                self.cf, colors="black", transform=ccrs.PlateCarree(), linewidths=0.3
-            )
-            self.cl = self.ax.clabel(
-                self.cs, inline=1, fontsize=6, fmt="%1.0f", inline_spacing=1
-            )
-
-        # Plot wind barbs on top of contourf only if U and V components are available
-        if self.U is not None and self.V is not None:
-            """print(self.lats)
-            print(self.lons)
-            print(self.U)
-            print(self.V)
-            sys.exit()"""
-            thin = utils.get_auto_resolution(to_np(self.lats))
-            self.ax.barbs(
-                to_np(self.lons)[::thin, ::thin],
-                to_np(self.lats)[::thin, ::thin],
-                to_np(self.U)[::thin, ::thin],
-                to_np(self.V)[::thin, ::thin],
-                transform=ccrs.PlateCarree(),
-                length=5.5,
-                sizes={"spacing": 0.2},
-                pivot="middle",
-            )
-
-    def save_fig(self):
+        self.grd_lns.top_labels = False
+        self.grd_lns.right_labels = False
+    
+    def set_xy_lim(self, lons, lats):
+        self.ax.set_extent([np.min(lons), np.max(lons), np.min(lats), np.max(lats)], crs=ccrs.PlateCarree())
+        """self.ax.set_ylim(cartopy_ylim(var_data))
+        self.ax.set_xlim(cartopy_xlim(var_data))"""
+        
+    def save_fig(self, var, fcst_time, _level=None):
         """Save plotted image to local filesystem"""
-        file_id = "%s_%s" % (self.var_name, self.fcst_hr)
-        if "u_" in self.var_name:
-            file_id = "%s_%s_%s" % (self.var_name, self.ulevel, self.fcst_hr)
+        file_id = "%s_%s" % (var, fcst_time)
+        if "u_" in var:
+            file_id = "%s_%s_%s" % (var, _level, fcst_time)
         filename = "%s.%s" % (file_id.replace(" ", "_"), self.fig_format)
         # Windows fix
         # Widows does not accept file containing ":" in the file name. So replace it with '_'.
         filename = filename.replace(":", "_")
         if not os.path.exists(self.output_dir):
             os.makedirs(self.output_dir)
-        plt.savefig(
-            os.path.join(self.output_dir, filename),
-            bbox_inches="tight",
-            dpi=self.dpi,
-            # frameon=True,  # option depreciated in latest matplotlib
-        )
+        # plt.savefig(os.path.join(self.output_dir, filename), bbox_inches="tight", dpi=self.dpi)
+        self.fig.savefig(os.path.join(self.output_dir, filename), bbox_inches="tight", dpi=self.dpi,
+                         format='png')
+        # self.clear_plots()
         if os.path.exists(os.path.join(self.output_dir, filename)):
-            tqdm.write(
-                "\t  Image saved at : "
-                + utils.quote(os.path.join(self.output_dir, filename))
-            )
-            
-            self.fig.canvas.flush_events()
-            plt.close()
+            tqdm.write("\t  Image saved at : " + utils.quote(os.path.join(self.output_dir, filename)))
+
             return os.path.join(self.output_dir, filename)
         else:
             return None
 
-    def animation(self, input_dir, variable, level=False, speed=0.5, loop=0):
-        """
-        Make animation for variable
-        # TODO
-        """
-        print("")
+    def clear_plots(self):
+        try:
+            if self.cs:
+                self.cs.remove()
+            if self.cf:
+                self.cf.remove()
+            if self.barbs:
+                self.barbs.remove()
+            if self.cax:
+                self.cax.remove()
+                self.cbar = False
+            """if self.cbar:
+                self.cbar.remove()
+                self.cbar = False"""
+        except Exception as e_clr_plt:
+            #   print(e_clr_plt)
+            pass
+

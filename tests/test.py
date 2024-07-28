@@ -65,6 +65,7 @@ def plot_upper(input_path, output_dir):
         print('Failed to complete upper atmospheric plots successfully...')
         return False
 
+
 def test(input_path, output_dir):
     cmd_options = [wrfplot_path, '--vars', 'u_winds,dummy,u_rh', '--ulevels', '900,450,dummy', '--input', input_path, '--output', output_dir]
     if os.system('python ' + " ".join(cmd_options)) == 0:
@@ -73,6 +74,7 @@ def test(input_path, output_dir):
     else:
         ('Failed to complete upper atmospheric plots successfully...')
         return False
+
 
 def plot_animation(input_path, output_dir):
     cmd_options = [wrfplot_path, '--vars', 'T2,dummy,u_rh', '--gif', '--input', input_path, '--output', output_dir]
@@ -83,6 +85,7 @@ def plot_animation(input_path, output_dir):
         print('Failed to create animation plot...')
         return False
 
+
 def plot_animation_with_speed(input_path, output_dir):
     cmd_options = [wrfplot_path, '--vars', 'T2,dummy', '--gif', '--gif-speed', '0.25'', --input', input_path, '--output', output_dir]
     if os.system('python ' + " ".join(cmd_options)) == 0:
@@ -91,7 +94,8 @@ def plot_animation_with_speed(input_path, output_dir):
     else:
         print('Failed to create animation plot...')
         return False
-    
+
+
 if __name__ == "__main__":
     home = str(Path.home())
     test_file_path = os.path.realpath(__file__)

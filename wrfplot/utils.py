@@ -1,33 +1,28 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-""" Module to deal with various operations repetadly used int he application  """
+""" Module to deal with various operations repeatedly used in the application  """
 """
 This file is part of wrfplot application.
 
-wrfplot is free software: you can redistribute it and/or modify
-it under the terms of the GNU General Public License as published by
-the Free Software Foundation, either version 3 of the License, or
-any later version.
+wrfplot is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as
+ published by the Free Software Foundation, either version 3 of the License, or any later version. 
+ 
+wrfplot is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty 
+of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
 
-wrfplot is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU General Public License for more details.
-
-You should have received a copy of the GNU General Public License
-along with wrfplot. If not, see <http://www.gnu.org/licenses/>.
+You should have received a copy of the GNU General Public License along with wrfplot. If not, 
+see <http://www.gnu.org/licenses/>.
 """
 
 __author__ = "J Sundar (wrf.guy@gmail.com)"
 
 import numpy as np
 import matplotlib.pyplot as plt
-from matplotlib import cm
 import os
-import sys
 import socket
 import colormaps as cmaps
+import configparser
 
 
 def get_cmap(name):
@@ -48,33 +43,9 @@ def get_cmap(name):
         cmap = getattr(cmaps, name)
     except AttributeError:
         print("Defaulting to 'rainbow' colormap.")
-        cmap = cm.get_cmap('rainbow')
+        cmap = plt.get_cmap('rainbow')
 
     return cmap
-
-
-# These are the list of projections supported by cartopy module
-cartopy_proj = [
-    "Mercator",
-    "PlateCarree",
-    "LambertConformal",
-    "LambertCylindrical",
-    "Miller",
-    "Mollweide",
-    "Orthographic",
-    "Robinson",
-    "Stereographic",
-    "TransverseMercator",
-    "InterruptedGoodeHomolosine",
-    "RotatedPole",
-    "OSGB",
-    "EuroPP",
-    "Geostationary",
-    "Gnomonic",
-    "NorthPolarStereo",
-    "OSNI",
-    "SouthPolarStereo",
-]
 
 
 def list_proj():
@@ -84,7 +55,8 @@ def list_proj():
         "merc\t: 'Mercator'. Best Used in areas around the Equator and for marine navigation"
     )
     print(
-        "pltcre\t: 'PlateCarree'. Used for simple portrayals of the world or regions with minimal geographic data and those not requiring accurate areas."
+        "pltcre\t: 'PlateCarree'. Used for simple portrayals of the world or regions with minimal geographic data and "
+        "those not requiring accurate areas."
     )
     print(
         "lc: 'LambertConformal'. Best suitable for mid-latitudes e.g. USA, Europe and Australia"
@@ -141,6 +113,7 @@ def get_auto_range_calc(max, min, step):
     """
 
     x = int((max - min) / step)
+
     return x
 
 
@@ -165,6 +138,31 @@ def dir_to_list_files(path):
     return _in_files
 
 
+def get_clevels(var_name=None, clevels=False, data=False):
+    config = configparser.ConfigParser()
+    config.read(os.path.join(data_dir(), "wrf_variables.ini"))
+    _clevels = clevels
+    if clevels is False:
+        default_clevels = config.get(var_name, "clevels")
+        if ',' in default_clevels:
+            _clevels = list(map(int, default_clevels.split(',')))
+        elif default_clevels == "auto":
+            _clevels = get_auto_clevel(data)
+    elif isinstance(clevels, int):
+        _clevels = get_auto_clevel(data, scale=int(clevels))
+    elif isinstance(clevels, list):
+        return _clevels
+
+    return _clevels
+
+
+def get_cbar_extend(var_name):
+    config = configparser.ConfigParser()
+    config.read(os.path.join(data_dir(), "wrf_variables.ini"))
+
+    return config.get(var_name, "c_bar_extend")
+
+
 def get_auto_clevel(data, scale=12, slp=False):
     """Calculate automatic clevels from input data
 
@@ -178,15 +176,21 @@ def get_auto_clevel(data, scale=12, slp=False):
     """
     
     c_levels = []
-    max = data.max()
-    min = data.min()
+
+    _max = np.max(data)
+    _min = np.min(data)
+    # print(_min, _max)
     if slp is True:
-        for i in range(int(min), int(max), 1):
+        for i in range(int(_min), int(_max), 1):
             if i % 2 == 0:
                 if 950 <= i <= 1040:
                     c_levels.append(i)
+    elif np.isnan(_min) and np.isnan(_max):   # patch to prevent crashing of app if array only contain nan
+        c_levels = np.linspace(0, 20, scale)
+    elif _min == _max:
+        c_levels = np.linspace(0, 20, scale)  # Same as nan but for same values in array
     else:
-        c_levels = np.linspace(min, max, scale)
+        c_levels = np.linspace(_min, _max, scale)
         if not all(i < j for i, j in zip(c_levels, c_levels[1:])):
             return c_levels.sort()
 
