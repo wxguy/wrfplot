@@ -33,7 +33,7 @@ Support for all platforms is provided through `conda-forge`. If you have already
 ```
 conda install -c cond-forge wrfplot
 ```
-Check your installation by typing following command which should show the version number:
+Check your installation by typing the following command which should show the version number:
 
 ```
 wrfplot --version
@@ -77,25 +77,25 @@ Updating .bashrc file to include install directory...
 Installation completed. Please restart your terminal to continue using wrfplot...
 ```
 
-Once installed Check if installation is successful by typing following command in terminal which should not produce any errors:
+Once installed Check if installation is successful by typing the following command in the terminal which should not produce any errors:
 
 ```
 wrfplot --version
 0.1.0
 ```
 
-### Mac OS Only
+### macOS Only
 
-At the moment, Mac OS support is not available in binary format. You can install `wrfplot` using method mentioned above.
+At the moment, macOS support is not available in binary format. However, support is provided through conda. You can install `wrfplot` using `conda install -c cond-forge wrfplot` command.
 
 ## How to use?
 
-Please refer to https://wrfplot.readthedocs.io for complete documentation on how to use `wrfplot` application.
+Please refer to https://wxguy.in/wrfplot for complete documentation on how to use `wrfplot` application.
 
 
 ## TODO
 
-Add following command line options:
+Add the following command line options:
 
 * ~~`--cmap`      :   Use user provided colour map~~
 * ~~`--ulevels `   :   To plot upper level data as per user defined upper levels~~
@@ -108,4 +108,4 @@ Add following command line options:
 
 ## Author
 
-J Sundar aka WxGuy (wrf.guy@gmail.com)
+J Sundar (wrf.guy@gmail.com)
