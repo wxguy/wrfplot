@@ -1,0 +1,25 @@
+site_name: wrfplot
+site_url: https://wxguy.github.io/wrfplot
+
+nav:
+  - Home: index.md
+  - Installation: install.md
+  - Supported Variables: variable-list.md
+  - Usage: usage.md
+  - Supported Colormaps: colormaps.md
+  - Support: support.md
+  - Contribution: contribution.md
+  - Authors: authors.md
+
+theme:
+  name: material
+  features:
+    - content.code.copy
+
+markdown_extensions:
+  - admonition
+  - pymdownx.details
+  - pymdownx.superfences
+  - attr_list
+  - md_in_html
+  - tables
