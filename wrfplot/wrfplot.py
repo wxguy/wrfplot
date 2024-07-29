@@ -150,7 +150,8 @@ def arg_praser():
     return parser.parse_args()
 
 
-def main(args=None):
+def main():
+    args = arg_praser()
     if args.list_vars:
         sys.exit(arguments.list_vars())
     elif args.list_cmaps:
@@ -195,4 +196,4 @@ def main(args=None):
 
 
 if __name__ == "__main__":
-    main(arg_praser())
+    main()
