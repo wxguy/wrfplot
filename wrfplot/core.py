@@ -20,19 +20,6 @@ see <http://www.gnu.org/licenses/>.
 __author__ = "J Sundar (wrf.guy@gmail.com)"
 
 import os
-
-# Set these env variables to avoid font related errors
-os.environ["FONTCONFIG_PATH"] = "$CONDA_PREFIX/etc/fonts/"
-os.environ["FONTCONFIG_FILE"] = "$CONDA_PREFIX/etc/fonts/fonts.conf"
-# Have to set update env variables before importing pyproj module when running from freeze mode
-custom_pyproj_dbase_dir = os.path.join(
-    os.path.dirname(os.path.abspath(__file__)), "pyproj", "proj"
-)
-if os.path.exists(custom_pyproj_dbase_dir):
-    os.environ["PROJ_LIB"] = custom_pyproj_dbase_dir
-    os.environ["PATH"] += os.pathsep + custom_pyproj_dbase_dir
-    os.environ["PATH"] += os.path.dirname(os.path.abspath(__file__))
-
 from tqdm import tqdm
 import netCDF4 as nc
 import numpy as np
@@ -111,6 +98,8 @@ class WrfPlot:
         if self.proj is None:
             self.proj = self.set_proj()
 
+        self.cmap = self.set_cmap(var_name=variable)
+
     def to_datetime(self, dates):
         """Convert numpy datetime data into string time
         Args:
@@ -147,7 +136,7 @@ class WrfPlot:
         """Extract data for a given variable
 
         This function reads the data for a given variable through supported variables. Segregation of 2D and 3D data
-        based on variable names are done here. If new variable names are to be added to application, then this function
+        based on variable names is done here. If new variable names are to be added to application, then this function
         is required to be gone through thoroughly.
 
         Args:
@@ -230,8 +219,6 @@ class WrfPlot:
         tqdm.write("\n*** Initialising plotting for variable : {_var} ***\n".format(_var=utils.quote(var_name)))
         if self.var is None:
             self.set_variable(variable=var_name)
-        if self.cmap is False:
-            self.set_cmap(var_name)
         if self.ulevels is None:
             self.ulevels = [925, 850, 700, 600, 500, 400, 300, 200]
         if "u_" not in self.var:
@@ -239,20 +226,17 @@ class WrfPlot:
             with tqdm(total=(self.total_vars * len(self.get_time_period())), desc="Completed", leave=False, position=0,
                       colour="green") as pbar:
                 for index, _date_time in enumerate(self.get_time_period()):
-                    try:
-                        tqdm.write(f"\tPlotting {utils.quote(var_name)} for Time : {utils.quote(_date_time)} UTC")
-                        img_path = self.make_map(var_name=var_name, idx_time=index, time_fcst=_date_time)
-                        self.bar_update = self.bar_update + 1
-                        pbar.update(self.bar_update - pbar.n)
-                        if img_path is not None:
-                            img_paths.append(img_path)
+                    tqdm.write(f"\tPlotting {utils.quote(var_name)} for Time : {utils.quote(_date_time)} UTC")
+                    img_path = self.make_map(var_name=var_name, idx_time=index, time_fcst=_date_time)
+                    self.bar_update = self.bar_update + 1
+                    pbar.update(self.bar_update - pbar.n)
+                    if img_path is not None:
+                        img_paths.append(img_path)
 
-                    except Exception as e_plt:
-                        tqdm.write(f"\t  *** Unable to plotting {utils.quote(var_name)} for Time : {utils.quote(_date_time)} UTC")
-                        pass
                 if self.animation is not False:
                     self.make_animation(var_name=var_name, img_paths=img_paths)
                 self.reset_axes()
+
         elif "u_" in self.var:
             img_paths_p_level = []
             with tqdm(total=len(self.total_vars * self.ulevels * len(self.get_time_period())),
@@ -292,7 +276,7 @@ class WrfPlot:
             tqdm.write(f"\nNot enough images available to make GIF image for variable {utils.quote(var_name)}...\n")
 
     def make_map(self, var_name, idx_time=None, time_fcst=None, p_level=None):
-        """ Make map for a given variable
+        """ Make a map for a given variable
         """
         data, u_data, v_data = self.extract_data(var_name, idx_time=idx_time, level=p_level)
         lats, lons = latlon_coords(data)
@@ -318,7 +302,11 @@ class WrfPlot:
     def set_cmap(self, var_name):
         """Get cmap from variable.ini file"""
         if self.cmap is False:
-            self.cmap = utils.get_cmap(self.config[var_name]["cmap"])
+            cmap_name = self.config[var_name]["cmap"]
+        else:
+            cmap_name = self.cmap
+
+        return utils.get_cmap(cmap_name)
 
     def extract_lats_lons(self, var_data):
         """Extract lat & lon data and update ``self.lats`` and ``self.lons`` variables accordingly"""
@@ -343,7 +331,7 @@ class WrfPlot:
         return self.proj
     
     def get_title(self, var_name, time_fcst, level=None):
-        """Get title from config file"""
+        """Get title from a config file"""
         if self.custom_title is not None:
             return self.custom_title
         else:
@@ -352,7 +340,7 @@ class WrfPlot:
                              "Cycle : " + self.cycle + " UTC  |  Validity : " + time_fcst  + " UTC"
             else:
                 return self.config[var_name]["title"] + " (" + self.config[var_name]["unit"] + ") at " \
-                       + str(level) + " hPa\nCycle : " + self.cycle + " UTC  |  Validity : " + time_fcst + " UTC"
+                           + str(int(level)) + " hPa\nCycle : " + self.cycle + " UTC  |  Validity : " + time_fcst + " UTC"
 
     def set_clevels(self, var_name, var_data):
         """ Create automatic contour levels for specific variable"""
@@ -364,7 +352,7 @@ class WrfPlot:
         return self.clevels
 
     def convert_unit(self, data):
-        """Convert data to other unit"""
+        """Convert data to another unit"""
         if self.var in ["T2", "u_temp", "u_theta", "u_tv", "u_twb", "u_temp"]:
             return convert.k_to_c(data)
         elif self.var in ["low_cloudfrac", "mid_cloudfrac", "high_cloudfrac"]:

@@ -130,7 +130,7 @@ setup(
     # cmdclass={ 'upload': UploadCommand,},
     project_urls={
         "Bug Reports": "https://github.com/wxguy/wrfplot/issues",
-        "Source": "https://github.com/wxguy/wrfplot/",
-        "Documentation": "https://wrfplot.readthedocs.io"
+        "Source": "https://github.com/wxguy/wrfplot",
+        "Documentation": "https://wxguy.in/wrfplot"
     },
 )

@@ -10,7 +10,7 @@ Details of PyPi package [![PyPI Version](https://badge.fury.io/py/ansicolortags.
 
 Status of builds ![Build and Release](https://github.com/wxguy/wrfplot/actions/workflows/release-github.yaml/badge.svg)  ![PyPi Package](https://github.com/wxguy/wrfplot/actions/workflows/release-pip.yaml/badge.svg)
 
-Conda details ![Conda Version](https://anaconda.org/conda-forge/wrfplot/badges/version.svg)  ![Last updated on](https://anaconda.org/conda-forge/wrfplot/badges/latest_release_date.svg) ![Works on Windows, Linux and Mac](https://anaconda.org/conda-forge/wrfplot/badges/platforms.svg) ![Download Counts](https://anaconda.org/conda-forge/wrfplot/badges/downloads.svg)
+Conda details ![Conda Version](https://img.shields.io/conda/v/conda-forge/wrfplot)  ![Last updated on](https://anaconda.org/conda-forge/wrfplot/badges/latest_release_date.svg) ![Works on Windows, Linux and Mac](https://anaconda.org/conda-forge/wrfplot/badges/platforms.svg) ![Download Counts](https://img.shields.io/conda/dn/conda-forge/wrfplot)
 
 ## About wrfplot
 
@@ -20,7 +20,7 @@ The idea of developing wrfplot came to my mind as I frequently revisit the same 
 
 ## Documentation
 
-Documentation of this project is located at https://wrfplot.readthedocs.io.
+Documentation of this project is located at https://wxguy.in/wrfplot.
 
 ## Use Cases
 
@@ -43,11 +43,11 @@ wrfplot --version
 
 ## Binary (standalone) Installation
 
-Since it is intended to be used as command line, the application is also distributed as stand-alone on both Linux and Windows. You must download the correct version of application installer or setup file. Both are described below:
+Since it is intended to be used as a command line, the application is also distributed as stand-alone on both Linux and Windows. You must download the correct version of application installer or setup file. Both are described below:
 
 ### Windows Only
 
-Go to https://github.com/wxguy/wrfplot/releases and look for latest release. The Windows setup executable will have name `wrfplot-windows-64bit.exe`. Click on the link and download it to local disk. The rest of the installation procedure is same as you do for any other windows setup files. Once installed Check if installation is successful by typing following command in `cmd` window which should not produce any errors:
+Go to https://github.com/wxguy/wrfplot/releases and look for the latest release. The Windows setup executable will have name `wrfplot-windows-64bit.exe`. Click on the link and download it to local disk. The rest of the installation procedure is same as you do for any other windows setup files. Once installed Check if installation is successful by typing following command in `cmd` window which should not produce any errors:
 
 ```
 wrfplot --version
