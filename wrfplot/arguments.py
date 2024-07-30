@@ -34,7 +34,7 @@ def dir_path(path):
         str: if path is valid or else ArgumentTypeError
     """
 
-    # Convert Linux's '~' to absolute path to make it workable
+    # Convert Linux's '~' to an absolute path to make it workable
     if path.startswith("~"):
         path = os.path.expanduser(path)
     previous_dir = os.path.dirname(path)
@@ -48,10 +48,10 @@ def dir_path(path):
 
 
 def file_path(path):
-    """Validate if input file provided exist
+    """Validate if an input file provided exists
 
     Args:
-        path: Path to input file
+        path: Path to an input file
 
     Results:
         str: if path is valid or else ArgumentTypeError
@@ -72,7 +72,7 @@ def validate_vars(input_vars):
         input_vars (list): List of variables for plotting
 
     Results:
-        list: list of variable after omitting names not known to application
+        list: list of variables after omitting names not known to application
     """
 
     final_vars = []
@@ -131,14 +131,7 @@ def list_cmaps():
     cmap_methods = dir(cmaps)
     print(cmap_methods)
     return cmap_methods
-    """
-    for method in cmap_methods:
-        try:
-            if getattr(cmaps, method):
-                print(method)
-        except AttributeError:
-            pass
-    """
+
 
 def validate_cmap(cmap):
     """Validate user colormap name
@@ -195,7 +188,7 @@ def validate_ulevels(ulevels):
 
     if len(filtered_ulevels) > 0:
         output_str_lst = [str(x) for x in filtered_ulevels]
-        print("Using user provided upper level(s) : " + utils.quote(",".join(output_str_lst)))
+        print("\nUsing user provided upper level(s) : " + utils.quote(",".join(output_str_lst)))
         return filtered_ulevels
     else:
         print("\nNone of the levels are valid upper levels.")
@@ -238,7 +231,7 @@ def validate_clevels(clevels):
         return False
     else:
         output_str_lst = [str(x) for x in filtered_clevels]
-        print("Using user provided contour levels : " + utils.quote(",".join(sorted(output_str_lst))))
+        print("\nUsing user provided contour levels : " + utils.quote(",".join(sorted(output_str_lst))))
         return sorted(filtered_clevels)
                 
             

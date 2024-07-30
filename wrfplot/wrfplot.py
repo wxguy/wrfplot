@@ -19,7 +19,6 @@ __author__ = "J Sundar (wrf.guy@gmail.com)"
 
 import os
 import sys
-import time
 import fileio
 import argparse
 import arguments
@@ -49,7 +48,7 @@ try:
     __version__ = version("wrfplot")
 except:
     # package is not installed
-    # Get the version from local file
+    # Get the version from the local file
     import _version
     __version__ = _version.__version__
 finally:

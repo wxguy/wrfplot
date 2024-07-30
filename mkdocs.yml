@@ -4,12 +4,13 @@ site_url: https://wxguy.github.io/wrfplot
 nav:
   - Home: index.md
   - Installation: install.md
-  - Supported Variables: variable-list.md
+  - Variables : variable-list.md
   - Usage: usage.md
-  - Supported Colormaps: colormaps.md
+  - Colormaps: colormaps.md
   - Support: support.md
   - Contribution: contribution.md
   - Authors: authors.md
+  - License: license.md
 
 theme:
   name: material

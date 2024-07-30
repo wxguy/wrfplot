@@ -1,6 +1,8 @@
 ## Basic Usage
 
-The first step in plotting diagnostic variable to find what all variables are supported by wrfplot application. This is required as the application would accept variable names only in certain string format. Therefore, you should list and review the name of variable by issuing the following command in the terminal:
+The first step in plotting diagnostic variable to find what all variables are supported by wrfplot application. 
+This is required as the application would accept variable names only in certain string format. 
+Therefore, you should list and review the name of variable by issuing the following command in the terminal:
 
 ```console
 $ wrfplot --list-vars
@@ -51,8 +53,12 @@ Variable "u_cin"   --> Convective Inhibition ($J kg^{1}$)
 Variable "u_cape"   --> Convective Available Potential Energy ($J kg^{1}$)
 ```
 
-The above console print has two names. One with quote and the other is without. The name within quote such as "slp" is called short variable, and without a quote is called long variable. You can read through a list to take note of what parameter you want to plot. For example, if you need to plot `2m Relative Humidity`, then you need to remember the sort variable name in the first quote “” i.e, `“rh2”`. With this, we will proceed ahead to plot “rh2” variable.
-To plot any variable, there are minimum three arguments are to be provided. They are `--vars`, `--input` and `--output`. Details of this would be discussed later.
+The above console print has two names. One with quote and the other is without. 
+The name within quote such as "slp" is called short variable, and without a quote is called long variable. 
+You can read through a list to take note of what parameter you want to plot. 
+For example, if you need to plot `2m Relative Humidity`, then you need to remember the sort variable name in the first quote “” i.e, `“rh2”`. 
+With this, we will proceed ahead to plot “rh2” variable. To plot any variable, there are minimum three arguments required to be provided. 
+They are `--vars`, `--input` and `--output`. Details of these would be discussed later.
 
 ## Plotting Surface Variable
 
@@ -96,7 +102,10 @@ The plotted output for variable will look like below:
 
 ## Plotting Upper Atmospheric Variables
 
-`wrfplot` supports a few upper atmospheric variables. These variables are indicated with u_ tag for ease of identification. By default, the plot for upper atmospheric variables would be plotted for 925, 850, 700, 600, 500, 400, 300 & 200hPa. The upper levels can be controlled using --ulevels though. If you want to plot upper winds, you can specify the variable with following command:
+`wrfplot` supports a few upper atmospheric variables. These variables are indicated with u_ tag for ease of identification. 
+By default, the plot for upper atmospheric variables would be plotted for `925`, `850`, `700`, `600`, `500`, `400`, `300` & `200` hPa. 
+The upper levels can be controlled using `--ulevels` though.
+If you want to plot upper winds, you can specify the variable with the following command:
 
 ```console
 $ wrfplot --vars "u_winds" --input ../../test/wrfout_data/wrfout_d01_2021-05-13_00_00_00 --output ../../test/wrfout_data/output_images
@@ -107,7 +116,48 @@ $ wrfplot --vars "u_winds" --input ../../test/wrfout_data/wrfout_d01_2021-05-13_
       <figcaption>Sample Upper Winds Plot at 300hPa</figcaption>
 </figure>
 
-## Creating Animation to Plots
+## Plot Variable at Specific Level(s)
+
+When plotting upper level variable, `wrfplot` will plot all the predefined levels viz., `925`, `850`, `700`, `600`, `500`, `400`, `300` & `200` hPa.
+You can control the level at which variable is required to be plotted using `--ulevels` argument. 
+For example, if you need to plot at `800` and `750` hpa levels only, then you can apply the following command:
+
+```console
+$ wrfplot --vars "u_winds" --ulevels "800,750" --input ../../test/wrfout_data/wrfout_d01_2021-05-13_00_00_00 --output ../../test/wrfout_data/output_images
+```
+    
+Remember that the level values are to be separated by `,`. That should produce the following output in the terminal:
+
+```console
+Using user provided upper level(s) : "800.0,750.0"
+
+*** Initialising plotting for variable : "u_winds" ***
+
+        Plotting "u_winds" for level "800.0" hPa and Time : "13-05-2021_05:30" UTC                                                       
+          Image saved at : "../../test/wrfout_data/output_images/u_winds_800.0_13-05-2021_05_30.png"                  
+        Plotting "u_winds" for level "800.0" hPa and Time : "13-05-2021_08:30" UTC                                                       
+          Image saved at : "../../test/wrfout_data/output_images/u_winds_800.0_13-05-2021_08_30.png"                  
+        Plotting "u_winds" for level "800.0" hPa and Time : "13-05-2021_11:31" UTC                                                       
+          Image saved at : "../../test/wrfout_data/output_images/u_winds_800.0_13-05-2021_11_31.png"                  
+        Plotting "u_winds" for level "800.0" hPa and Time : "13-05-2021_14:30" UTC                                                       
+          Image saved at : "../../test/wrfout_data/output_images/u_winds_800.0_13-05-2021_14_30.png"                  
+        Plotting "u_winds" for level "800.0" hPa and Time : "13-05-2021_17:30" UTC                                                       
+          Image saved at : "../../test/wrfout_data/output_images/u_winds_800.0_13-05-2021_17_30.png"                  
+        Plotting "u_winds" for level "750.0" hPa and Time : "13-05-2021_05:30" UTC                                                       
+          Image saved at : "../../test/wrfout_data/output_images/u_winds_750.0_13-05-2021_05_30.png"                  
+        Plotting "u_winds" for level "750.0" hPa and Time : "13-05-2021_08:30" UTC                                                       
+          Image saved at : "../../test/wrfout_data/output_images/u_winds_750.0_13-05-2021_08_30.png"                  
+        Plotting "u_winds" for level "750.0" hPa and Time : "13-05-2021_11:31" UTC                                                       
+          Image saved at : "../../test/wrfout_data/output_images/u_winds_750.0_13-05-2021_11_31.png"                  
+        Plotting "u_winds" for level "750.0" hPa and Time : "13-05-2021_14:30" UTC                                                       
+          Image saved at : "../../test/wrfout_data/output_images/u_winds_750.0_13-05-2021_14_30.png"                  
+        Plotting "u_winds" for level "750.0" hPa and Time : "13-05-2021_17:30" UTC                                                       
+          Image saved at : "../../test/wrfout_data/output_images/u_winds_750.0_13-05-2021_17_30.png"                  
+                                                                                                                                         
+Plotting process completed. It took 0H:0M:6.948402S
+```
+
+## Create Animation (GIF)
 
 You can also create an animation of your plots using `--gif` option. Example command is given below:
 
@@ -122,6 +172,8 @@ This would produce an animated `gif` image as shown below:
       <figcaption>Sample Animation Plot</figcaption>
 </figure>
 
+## Control Animation Speed
+
 By default, the speed of the animation is kept as `0.5` sec. If you wish to increase or decrease the speed, you can do so by with `--gif-speed` option as indicated below where speed is increased to `0.25` sec:
 
 ```console
@@ -134,3 +186,31 @@ This would increase the speed of animation as shown in the sample image file.
   ![Image title](static/images/rh2-13-05-2021_05_30_faster.gif)
       <figcaption>Animation Plot with Increased Speed</figcaption>
 </figure>
+
+## Control Contour Levels
+
+The default contour levels of each variable set based on a variable type. 
+For example, `Relative Humidity` variable will have 10 levels from 0 to 100 with an interval of 10.
+If you wish to change these intervals for specific variable, you may do so with `--clevels` argument. 
+Levels are to be in ascending order and separated by ','. 
+For example, `24,26,28,30,32,34,36`.
+Example plot to change temperature level to highlight the temperature range of interest will be as follows:
+
+```console
+$ wrfplot --vars "rh2" --clevels '0,10,20,30,32,34,36,38,40,42,44,46' --input ../../test/wrfout_data/wrfout_d01_2021-05-13_00_00_00 --output ../../test/wrfout_data/output_images 
+```
+
+After executing the command with `--clevels` argument, the plot would look like this:
+
+<figure markdown="span">
+  ![Image title](static/images/T2_13-05-2021_17_30_clevels.png)
+      <figcaption>T2 Plot with Custom `--clevels` Option</figcaption>
+</figure>
+
+this can be compared with the default clevels set by the `wrfplot` as shown below:
+
+<figure markdown="span">
+  ![Image title](static/images/T2_13-05-2021_17_30.png)
+      <figcaption>T2 Plot with Default `--clevels` Option</figcaption>
+</figure>
+
