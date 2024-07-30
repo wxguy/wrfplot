@@ -20,3 +20,8 @@ For complete list of options, execute the following command in the terminal or c
 ```console
 $ wrfplot --help
 ```
+
+## Source Code
+
+`wrfplot` is an Open Source application and released under General Public License (GPL) Version 3. 
+The source code of the application can be found at [https://github.com/wxguy/wrfplot](https://github.com/wxguy/wrfplot). 
