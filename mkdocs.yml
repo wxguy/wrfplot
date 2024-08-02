@@ -1,19 +1,32 @@
+# Project info
 site_name: wrfplot
+site_description: 'Command line application to plot WRF output files'
+site_author: 'J Sundar'
 site_url: https://wxguy.github.io/wrfplot
 
-nav:
-  - Home: index.md
-  - Installation: install.md
-  - Variables : variable-list.md
-  - Usage: usage.md
-  - Colormaps: colormaps.md
-  - Support: support.md
-  - Contribution: contribution.md
-  - Authors: authors.md
-  - License: license.md
+# Repository
+repo_name: 'wrfplot/wrfplot'
+repo_url: 'https://github.com/wxguy/wrfplot'
 
+# Copyright
+copyright: 'Copyright 2024 J Sundar'
+
+# Markdown extensions
+markdown_extensions:
+  - admonition
+  - pymdownx.details
+  - pymdownx.superfences
+  - attr_list
+  - md_in_html
+  - tables
+
+# Theme
 theme:
   name: material
+  language: 'en'
+  logo: 'static/wrfplot.png'
+  favicon: 'static/wrfplot.png'
+
   features:
     - content.code.copy
   palette:
@@ -29,10 +42,14 @@ theme:
         icon: material/brightness-4
         name: Switch to light mode
 
-markdown_extensions:
-  - admonition
-  - pymdownx.details
-  - pymdownx.superfences
-  - attr_list
-  - md_in_html
-  - tables
+# Page navigation
+nav:
+  - Home: index.md
+  - Installation: install.md
+  - Variables : variable-list.md
+  - Usage: usage.md
+  - Colormaps: colormaps.md
+  - Support: support.md
+  - Contribution: contribution.md
+  - Authors: authors.md
+  - License: license.md

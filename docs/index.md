@@ -10,10 +10,10 @@ A typical use case of `wrfplot` would be to include as part of your WRF model ru
 
 !!! note
 
-    `wrfplot` is a new application. If you find any issues related to plotting variables or documentation, please open an issue in Github as given here Support
+    `wrfplot` is a new application. If you find any issues related to plotting variables or documentation, please open an issue in Github as given in [Support](support.md          ) secion.
 
 
-The best way to explore the application is to read and execute the extensive examples from Example Commands.
+The best way to explore the application is to read and execute the extensive examples provided in [usage](usage.md) section.
 
 For complete list of options, execute the following command in the terminal or cmd window:
 
