@@ -5,11 +5,11 @@ site_author: 'J Sundar'
 site_url: https://wxguy.github.io/wrfplot
 
 # Repository
-repo_name: 'wrfplot/wrfplot'
+repo_name: 'wxguy/wrfplot'
 repo_url: 'https://github.com/wxguy/wrfplot'
 
 # Copyright
-copyright: 'Copyright 2024 J Sundar'
+copyright: 'Copyright &copy; 2024 J Sundar'
 
 # Markdown extensions
 markdown_extensions:
@@ -46,7 +46,7 @@ theme:
 nav:
   - Home: index.md
   - Installation: install.md
-  - Variables : variable-list.md
+  - Variables : variables.md
   - Usage: usage.md
   - Colormaps: colormaps.md
   - Support: support.md

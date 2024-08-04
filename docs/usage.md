@@ -1,11 +1,11 @@
 ## Basic Usage
 
-The first step in plotting diagnostic variable to find what all variables are supported by wrfplot application. 
+The first step in plotting diagnostic variable to find what all variables are supported by `wrfplot` application.
 This is required as the application would accept variable names only in certain string format. 
 Therefore, you should list and review the name of variable by issuing the following command in the terminal:
 
-```console
-$ wrfplot --list-vars
+```commandline
+wrfplot --list-vars
 ```
 
 Invoking the above command will produce the following output:
@@ -56,16 +56,18 @@ Variable "u_cape"   --> Convective Available Potential Energy ($J kg^{1}$)
 The above console print has two names. One with quote and the other is without. 
 The name within quote such as "slp" is called short variable, and without a quote is called long variable. 
 You can read through a list to take note of what parameter you want to plot. 
-For example, if you need to plot `2m Relative Humidity`, then you need to remember the sort variable name in the first quote “” i.e, `“rh2”`. 
-With this, we will proceed ahead to plot “rh2” variable. To plot any variable, there are minimum three arguments required to be provided. 
-They are `--vars`, `--input` and `--output`. Details of these would be discussed later.
+For example, if you need to plot `2m Relative Humidity`, then you need to remember the sort variable name in the first 
+quote `“”` i.e, `“rh2”`. With this, we will proceed ahead to plot “rh2” variable. To plot any variable, 
+there are minimum three arguments required to be provided. They are `--vars`, `--input` and `--output`. 
+Details of these would be discussed later.
 
 ## Plotting Surface Variable
 
-All the variables which does not start with `u_` string are surface variable. Now, let's go ahead and start plotting the variable “2m Relative Humidity” named as “rh2”:
+All the variables which does not start with `u_` string are surface variable. 
+Now, let's go ahead and start plotting the variable `“2m Relative Humidity”` named as `“rh2”`:
 
-```console
-$ wrfplot --vars "rh2" --input ../../test/wrfout_data/wrfout_d01_2021-05-13_00_00_00 --output ../../test/wrfout_data/output_images
+```commandline
+wrfplot --vars "rh2" --input ../../test/wrfout_data/wrfout_d01_2021-05-13_00_00_00 --output ../../test/wrfout_data/output_images
 ```
 
 Where:
@@ -102,13 +104,13 @@ The plotted output for variable will look like below:
 
 ## Plotting Upper Atmospheric Variables
 
-`wrfplot` supports a few upper atmospheric variables. These variables are indicated with u_ tag for ease of identification. 
+`wrfplot` supports a few upper atmospheric variables. These variables are indicated with `u_` tag for ease of identification. 
 By default, the plot for upper atmospheric variables would be plotted for `925`, `850`, `700`, `600`, `500`, `400`, `300` & `200` hPa. 
 The upper levels can be controlled using `--ulevels` though.
 If you want to plot upper winds, you can specify the variable with the following command:
 
-```console
-$ wrfplot --vars "u_winds" --input ../../test/wrfout_data/wrfout_d01_2021-05-13_00_00_00 --output ../../test/wrfout_data/output_images
+```commandline
+wrfplot --vars "u_winds" --input ../../test/wrfout_data/wrfout_d01_2021-05-13_00_00_00 --output ../../test/wrfout_data/output_images
 ```
 
 <figure markdown="span">
@@ -122,8 +124,8 @@ When plotting upper level variable, `wrfplot` will plot all the predefined level
 You can control the level at which variable is required to be plotted using `--ulevels` argument. 
 For example, if you need to plot at `800` and `750` hpa levels only, then you can apply the following command:
 
-```console
-$ wrfplot --vars "u_winds" --ulevels "800,750" --input ../../test/wrfout_data/wrfout_d01_2021-05-13_00_00_00 --output ../../test/wrfout_data/output_images
+```commandline
+wrfplot --vars "u_winds" --ulevels "800,750" --input ../../test/wrfout_data/wrfout_d01_2021-05-13_00_00_00 --output ../../test/wrfout_data/output_images
 ```
     
 Remember that the level values are to be separated by `,`. That should produce the following output in the terminal:
@@ -161,8 +163,8 @@ Plotting process completed. It took 0H:0M:6.948402S
 
 You can also create an animation of your plots using `--gif` option. Example command is given below:
 
-```console
-$ wrfplot --vars "rh2" --gif --input ../../test/wrfout_data/wrfout_d01_2021-05-13_00_00_00 --output ../../test/wrfout_data/output_images 
+```commandline
+wrfplot --vars "rh2" --gif --input ../../test/wrfout_data/wrfout_d01_2021-05-13_00_00_00 --output ../../test/wrfout_data/output_images 
 ```
 
 This would produce an animated `gif` image as shown below:
@@ -176,8 +178,8 @@ This would produce an animated `gif` image as shown below:
 
 By default, the speed of the animation is kept as `0.5` sec. If you wish to increase or decrease the speed, you can do so by with `--gif-speed` option as indicated below where speed is increased to `0.25` sec:
 
-```console
-$ wrfplot --vars "rh2" --gif --gif-speed 0.25 --input ../../test/wrfout_data/wrfout_d01_2021-05-13_00_00_00 --output ../../test/wrfout_data/output_images 
+```commandline
+wrfplot --vars "rh2" --gif --gif-speed 0.25 --input ../../test/wrfout_data/wrfout_d01_2021-05-13_00_00_00 --output ../../test/wrfout_data/output_images 
 ```
 
 This would increase the speed of animation as shown in the sample image file.
@@ -196,8 +198,8 @@ Levels are to be in ascending order and separated by ','.
 For example, `24,26,28,30,32,34,36`.
 Example plot to change temperature level to highlight the temperature range of interest will be as follows:
 
-```console
-$ wrfplot --vars "rh2" --clevels '0,10,20,30,32,34,36,38,40,42,44,46' --input ../../test/wrfout_data/wrfout_d01_2021-05-13_00_00_00 --output ../../test/wrfout_data/output_images 
+```commandline
+wrfplot --vars "rh2" --clevels '0,10,20,30,32,34,36,38,40,42,44,46' --input ../../test/wrfout_data/wrfout_d01_2021-05-13_00_00_00 --output ../../test/wrfout_data/output_images 
 ```
 
 After executing the command with `--clevels` argument, the plot would look like this:
@@ -213,4 +215,3 @@ this can be compared with the default clevels set by the `wrfplot` as shown belo
   ![Image title](static/images/T2_13-05-2021_17_30.png)
       <figcaption>T2 Plot with Default `--clevels` Option</figcaption>
 </figure>
-

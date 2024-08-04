@@ -3,18 +3,18 @@
 This section briefly guides you to install **_wrfplot_** on a variety of Operating Systems viz., Linux, Windows and macOS.
 
 ## System Requirements
-Here are the following dependencies you should know about before installing wrfplot:
+Here are the following dependencies you should know about before installing `wrfplot`:
 
 * Operating System (Windows): Windows 10 or above. May work on Windows 7/ 8 but not tested.
 
-* Operating System (Linux): Ubuntu 18.04 or above. If you wish to use it on Red Hat or Cent OS based, then it should be versioned 7 or above.
+* Operating System (Linux): Ubuntu 20.04 or above. If you wish to use it on Red Hat or Cent OS based, then it should be versioned 8 or above.
 
 * Architecture: x86_64 or simple called 64bit. **_Don't download if you have 32bit machine_**. It won't work.
 
 ## Install on Windows, Linux and macOS
 
 Support for all platforms is provided through conda-forge.
-If you have already conda installed, then the following command is enough to install wrfplot:
+If you have already conda installed, then the following command is enough to install `wrfplot`:
 
 ```commandline
 conda install -c cond-forge wrfplot
@@ -78,10 +78,10 @@ That’s it. You have successfully installed `wrfplot`.
 
 ### Installation under Linux
 
-Go to [https://github.com/wxguy/wrfplot/releases](https://github.com/wxguy/wrfplot/releases) and look for the latest release. The Linux installer will have name wrfplot-linux-64bit.run. Click on the link and download it to local disk. Thereafter, execute the below command (assuming that the Linux installer is downloaded at ~/Downloads):
+Go to [https://github.com/wxguy/wrfplot/releases](https://github.com/wxguy/wrfplot/releases) and look for the latest release. The Linux installer will have name `wrfplot`-linux-64bit.run. Click on the link and download it to local disk. Thereafter, execute the below command (assuming that the Linux installer is downloaded at ~/Downloads):
 
-```console
-$ bash ~/Downloads/wrfplot-linux-64bit.run
+```commandline
+bash ~/Downloads/wrfplot-linux-64bit.run
 ```
 
 that would produce the output as indicated below:
@@ -103,15 +103,15 @@ Installation completed. Please restart your terminal to continue using wrfplot..
 
 There is no binary distribution made available for macOS at the moment. The support for macOS is provided through miniconda. If you already have miniconda/ anaconda installed, you can execute the following to install `wrfplot`:
 
-```console
-$ conda install -c conda-forge wrfplot
+```commandline
+conda install -c conda-forge wrfplot
 ```
 
 ## Confirm Installation
 
 The easiest way to check the installation is to issue the following command in the terminal:
 
-```console
+```commandline
 wrfplot --help
 ```
 
@@ -154,5 +154,5 @@ options:
 © J Sundar, wrf.guy@gmail.com, 2024
 ```
 
-If you get inbuilt help page of wrfplot, then it is ensured that you have successfully installed wrfplot.
+If you get the inbuilt help page of `wrfplot`, then it is ensured that you have successfully installed `wrfplot`.
 
