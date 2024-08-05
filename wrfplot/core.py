@@ -120,12 +120,7 @@ class WrfPlot:
         self.date_time = []
         for _date in dates:
             if not np.isnat(_date):
-                date_time = self.to_datetime(_date)
-                year = date_time.strftime("%Y")
-                month = date_time.strftime("%m")
-                day = date_time.strftime("%d")
-                _time = date_time.strftime("%H:%M")
-                self.date_time.append(day + "-" + month + "-" + year + "_" + _time)
+                self.date_time.append(np.datetime64(_date.values, 's').astype(datetime).strftime("%d-%m-%Y_%H:%M"))
 
         if len(self.date_time) > 0:
             self.cycle = self.date_time[0]
@@ -166,7 +161,6 @@ class WrfPlot:
                 var_data = rain_c_current
             elif var_name == 'ppn' and idx_time == 0:
                 var_data = rain_c_current + rain_nc_current
-
             if var_name == 'ppn_conv' and idx_time != 0:
                 rain_c_previous = getvar(self.nc_fh, "RAINC", timeidx=(idx_time - 1))
                 var_data = rain_c_current - rain_c_previous
@@ -177,6 +171,8 @@ class WrfPlot:
         elif var_name == 'ppn_accum':
             var_data = (getvar(self.nc_fh, "RAINC", timeidx=idx_time) +
                         getvar(self.nc_fh, "RAINNC", timeidx=idx_time))
+        elif var_name in ['inv1', 'inv2', 'inv3']:
+            var_data = self.interpolate_to(var_name=var_name, u_data=u, v_data=v, idx_time=idx_time, p_level=level)[0]
         elif 'u_' in var_name:
             var_data, u, v = self.interpolate_to(var_name=var_name, u_data=u, v_data=v, idx_time=idx_time, p_level=level)
         else:
@@ -201,12 +197,22 @@ class WrfPlot:
         cape_3d = ["u_cape", "u_cin"]
         if var_name in cape_3d:
             var_data = getvar(self.nc_fh, "cape_3d", timeidx=idx_time)[cape_3d.index(var_name)]
-        elif var_name == 'u_winds':
+        elif var_name in ["u_winds", "u_stream"]:
             u, v = getvar(self.nc_fh, "uvmet", timeidx=idx_time, units='kt')
             u_data = interplevel(u, pressure, p_level)
             v_data = interplevel(v, pressure, p_level)
             var_data = getvar(self.nc_fh, "wspd_wdir", timeidx=idx_time, units='kt')[0]
             # var_data_interp = interplevel(var_data, pressure, p_level)
+        elif var_name in ['inv1', 'inv2']:
+            u_temp = getvar(self.nc_fh, 'temp', timeidx=idx_time, units='degC')
+            if var_name == 'inv1':
+                t_low_hpa = interplevel(u_temp, pressure, 975)
+                t_high_hpa = interplevel(u_temp, pressure, 950)
+            elif var_name == 'inv2':
+                t_low_hpa = interplevel(u_temp, pressure, 900)
+                t_high_hpa = interplevel(u_temp, pressure, 850)
+            var_data_interp = t_high_hpa - t_low_hpa
+            return var_data_interp, u_data, v_data
         else:
             var_data = getvar(self.nc_fh, var_name.replace('u_', ''), timeidx=idx_time)
 
@@ -279,7 +285,8 @@ class WrfPlot:
         """ Make a map for a given variable
         """
         data, u_data, v_data = self.extract_data(var_name, idx_time=idx_time, level=p_level)
-        lats, lons = latlon_coords(data)
+        # lats, lons = latlon_coords(data)
+        lats, lons = self.extract_lats_lons(var_name=var_name, var_data=data, idx_time=idx_time)
         # clevels = self.set_clevels(var_name=var_name, var_data=data)
         if self.config[var_name]["clevels"] == 'auto':
             clevels = utils.get_auto_clevel(data=data)
@@ -288,7 +295,7 @@ class WrfPlot:
         if var_name == 'slp':
             img_path = self.plot.contour(var_name=var_name, lons=lons, lats=lats, data=data, clevels=clevels,
                                          title=self.get_title(var_name, time_fcst), colors='blue', fcst_time=time_fcst)
-        elif var_name in ['winds', 'u_winds']:
+        elif var_name in ['winds', 'u_winds', 'u_stream']:
             img_path = self.plot.winds(var_name=var_name, lons=lons, lats=lats, u_data=u_data, v_data=v_data,
                                        wspd=data, title=self.get_title(var_name, time_fcst, p_level), level=p_level,
                                        clevels=clevels, colors='black', cmap=self.cmap, fcst_time=time_fcst)
@@ -308,15 +315,24 @@ class WrfPlot:
 
         return utils.get_cmap(cmap_name)
 
-    def extract_lats_lons(self, var_data):
+    def extract_lats_lons(self, var_name, var_data, idx_time):
         """Extract lat & lon data and update ``self.lats`` and ``self.lons`` variables accordingly"""
-        lats, lons = latlon_coords(var_data)
-        if lats.ndim == 3:
-            self.lats = lats[0]
-            self.lons = lons[0]
-        else:
-            self.lats = lats
-            self.lons = lons
+        self.lats = getvar(self.nc_fh, 'lat', timeidx=idx_time)
+        self.lons = getvar(self.nc_fh, 'lon', timeidx=idx_time)
+        """if self.lats is None and self.lons is None:
+            if var_name in ['inv1', 'inv2', 'inv3']:
+                var_data = getvar(self.nc_fh, 'slp', timeidx=idx_time)
+            lats, lons = latlon_coords(var_data)
+            # print(lons.values)
+            if lats.ndim == 3:
+                self.lats = lats[0]
+                self.lons = lons[0]
+            else:
+
+                self.lats = lats[0]
+                self.lons = lons[0]"""
+
+        return self.lats, self.lons
 
     def set_proj(self):
         """Get projection details from data extracted"""

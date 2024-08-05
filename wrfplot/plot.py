@@ -77,6 +77,7 @@ class PlotMap(object):
         self.c_bar_extend = None
         self.cbar = None
         self.cax = None
+        self.stream = None
     
     def create_fig(self, projection):
         """Create Fig"""
@@ -118,14 +119,18 @@ class PlotMap(object):
         thin = utils.get_auto_resolution(to_np(lats))
         flip_array = (lats < 0)
         self.clear_plots()
-        self.contour_fill(var_name=var_name, lons=lons[::thin, ::thin], lats=lats[::thin, ::thin],
-                          data=wspd[::thin, ::thin] , title=title, clevels=clevels, colors=colors, cmap=cmap,
-                          fcst_time=fcst_time)
+        if not var_name == "u_stream":
+            self.contour_fill(var_name=var_name, lons=lons[::thin, ::thin], lats=lats[::thin, ::thin],
+                              data=wspd[::thin, ::thin], title=title, clevels=clevels, colors=colors, cmap=cmap,
+                              fcst_time=fcst_time)
 
-        self.barbs = self.ax.barbs(to_np(lons)[::thin, ::thin], to_np(lats)[::thin, ::thin],
-                                   to_np(u_data)[::thin, ::thin], to_np(v_data)[::thin, ::thin],
-                                   transform=ccrs.PlateCarree(), length=5.5, sizes={"spacing": 0.2},
-                                   pivot="middle", flip_barb=flip_array[::thin, ::thin])
+        if var_name == "u_stream":
+            self.stream = self.ax.streamplot(to_np(lons), to_np(lats), to_np(u_data), to_np(v_data), color='black', transform=ccrs.PlateCarree())
+        else:
+            self.barbs = self.ax.barbs(to_np(lons)[::thin, ::thin], to_np(lats)[::thin, ::thin],
+                                       to_np(u_data)[::thin, ::thin], to_np(v_data)[::thin, ::thin],
+                                       transform=ccrs.PlateCarree(), length=5.5, sizes={"spacing": 0.2},
+                                       pivot="middle", flip_barb=flip_array[::thin, ::thin])
 
         return self.save_fig(var=var_name, fcst_time=fcst_time, _level=level)
 
@@ -216,6 +221,9 @@ class PlotMap(object):
             if self.cax:
                 self.cax.remove()
                 self.cbar = False
+            if self.stream:
+                for collection in self.stream:
+                    collection.remove()     
             """if self.cbar:
                 self.cbar.remove()
                 self.cbar = False"""
