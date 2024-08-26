@@ -213,6 +213,11 @@ class WrfPlot:
                 t_high_hpa = interplevel(u_temp, pressure, 850)
             var_data_interp = t_high_hpa - t_low_hpa
             return var_data_interp, u_data, v_data
+        elif var_name == 'u_winds_temp':
+            u, v = getvar(self.nc_fh, "uvmet", timeidx=idx_time, units='kt')
+            u_data = interplevel(u, pressure, p_level)
+            v_data = interplevel(v, pressure, p_level)
+            var_data = getvar(self.nc_fh, 'temp', timeidx=idx_time, units='degC')
         else:
             var_data = getvar(self.nc_fh, var_name.replace('u_', ''), timeidx=idx_time)
 
@@ -295,7 +300,7 @@ class WrfPlot:
         if var_name == 'slp':
             img_path = self.plot.contour(var_name=var_name, lons=lons, lats=lats, data=data, clevels=clevels,
                                          title=self.get_title(var_name, time_fcst), colors='blue', fcst_time=time_fcst)
-        elif var_name in ['winds', 'u_winds', 'u_stream']:
+        elif var_name in ['winds', 'u_winds', 'u_stream', 'u_winds_temp']:
             img_path = self.plot.winds(var_name=var_name, lons=lons, lats=lats, u_data=u_data, v_data=v_data,
                                        wspd=data, title=self.get_title(var_name, time_fcst, p_level), level=p_level,
                                        clevels=clevels, colors='black', cmap=self.cmap, fcst_time=time_fcst)

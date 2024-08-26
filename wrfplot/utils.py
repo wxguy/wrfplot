@@ -34,11 +34,15 @@ def get_cmap(name):
         cmap: Maplotlib's cmap instance
     """
     all_cmap = dir(cmaps)
+    mpl_cmaps = plt.colormaps()
     if name in all_cmap:
         return getattr(cmaps, name)
+    elif name in mpl_cmaps:
+        return plt.get_cmap(name)
 
     if isinstance(name, list):
         return name
+
     try:
         cmap = getattr(cmaps, name)
     except AttributeError:
@@ -96,6 +100,10 @@ def get_auto_resolution(data):
     x_size = int(size[0])
     x_data = data.shape
     thin = int(x_data[0] / x_size) - 2
+
+    # Ensure that we don't return 0 or negative     value as a thin factor which will result in error while slicing data.
+    if thin == 0 or thin < 0:
+        return 1
 
     return thin
 

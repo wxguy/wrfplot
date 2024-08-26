@@ -119,14 +119,17 @@ class PlotMap(object):
         thin = utils.get_auto_resolution(to_np(lats))
         flip_array = (lats < 0)
         self.clear_plots()
-        if not var_name == "u_stream":
-            self.contour_fill(var_name=var_name, lons=lons[::thin, ::thin], lats=lats[::thin, ::thin],
-                              data=wspd[::thin, ::thin], title=title, clevels=clevels, colors=colors, cmap=cmap,
-                              fcst_time=fcst_time)
 
-        if var_name == "u_stream":
-            self.stream = self.ax.streamplot(to_np(lons), to_np(lats), to_np(u_data), to_np(v_data), color='black', transform=ccrs.PlateCarree())
-        else:
+        if var_name == 'u_winds_temp':
+            # FIXME: u_winds_temp plot not working at the moment
+            self.ax.text(lons, lats, wspd, transform=ccrs.PlateCarree())
+        elif var_name == "u_stream":
+            # FIXME: Stream plot not working at the moment
+            self.stream = self.ax.streamplot(to_np(lons), to_np(lats), to_np(u_data), to_np(v_data), color='black',
+                                             transform=ccrs.PlateCarree())
+        if var_name not in ["u_stream", "u_winds_temp"]:
+            self.contour_fill(var_name=var_name, lons=lons, lats=lats, data=wspd, title=title, clevels=clevels,
+                              colors=colors, cmap=cmap, fcst_time=fcst_time)
             self.barbs = self.ax.barbs(to_np(lons)[::thin, ::thin], to_np(lats)[::thin, ::thin],
                                        to_np(u_data)[::thin, ::thin], to_np(v_data)[::thin, ::thin],
                                        transform=ccrs.PlateCarree(), length=5.5, sizes={"spacing": 0.2},
@@ -192,10 +195,10 @@ class PlotMap(object):
         """Save plotted image to local filesystem"""
         file_id = "%s_%s" % (var, fcst_time)
         if "u_" in var:
-            file_id = "%s_%s_%s" % (var, _level, fcst_time)
+            file_id = "%s_%s_%s" % (var, int(_level), fcst_time)
         filename = "%s.%s" % (file_id.replace(" ", "_"), self.fig_format)
         # Windows fix
-        # Widows does not accept file containing ":" in the file name. So replace it with '_'.
+        # Widows does not accept a file containing ":" in the file name. So replace it with '_'.
         filename = filename.replace(":", "_")
         if not os.path.exists(self.output_dir):
             os.makedirs(self.output_dir)
@@ -222,8 +225,9 @@ class PlotMap(object):
                 self.cax.remove()
                 self.cbar = False
             if self.stream:
+                self.stream.remove()
                 for collection in self.stream:
-                    collection.remove()     
+                    collection.remove()
             """if self.cbar:
                 self.cbar.remove()
                 self.cbar = False"""

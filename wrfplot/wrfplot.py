@@ -123,6 +123,7 @@ def arg_praser():
         "--dpi",
         metavar="<value>",
         type=int,
+        default=125,
         help="Increase or decrease the plotted image resolution. Default is 125. More is higher resolution and less is "
              "course resolution. Higher values will reduce the speed of plot.",
     )
@@ -187,7 +188,7 @@ def main():
                 total_time = timeit.default_timer() - start_time
                 mins, secs = divmod(total_time, 60)
                 hours, mins = divmod(mins, 60)
-                print(f"\nPlotting process completed. It took %dH:%dM:%fS\n" % (hours, mins, secs))
+                print(f"\nIt took '%dH:%dM:%fS' to complete all processes.\n" % (hours, mins, secs))
             except Exception as e:
                 # print(e)
                 print(traceback.format_exc())

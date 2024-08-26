@@ -22,6 +22,7 @@ import argparse
 import configparser
 import utils
 import colormaps as cmaps
+import matplotlib.pyplot as plt
 
 
 def dir_path(path):
@@ -142,11 +143,12 @@ def validate_cmap(cmap):
     Results:
         str: Name of colormap if supported
     """
-    if not cmap in dir(cmaps):
-        print("\nColormap", utils.quote(cmap), "is nor supported by wrfplot. Use '--list-cmaps' option to find list of supported colormaps.")
+    if cmap not in dir(cmaps) + plt.colormaps():
+        print(f"\nColormap {utils.quote(cmap)} is not supported by wrfplot."
+              f"\nUse '--list-cmaps' option to find list of supported colormaps.")
         return False
     else:
-        print("\nUsing user provided colormap :", utils.quote(cmap))
+        print(f"\nUsing user provided colormap : {utils.quote(cmap)}")
 
         return cmap
 
@@ -157,7 +159,7 @@ def valid_range(ulevel):
         print("Upper level" + utils.quote(str(ulevel)) + " can not be more than 1000")
         return False
     elif ulevel < 50:
-        print("Upper level" + utils.quote(str(ulevel)) + " can not be less than 1000")
+        print("Upper level" + utils.quote(str(ulevel)) + " can not be less than 50")
         return False
     else:
         return True
