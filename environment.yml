@@ -1,11 +1,11 @@
 # conda env create -f environment.yml
 # conda activate wrfplot
-    # conda env remove -n wrfplot
+# conda env remove -n wrfplot
 
 name: wrfplot
 channels:
   - conda-forge
-  - defaults
+  # - defaults
 dependencies:
   - python=3.11
   - conda-forge::libpython-static
@@ -23,9 +23,9 @@ dependencies:
   - conda-forge::colormaps
   - conda-forge::python-build
   - conda-forge::setuptools_scm
-  - pip:
-    - sphinx
-    - sphinx_rtd_theme
-    # - build
-    - setuptools-git-versioning
-    # - pyinstaller  # Not required as of now as nuitka works fine on Linux and Windows
+  # - pip:
+  # - sphinx
+  #- sphinx_rtd_theme
+  # - build
+  # - setuptools-git-versioning
+  # - pyinstaller  # Not required as of now as nuitka works fine on Linux and Windows

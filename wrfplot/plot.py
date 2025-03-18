@@ -78,7 +78,7 @@ class PlotMap(object):
         self.cbar = None
         self.cax = None
         self.stream = None
-    
+
     def create_fig(self, projection):
         """Create Fig"""
         if self.proj is None:
@@ -97,69 +97,159 @@ class PlotMap(object):
     def add_shp_features(self):
         """Read shapefile and add as cartopy features"""
         wld_shp_f = os.path.join(utils.data_dir(), "shape", "world_shape.shp")
-        wld_shp_features = ShapelyFeature(Reader(wld_shp_f).geometries(), ccrs.PlateCarree(), facecolor="none")
-        self.ax.add_feature(wld_shp_features, linewidth=0.5, edgecolor="black", alpha=0.7)
+        wld_shp_features = ShapelyFeature(
+            Reader(wld_shp_f).geometries(), ccrs.PlateCarree(), facecolor="none"
+        )
+        self.ax.add_feature(
+            wld_shp_features, linewidth=0.5, edgecolor="black", alpha=0.7
+        )
 
-    def contour(self, var_name, lons, lats, data, title, clevels, fcst_time, colors='blue'):
+    def contour(
+        self, var_name, lons, lats, data, title, clevels, fcst_time, colors="blue"
+    ):
         self.clear_plots()
         if var_name == "slp":
             data = smooth2d(data, 3, cenweight=4)
-            self.cs = self.ax.contour(lons, lats, data, colors=colors, transform=ccrs.PlateCarree(), linewidths=1.0,
-                                      levels=clevels)
+            self.cs = self.ax.contour(
+                lons,
+                lats,
+                data,
+                colors=colors,
+                transform=ccrs.PlateCarree(),
+                linewidths=1.0,
+                levels=clevels,
+            )
         else:
-            self.cs = self.ax.contour(lons, lats, data, colors="blue", transform=ccrs.PlateCarree(), linewidths=0.5, levels=self.clevels)
+            self.cs = self.ax.contour(
+                lons,
+                lats,
+                data,
+                colors="blue",
+                transform=ccrs.PlateCarree(),
+                linewidths=0.5,
+                levels=self.clevels,
+            )
 
-        self.cl = self.ax.clabel(self.cs, inline=1, fontsize=10, fmt="%1.0f", inline_spacing=1)
+        self.cl = self.ax.clabel(
+            self.cs, inline=1, fontsize=10, fmt="%1.0f", inline_spacing=1
+        )
         self.plot_title(title)
         # self.set_xy_lim(data)
 
         return self.save_fig(var=var_name, fcst_time=fcst_time)
 
-    def winds(self, var_name, lons, lats, u_data, v_data, wspd, title, clevels, colors, cmap, fcst_time, level=None):
+    def winds(
+        self,
+        var_name,
+        lons,
+        lats,
+        u_data,
+        v_data,
+        wspd,
+        title,
+        clevels,
+        colors,
+        cmap,
+        fcst_time,
+        level=None,
+    ):
         thin = utils.get_auto_resolution(to_np(lats))
-        flip_array = (lats < 0)
+        flip_array = lats < 0
         self.clear_plots()
 
-        if var_name == 'u_winds_temp':
+        if var_name == "u_winds_temp":
             # FIXME: u_winds_temp plot not working at the moment
             self.ax.text(lons, lats, wspd, transform=ccrs.PlateCarree())
         elif var_name == "u_stream":
             # FIXME: Stream plot not working at the moment
-            self.stream = self.ax.streamplot(to_np(lons), to_np(lats), to_np(u_data), to_np(v_data), color='black',
-                                             transform=ccrs.PlateCarree())
+            self.stream = self.ax.streamplot(
+                to_np(lons),
+                to_np(lats),
+                to_np(u_data),
+                to_np(v_data),
+                color="black",
+                transform=ccrs.PlateCarree(),
+            )
         if var_name not in ["u_stream", "u_winds_temp"]:
-            self.contour_fill(var_name=var_name, lons=lons, lats=lats, data=wspd, title=title, clevels=clevels,
-                              colors=colors, cmap=cmap, fcst_time=fcst_time)
-            self.barbs = self.ax.barbs(to_np(lons)[::thin, ::thin], to_np(lats)[::thin, ::thin],
-                                       to_np(u_data)[::thin, ::thin], to_np(v_data)[::thin, ::thin],
-                                       transform=ccrs.PlateCarree(), length=5.5, sizes={"spacing": 0.2},
-                                       pivot="middle", flip_barb=flip_array[::thin, ::thin])
+            self.contour_fill(
+                var_name=var_name,
+                lons=lons,
+                lats=lats,
+                data=wspd,
+                title=title,
+                clevels=clevels,
+                colors=colors,
+                cmap=cmap,
+                fcst_time=fcst_time,
+            )
+            self.barbs = self.ax.barbs(
+                to_np(lons)[::thin, ::thin],
+                to_np(lats)[::thin, ::thin],
+                to_np(u_data)[::thin, ::thin],
+                to_np(v_data)[::thin, ::thin],
+                transform=ccrs.PlateCarree(),
+                length=5.5,
+                sizes={"spacing": 0.2},
+                pivot="middle",
+                flip_barb=flip_array[::thin, ::thin],
+            )
 
         return self.save_fig(var=var_name, fcst_time=fcst_time, _level=level)
 
-    def contour_fill(self, var_name, lons, lats, data, title, clevels, colors, cmap, fcst_time, level=None):
+    def contour_fill(
+        self,
+        var_name,
+        lons,
+        lats,
+        data,
+        title,
+        clevels,
+        colors,
+        cmap,
+        fcst_time,
+        level=None,
+    ):
         if isinstance(clevels, int):
-            bnorm = 'linear'
+            bnorm = "linear"
         else:
             bnorm = BoundaryNorm(clevels, cmap.N)
         if self.c_bar_extend is None:
             self.c_bar_extend = utils.get_cbar_extend(var_name)
         self.clear_plots()
-        self.cf = self.ax.contourf(lons, lats, data, transform=ccrs.PlateCarree(), cmap=cmap, norm=bnorm,
-                                   levels=clevels, extend=self.c_bar_extend)
-        self.cs = self.ax.contour(self.cf, colors=colors, transform=ccrs.PlateCarree(), linewidths=0.3)
-        self.cl = self.ax.clabel(self.cs, inline=1, fontsize=6, fmt="%1.0f", inline_spacing=1)
+        self.cf = self.ax.contourf(
+            lons,
+            lats,
+            data,
+            transform=ccrs.PlateCarree(),
+            cmap=cmap,
+            norm=bnorm,
+            levels=clevels,
+            extend=self.c_bar_extend,
+        )
+        self.cs = self.ax.contour(
+            self.cf, colors=colors, transform=ccrs.PlateCarree(), linewidths=0.3
+        )
+        self.cl = self.ax.clabel(
+            self.cs, inline=1, fontsize=6, fmt="%1.0f", inline_spacing=1
+        )
 
         self.plot_title(title)
         self.set_xy_lim(lons=lons, lats=lats)
         self.add_cbar(var_name=var_name, clevels=clevels)
 
-        if var_name not in ['winds', 'u_winds']:
+        if var_name not in ["winds", "u_winds"]:
             return self.save_fig(var=var_name, fcst_time=fcst_time, _level=level)
 
-    def plot_title(self, title_text=''): 
-        self.ax.set_title(title_text, fontsize=12, weight="semibold", style="oblique", stretch="normal", family="serif")
-    
+    def plot_title(self, title_text=""):
+        self.ax.set_title(
+            title_text,
+            fontsize=12,
+            weight="semibold",
+            style="oblique",
+            stretch="normal",
+            family="serif",
+        )
+
     def add_cbar(self, var_name, clevels):
         """Plot colorbar next to plotted axes"""
         # 'neither', 'both', 'min', 'max'
@@ -169,9 +259,13 @@ class PlotMap(object):
         if not self.cbar:
             # F = plt.gcf()
             divider = make_axes_locatable(self.ax)
-            self.cax = divider.append_axes("right", size="3.0%", pad=0.2, axes_class=maxes.Axes)
+            self.cax = divider.append_axes(
+                "right", size="3.0%", pad=0.2, axes_class=maxes.Axes
+            )
             self.fig.add_axes(self.cax)
-            self.cbar = plt.colorbar(self.cf, cax=self.cax, orientation="vertical", extend=self.c_bar_extend)
+            self.cbar = plt.colorbar(
+                self.cf, cax=self.cax, orientation="vertical", extend=self.c_bar_extend
+            )
             unit = self.config[var_name]["unit"].replace('"', "")
             self.cbar.set_ticks(clevels)
             self.cbar.ax.tick_params(labelsize=8)
@@ -185,12 +279,15 @@ class PlotMap(object):
         )
         self.grd_lns.top_labels = False
         self.grd_lns.right_labels = False
-    
+
     def set_xy_lim(self, lons, lats):
-        self.ax.set_extent([np.min(lons), np.max(lons), np.min(lats), np.max(lats)], crs=ccrs.PlateCarree())
+        self.ax.set_extent(
+            [np.min(lons), np.max(lons), np.min(lats), np.max(lats)],
+            crs=ccrs.PlateCarree(),
+        )
         """self.ax.set_ylim(cartopy_ylim(var_data))
         self.ax.set_xlim(cartopy_xlim(var_data))"""
-        
+
     def save_fig(self, var, fcst_time, _level=None):
         """Save plotted image to local filesystem"""
         file_id = "%s_%s" % (var, fcst_time)
@@ -203,11 +300,18 @@ class PlotMap(object):
         if not os.path.exists(self.output_dir):
             os.makedirs(self.output_dir)
         # plt.savefig(os.path.join(self.output_dir, filename), bbox_inches="tight", dpi=self.dpi)
-        self.fig.savefig(os.path.join(self.output_dir, filename), bbox_inches="tight", dpi=self.dpi,
-                         format='png')
+        self.fig.savefig(
+            os.path.join(self.output_dir, filename),
+            bbox_inches="tight",
+            dpi=self.dpi,
+            format="png",
+        )
         # self.clear_plots()
         if os.path.exists(os.path.join(self.output_dir, filename)):
-            tqdm.write("\t  Image saved at : " + utils.quote(os.path.join(self.output_dir, filename)))
+            tqdm.write(
+                "\t  Image saved at : "
+                + utils.quote(os.path.join(self.output_dir, filename))
+            )
 
             return os.path.join(self.output_dir, filename)
         else:
@@ -234,4 +338,3 @@ class PlotMap(object):
         except Exception as e_clr_plt:
             #   print(e_clr_plt)
             pass
-

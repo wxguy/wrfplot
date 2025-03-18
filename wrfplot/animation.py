@@ -6,12 +6,12 @@
 This file is part of wrfplot application.
 
 wrfplot is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as
- published by the Free Software Foundation, either version 3 of the License, or any later version. 
- 
-wrfplot is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty 
+ published by the Free Software Foundation, either version 3 of the License, or any later version.
+
+wrfplot is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty
 of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
 
-You should have received a copy of the GNU General Public License along with wrfplot. If not, 
+You should have received a copy of the GNU General Public License along with wrfplot. If not,
 see <http://www.gnu.org/licenses/>.
 """
 
@@ -28,11 +28,11 @@ def check_img(filename):
         im = Image.open(filename)
         im.verify()
         im.close()
-        im = Image.open(filename) 
+        im = Image.open(filename)
         im.transpose(Image.FLIP_LEFT_RIGHT)
         im.close()
         return True
-    except: 
+    except:
         print('Image', filename, 'is corrupted...')
         return False
 
@@ -45,7 +45,7 @@ def filter_images(image_paths, type='png'):
         if image_path.endswith(type):
             if check_img(image_path) is True:
                 images.append(Image.open(image_path))
-    
+
     if len(images) > 0:
         return images
     return None

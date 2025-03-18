@@ -42,7 +42,7 @@ if os.path.exists(custom_pyproj_dbase_dir):
     os.environ["PATH"] += os.path.dirname(os.path.abspath(__file__))
 
 
-VERSION = 'unknown'
+VERSION = "unknown"
 
 try:
     __version__ = version("wrfplot")
@@ -50,6 +50,7 @@ except:
     # package is not installed
     # Get the version from the local file
     import _version
+
     __version__ = _version.__version__
 finally:
     # Do nothing
@@ -68,7 +69,9 @@ def arg_praser():
         description=prog_name, epilog="\u00a9 J Sundar, wrf.guy@gmail.com, 2024"
     )
     parser.add_argument(
-        "--list-vars", action="store_true", help="Show list of variables supported by wrfplot and exit."
+        "--list-vars",
+        action="store_true",
+        help="Show list of variables supported by wrfplot and exit.",
     )
     parser.add_argument(
         "--input",
@@ -88,20 +91,20 @@ def arg_praser():
         metavar="<variable(s)>",
         type=arguments.validate_vars,
         help="Name of the variable to be plotted. Multiple variables are to be separated with ','. Use '--list-vars' "
-             "option to see list of supported variables.",
+        "option to see list of supported variables.",
     )
     parser.add_argument(
         "--ulevels",
         metavar="<upper-levels>",
         type=arguments.validate_ulevels,
         help="Provide custom upper level(s) when plotting upper atmospheric data. Each level is to be separated by ',' "
-             "i.e., '925,850,700'. Use '--list-vars' to know list of supported upper level variables.",
+        "i.e., '925,850,700'. Use '--list-vars' to know list of supported upper level variables.",
     )
     parser.add_argument(
         "--list-cmaps",
         action="store_true",
         help="List colour maps (cmaps) supported by wrfplot. Refer https://pratiman-91.github.io/colormaps for "
-             "information on each colourmaps.",
+        "information on each colourmaps.",
     )
     parser.add_argument(
         "--cmap",
@@ -109,7 +112,7 @@ def arg_praser():
         type=arguments.validate_cmap,
         default=False,
         help="Valid colormap name to fill colors. Use '--list-cmaps' option to see list of supported colormaps. Must "
-             "have minimum 11 colors, else will lead to error.",
+        "have minimum 11 colors, else will lead to error.",
     )
     parser.add_argument(
         "--clevels",
@@ -117,7 +120,7 @@ def arg_praser():
         type=arguments.validate_clevels,
         default=False,
         help="Provide custom contour level(s) to highlight data. Levels are to be in ascending order and separated "
-             "by ',' i.e., '24,26,28'. If single value is provided, clevels will be automatically calculated.",
+        "by ',' i.e., '24,26,28'. If single value is provided, clevels will be automatically calculated.",
     )
     parser.add_argument(
         "--dpi",
@@ -125,14 +128,14 @@ def arg_praser():
         type=int,
         default=125,
         help="Increase or decrease the plotted image resolution. Default is 125. More is higher resolution and less is "
-             "course resolution. Higher values will reduce the speed of plot.",
+        "course resolution. Higher values will reduce the speed of plot.",
     )
     parser.add_argument(
         "--gif",
         action="store_true",
         default=False,
         help="If applied, creates an animated GIF image. GIF image will be saved same location as other images with a "
-             "name specifed in '--vars' option."
+        "name specified in '--vars' option.",
     )
     parser.add_argument(
         "--gif-speed",
@@ -140,7 +143,7 @@ def arg_praser():
         type=arguments.validate_gif_speed,
         default=False,
         help="Set speed of GIF frame in seconds. Default is 0.5 sec. Lower value increases the speed of animation. To "
-             "be used with '--gif' option to take effect."
+        "be used with '--gif' option to take effect.",
     )
     parser.add_argument(
         "--version",
@@ -170,8 +173,14 @@ def main():
             # start_time = time.monotonic()
             start_time = timeit.default_timer()
             wrfplt = WrfPlot(
-                input_path=args.input, output_path=args.output, dpi=args.dpi, cmap=args.cmap, ulevels=args.ulevels, animation=args.gif,
-                animation_speed=args.gif_speed, clevels=args.clevels
+                input_path=args.input,
+                output_path=args.output,
+                dpi=args.dpi,
+                cmap=args.cmap,
+                ulevels=args.ulevels,
+                animation=args.gif,
+                animation_speed=args.gif_speed,
+                clevels=args.clevels,
             )
             try:
                 wrfplt.read_file(args.input)
@@ -188,7 +197,10 @@ def main():
                 total_time = timeit.default_timer() - start_time
                 mins, secs = divmod(total_time, 60)
                 hours, mins = divmod(mins, 60)
-                print(f"\nIt took '%dH:%dM:%fS' to complete all processes.\n" % (hours, mins, secs))
+                print(
+                    f"\nIt took '%dH:%dM:%fS' to complete all processes.\n"
+                    % (hours, mins, secs)
+                )
             except Exception as e:
                 # print(e)
                 print(traceback.format_exc())
