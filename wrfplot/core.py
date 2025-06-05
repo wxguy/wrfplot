@@ -1,7 +1,8 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-""" Core module to deal with wrf model output NetCDF files before plotting """
+"""Core module to deal with wrf model output NetCDF files before plotting"""
+
 import sys
 
 """
@@ -51,6 +52,7 @@ class WrfPlot:
         animation=False,
         animation_speed=0.5,
         clevels=False,
+        dis_clabel=False,
     ):
         self.nc_fh = None
         self.valid_input = None
@@ -72,12 +74,17 @@ class WrfPlot:
         self.speed = animation_speed
         self.custom_title = None
         self.plot = plot.PlotMap(
-            output_dir=output_path, dpi=dpi, clevels=clevels, config_file=self.config
+            output_dir=output_path,
+            dpi=dpi,
+            clevels=clevels,
+            config_file=self.config,
+            disable_clabel=dis_clabel,
         )
         self.total_vars = 1
         self.is_moving_domain = None
         self.pressure = None
         self.bar_update = 1
+        self.dis_clabel = dis_clabel
 
     def get_domain_state(self):
         if self.is_moving_domain is None:

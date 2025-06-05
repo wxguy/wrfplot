@@ -1,7 +1,8 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-""" Plot data on a Map """
+"""Plot data on a Map"""
+
 """
 This file is part of wrfplot application.
 
@@ -57,6 +58,7 @@ class PlotMap(object):
         output_dir=None,
         dpi=150,
         config_file=None,
+        disable_clabel=False,
     ):
         super(PlotMap, self).__init__()
         self.var_name = var_name
@@ -78,6 +80,7 @@ class PlotMap(object):
         self.cbar = None
         self.cax = None
         self.stream = None
+        self.disable_clabel = disable_clabel
 
     def create_fig(self, projection):
         """Create Fig"""
@@ -229,9 +232,11 @@ class PlotMap(object):
         self.cs = self.ax.contour(
             self.cf, colors=colors, transform=ccrs.PlateCarree(), linewidths=0.3
         )
-        self.cl = self.ax.clabel(
-            self.cs, inline=1, fontsize=6, fmt="%1.0f", inline_spacing=1
-        )
+
+        if self.disable_clabel is False:
+            self.cl = self.ax.clabel(
+                self.cs, inline=1, fontsize=6, fmt="%1.0f", inline_spacing=1
+            )
 
         self.plot_title(title)
         self.set_xy_lim(lons=lons, lats=lats)

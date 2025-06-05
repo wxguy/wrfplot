@@ -1,7 +1,8 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-""" wrfplot entry point to the application """
+"""wrfplot entry point to the application"""
+
 """
 This file is part of wrfplot application.
 
@@ -123,6 +124,11 @@ def arg_praser():
         "by ',' i.e., '24,26,28'. If single value is provided, clevels will be automatically calculated.",
     )
     parser.add_argument(
+        "--no-clabel",
+        action="store_true",
+        help="Disable contour label. This will not have an effect on variable 'slp'.",
+    )
+    parser.add_argument(
         "--dpi",
         metavar="<value>",
         type=int,
@@ -181,6 +187,7 @@ def main():
                 animation=args.gif,
                 animation_speed=args.gif_speed,
                 clevels=args.clevels,
+                dis_clabel=args.no_clabel,
             )
             try:
                 wrfplt.read_file(args.input)
