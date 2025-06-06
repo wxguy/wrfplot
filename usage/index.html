@@ -1,0 +1,889 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Command line application to plot WRF output files">
+      
+      
+        <meta name="author" content="J Sundar">
+      
+      
+        <link rel="canonical" href="https://wxguy.github.io/wrfplot/usage/">
+      
+      
+        <link rel="prev" href="../variables/">
+      
+      
+        <link rel="next" href="../colormaps/">
+      
+      
+      <link rel="icon" href="../static/wrfplot.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.6.14">
+    
+    
+      
+        <title>Usage - wrfplot</title>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/stylesheets/main.342714a4.min.css">
+      
+        
+        <link rel="stylesheet" href="../assets/stylesheets/palette.06af60db.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#basic-usage" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href=".." title="wrfplot" class="md-header__button md-logo" aria-label="wrfplot" data-md-component="logo">
+      
+  <img src="../static/wrfplot.png" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            wrfplot
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Usage
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12s-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/wxguy/wrfplot" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.7.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2024 Fonticons, Inc.--><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81"/></svg>
+  </div>
+  <div class="md-source__repository">
+    wxguy/wrfplot
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href=".." title="wrfplot" class="md-nav__button md-logo" aria-label="wrfplot" data-md-component="logo">
+      
+  <img src="../static/wrfplot.png" alt="logo">
+
+    </a>
+    wrfplot
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/wxguy/wrfplot" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.7.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2024 Fonticons, Inc.--><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81"/></svg>
+  </div>
+  <div class="md-source__repository">
+    wxguy/wrfplot
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href=".." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Home
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../install/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Installation
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../variables/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Variables
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    Usage
+    
+  </span>
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    Usage
+    
+  </span>
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#basic-usage" class="md-nav__link">
+    <span class="md-ellipsis">
+      Basic Usage
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#plotting-surface-variable" class="md-nav__link">
+    <span class="md-ellipsis">
+      Plotting Surface Variable
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#plotting-upper-atmospheric-variables" class="md-nav__link">
+    <span class="md-ellipsis">
+      Plotting Upper Atmospheric Variables
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#plot-variable-at-specific-levels" class="md-nav__link">
+    <span class="md-ellipsis">
+      Plot Variable at Specific Level(s)
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#create-animation-gif" class="md-nav__link">
+    <span class="md-ellipsis">
+      Create Animation (GIF)
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#control-animation-speed" class="md-nav__link">
+    <span class="md-ellipsis">
+      Control Animation Speed
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#control-contour-levels" class="md-nav__link">
+    <span class="md-ellipsis">
+      Control Contour Levels
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../colormaps/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Colormaps
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../support/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Support
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../contribution/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Contribution
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../authors/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Authors
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../license/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    License
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#basic-usage" class="md-nav__link">
+    <span class="md-ellipsis">
+      Basic Usage
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#plotting-surface-variable" class="md-nav__link">
+    <span class="md-ellipsis">
+      Plotting Surface Variable
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#plotting-upper-atmospheric-variables" class="md-nav__link">
+    <span class="md-ellipsis">
+      Plotting Upper Atmospheric Variables
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#plot-variable-at-specific-levels" class="md-nav__link">
+    <span class="md-ellipsis">
+      Plot Variable at Specific Level(s)
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#create-animation-gif" class="md-nav__link">
+    <span class="md-ellipsis">
+      Create Animation (GIF)
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#control-animation-speed" class="md-nav__link">
+    <span class="md-ellipsis">
+      Control Animation Speed
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#control-contour-levels" class="md-nav__link">
+    <span class="md-ellipsis">
+      Control Contour Levels
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+  
+  
+
+
+  <h1>Usage</h1>
+
+<h2 id="basic-usage">Basic Usage</h2>
+<p>The first step in plotting diagnostic variable to find what all variables are supported by <code>wrfplot</code> application.
+This is required as the application would accept variable names only in certain string format. 
+Therefore, you should list and review the name of variable by issuing the following command in the terminal:</p>
+<div class="highlight"><pre><span></span><code>wrfplot --list-vars
+</code></pre></div>
+<p>Invoking the above command will produce the following output:</p>
+<div class="highlight"><pre><span></span><code><span class="go">****    ****    ****    ****    ****    ****    ****</span>
+<span class="go">Variables starting with &#39;u_&#39; are upper air variable availabe at 925, 850, 700, 600, 500, 400, 300 and 200 hPa heights...</span>
+<span class="go">****    ****    ****    ****    ****    ****    ****</span>
+
+<span class="go">Variable &quot;slp&quot;   --&gt; Mean Sea Level Pressure (hPa)</span>
+<span class="go">Variable &quot;winds&quot;   --&gt; Surface (10M) Wind Speed and Direction (Kt)</span>
+<span class="go">Variable &quot;rh2&quot;   --&gt; 2m Relative Humidity (%)</span>
+<span class="go">Variable &quot;T2&quot;   --&gt; 2m Temperature (°C)</span>
+<span class="go">Variable &quot;mcape&quot;   --&gt; CAPE Maximum ($J kg^{1}$)</span>
+<span class="go">Variable &quot;mcin&quot;   --&gt; Minimum Convective Inhibition ($J kg^{1}$)</span>
+<span class="go">Variable &quot;lcl&quot;   --&gt; Lifting Condensation Level (Meters)</span>
+<span class="go">Variable &quot;lfc&quot;   --&gt; Level of Free Convection (Meters)</span>
+<span class="go">Variable &quot;ctt&quot;   --&gt; Cloud Top Temperature (°C)</span>
+<span class="go">Variable &quot;low_cloudfrac&quot;   --&gt; Low Cloud Coverage (%)</span>
+<span class="go">Variable &quot;mid_cloudfrac&quot;   --&gt; Medium Cloud Coverage (%)</span>
+<span class="go">Variable &quot;high_cloudfrac&quot;   --&gt; High Cloud Coverage (%)</span>
+<span class="go">Variable &quot;mdbz&quot;   --&gt; Maximum Reflectivity (dBZ)</span>
+<span class="go">Variable &quot;helicity&quot;   --&gt; Storm Relative Helicity ($m^{2} s^{-2}$)</span>
+<span class="go">Variable &quot;pw&quot;   --&gt; Precipitable Water ($kg m^{-2}$)</span>
+<span class="go">Variable &quot;td2&quot;   --&gt; 2m Dew Point Temperature (°C)</span>
+<span class="go">Variable &quot;ppn_accum&quot;   --&gt; Accumulated Precipitation (mm)</span>
+<span class="go">Variable &quot;ppn_conv&quot;   --&gt; Convective Precipitation (mm)</span>
+<span class="go">Variable &quot;ppn&quot;   --&gt; Precipitation/ Rain (mm)</span>
+<span class="go">Variable &quot;updraft_helicity&quot;   --&gt; Updraft Helicity ($m^{2} s^{-2}$)</span>
+<span class="go">Variable &quot;u_theta_e&quot;   --&gt; Equivalent Potential Temperature (°C)</span>
+<span class="go">Variable &quot;u_avo&quot;   --&gt; Absolute Vorticity ($10^{-5} s^{-1}$)</span>
+<span class="go">Variable &quot;u_dbz&quot;   --&gt; Reflectivity (dBz)</span>
+<span class="go">Variable &quot;u_geopotential&quot;   --&gt; Geopotential - Mass Grid ($m^{2} s^{-2}$)</span>
+<span class="go">Variable &quot;u_omg&quot;   --&gt; Omega ($Pa s^{-1}s$)</span>
+<span class="go">Variable &quot;u_pressure&quot;   --&gt; Full Model Pressure (hPa)</span>
+<span class="go">Variable &quot;u_pvo&quot;   --&gt; Potential Vorticity (PVU)</span>
+<span class="go">Variable &quot;u_td&quot;   --&gt; Dew Point Temperature (°C)</span>
+<span class="go">Variable &quot;u_rh&quot;   --&gt; Relative Humidity (%)</span>
+<span class="go">Variable &quot;u_theta&quot;   --&gt; Potential Temperature (°C)</span>
+<span class="go">Variable &quot;u_temp&quot;   --&gt; Temperature (°C)</span>
+<span class="go">Variable &quot;u_tv&quot;   --&gt; Virtual Temperature (°C)</span>
+<span class="go">Variable &quot;u_twb&quot;   --&gt; Wet Bulb Temperature (°C)</span>
+<span class="go">Variable &quot;u_winds&quot;   --&gt; Wind Speed and Direction (Kt)</span>
+<span class="go">Variable &quot;u_cin&quot;   --&gt; Convective Inhibition ($J kg^{1}$)</span>
+<span class="go">Variable &quot;u_cape&quot;   --&gt; Convective Available Potential Energy ($J kg^{1}$)</span>
+</code></pre></div>
+<p>The above console print has two names. One with quote and the other is without. 
+The name within quote such as "slp" is called short variable, and without a quote is called long variable. 
+You can read through a list to take note of what parameter you want to plot. 
+For example, if you need to plot <code>2m Relative Humidity</code>, then you need to remember the sort variable name in the first 
+quote <code>“”</code> i.e, <code>“rh2”</code>. With this, we will proceed ahead to plot “rh2” variable. To plot any variable, 
+there are minimum three arguments required to be provided. They are <code>--vars</code>, <code>--input</code> and <code>--output</code>. 
+Details of these would be discussed later.</p>
+<h2 id="plotting-surface-variable">Plotting Surface Variable</h2>
+<p>All the variables which does not start with <code>u_</code> string are surface variable. 
+Now, let's go ahead and start plotting the variable <code>“2m Relative Humidity”</code> named as <code>“rh2”</code>:</p>
+<div class="highlight"><pre><span></span><code>wrfplot --vars &quot;rh2&quot; --input ../../test/wrfout_data/wrfout_d01_2021-05-13_00_00_00 --output ../../test/wrfout_data/output_images
+</code></pre></div>
+<p>Where:</p>
+<ul>
+<li><code>--vars</code> to indicate name of variable to plot</li>
+<li><code>--input</code> is path to wrfout netCDF file</li>
+<li><code>--output</code> is path to directory where final image files are required to be saved. The directory will be created if it does not exist</li>
+</ul>
+<p>Executing the above command will produce the following output in the terminal indicating the progress of plots and location of files saved in local filesystem.</p>
+<div class="highlight"><pre><span></span><code><span class="go">*** Initialising plotting for variable : &quot;rh2&quot; ***</span>
+
+<span class="go">        Plotting &quot;rh2&quot; for Time : &quot;13-05-2021_05:30&quot; UTC                                                                                 </span>
+<span class="go">          Image saved at : &quot;../../test/wrfout_data/output_images/rh2_13-05-2021_05_30.png&quot;                            </span>
+<span class="go">        Plotting &quot;rh2&quot; for Time : &quot;13-05-2021_08:30&quot; UTC                                                                                 </span>
+<span class="go">          Image saved at : &quot;../../test/wrfout_data/output_images/rh2_13-05-2021_08_30.png&quot;                            </span>
+<span class="go">        Plotting &quot;rh2&quot; for Time : &quot;13-05-2021_11:31&quot; UTC                                                                                 </span>
+<span class="go">          Image saved at : &quot;../../test/wrfout_data/output_images/rh2_13-05-2021_11_31.png&quot;                            </span>
+<span class="go">        Plotting &quot;rh2&quot; for Time : &quot;13-05-2021_14:30&quot; UTC                                                                                 </span>
+<span class="go">          Image saved at : &quot;../../test/wrfout_data/output_images/rh2_13-05-2021_14_30.png&quot;                            </span>
+<span class="go">        Plotting &quot;rh2&quot; for Time : &quot;13-05-2021_17:30&quot; UTC                                                                                 </span>
+<span class="go">          Image saved at : &quot;../../test/wrfout_data/output_images/rh2_13-05-2021_17_30.png&quot;                            </span>
+
+<span class="go">Plotting process completed. It took 0H:0M:9.682410S</span>
+</code></pre></div>
+<p>The plotted output for variable will look like below:</p>
+<figure>
+  <img alt="Image title" src="../static/images/rh2_13-05-2021_11_31.png" />
+      <figcaption>Sample Relative Humidity Plot</figcaption>
+</figure>
+<h2 id="plotting-upper-atmospheric-variables">Plotting Upper Atmospheric Variables</h2>
+<p><code>wrfplot</code> supports a few upper atmospheric variables. These variables are indicated with <code>u_</code> tag for ease of identification. 
+By default, the plot for upper atmospheric variables would be plotted for <code>925</code>, <code>850</code>, <code>700</code>, <code>600</code>, <code>500</code>, <code>400</code>, <code>300</code> &amp; <code>200</code> hPa. 
+The upper levels can be controlled using <code>--ulevels</code> though.
+If you want to plot upper winds, you can specify the variable with the following command:</p>
+<div class="highlight"><pre><span></span><code>wrfplot --vars &quot;u_winds&quot; --input ../../test/wrfout_data/wrfout_d01_2021-05-13_00_00_00 --output ../../test/wrfout_data/output_images
+</code></pre></div>
+<figure>
+  <img alt="Image title" src="../static/images/u_winds_300_13-05-2021_11_31.png" />
+      <figcaption>Sample Upper Winds Plot at 300hPa</figcaption>
+</figure>
+<h2 id="plot-variable-at-specific-levels">Plot Variable at Specific Level(s)</h2>
+<p>When plotting upper level variable, <code>wrfplot</code> will plot all the predefined levels viz., <code>925</code>, <code>850</code>, <code>700</code>, <code>600</code>, <code>500</code>, <code>400</code>, <code>300</code> &amp; <code>200</code> hPa.
+You can control the level at which variable is required to be plotted using <code>--ulevels</code> argument. 
+For example, if you need to plot at <code>800</code> and <code>750</code> hpa levels only, then you can apply the following command:</p>
+<div class="highlight"><pre><span></span><code>wrfplot --vars &quot;u_winds&quot; --ulevels &quot;800,750&quot; --input ../../test/wrfout_data/wrfout_d01_2021-05-13_00_00_00 --output ../../test/wrfout_data/output_images
+</code></pre></div>
+<p>Remember that the level values are to be separated by <code>,</code>. That should produce the following output in the terminal:</p>
+<div class="highlight"><pre><span></span><code><span class="go">Using user provided upper level(s) : &quot;800.0,750.0&quot;</span>
+
+<span class="go">*** Initialising plotting for variable : &quot;u_winds&quot; ***</span>
+
+<span class="go">        Plotting &quot;u_winds&quot; for level &quot;800.0&quot; hPa and Time : &quot;13-05-2021_05:30&quot; UTC                                                       </span>
+<span class="go">          Image saved at : &quot;../../test/wrfout_data/output_images/u_winds_800.0_13-05-2021_05_30.png&quot;                  </span>
+<span class="go">        Plotting &quot;u_winds&quot; for level &quot;800.0&quot; hPa and Time : &quot;13-05-2021_08:30&quot; UTC                                                       </span>
+<span class="go">          Image saved at : &quot;../../test/wrfout_data/output_images/u_winds_800.0_13-05-2021_08_30.png&quot;                  </span>
+<span class="go">        Plotting &quot;u_winds&quot; for level &quot;800.0&quot; hPa and Time : &quot;13-05-2021_11:31&quot; UTC                                                       </span>
+<span class="go">          Image saved at : &quot;../../test/wrfout_data/output_images/u_winds_800.0_13-05-2021_11_31.png&quot;                  </span>
+<span class="go">        Plotting &quot;u_winds&quot; for level &quot;800.0&quot; hPa and Time : &quot;13-05-2021_14:30&quot; UTC                                                       </span>
+<span class="go">          Image saved at : &quot;../../test/wrfout_data/output_images/u_winds_800.0_13-05-2021_14_30.png&quot;                  </span>
+<span class="go">        Plotting &quot;u_winds&quot; for level &quot;800.0&quot; hPa and Time : &quot;13-05-2021_17:30&quot; UTC                                                       </span>
+<span class="go">          Image saved at : &quot;../../test/wrfout_data/output_images/u_winds_800.0_13-05-2021_17_30.png&quot;                  </span>
+<span class="go">        Plotting &quot;u_winds&quot; for level &quot;750.0&quot; hPa and Time : &quot;13-05-2021_05:30&quot; UTC                                                       </span>
+<span class="go">          Image saved at : &quot;../../test/wrfout_data/output_images/u_winds_750.0_13-05-2021_05_30.png&quot;                  </span>
+<span class="go">        Plotting &quot;u_winds&quot; for level &quot;750.0&quot; hPa and Time : &quot;13-05-2021_08:30&quot; UTC                                                       </span>
+<span class="go">          Image saved at : &quot;../../test/wrfout_data/output_images/u_winds_750.0_13-05-2021_08_30.png&quot;                  </span>
+<span class="go">        Plotting &quot;u_winds&quot; for level &quot;750.0&quot; hPa and Time : &quot;13-05-2021_11:31&quot; UTC                                                       </span>
+<span class="go">          Image saved at : &quot;../../test/wrfout_data/output_images/u_winds_750.0_13-05-2021_11_31.png&quot;                  </span>
+<span class="go">        Plotting &quot;u_winds&quot; for level &quot;750.0&quot; hPa and Time : &quot;13-05-2021_14:30&quot; UTC                                                       </span>
+<span class="go">          Image saved at : &quot;../../test/wrfout_data/output_images/u_winds_750.0_13-05-2021_14_30.png&quot;                  </span>
+<span class="go">        Plotting &quot;u_winds&quot; for level &quot;750.0&quot; hPa and Time : &quot;13-05-2021_17:30&quot; UTC                                                       </span>
+<span class="go">          Image saved at : &quot;../../test/wrfout_data/output_images/u_winds_750.0_13-05-2021_17_30.png&quot;                  </span>
+
+<span class="go">Plotting process completed. It took 0H:0M:6.948402S</span>
+</code></pre></div>
+<h2 id="create-animation-gif">Create Animation (GIF)</h2>
+<p>You can also create an animation of your plots using <code>--gif</code> option. Example command is given below:</p>
+<div class="highlight"><pre><span></span><code>wrfplot --vars &quot;rh2&quot; --gif --input ../../test/wrfout_data/wrfout_d01_2021-05-13_00_00_00 --output ../../test/wrfout_data/output_images 
+</code></pre></div>
+<p>This would produce an animated <code>gif</code> image as shown below:</p>
+<figure>
+  <img alt="Image title" src="../static/images/rh2-13-05-2021_05_30.gif" />
+      <figcaption>Sample Animation Plot</figcaption>
+</figure>
+<h2 id="control-animation-speed">Control Animation Speed</h2>
+<p>By default, the speed of the animation is kept as <code>0.5</code> sec. If you wish to increase or decrease the speed, you can do so by with <code>--gif-speed</code> option as indicated below where speed is increased to <code>0.25</code> sec:</p>
+<div class="highlight"><pre><span></span><code>wrfplot --vars &quot;rh2&quot; --gif --gif-speed 0.25 --input ../../test/wrfout_data/wrfout_d01_2021-05-13_00_00_00 --output ../../test/wrfout_data/output_images 
+</code></pre></div>
+<p>This would increase the speed of animation as shown in the sample image file.</p>
+<figure>
+  <img alt="Image title" src="../static/images/rh2-13-05-2021_05_30_faster.gif" />
+      <figcaption>Animation Plot with Increased Speed</figcaption>
+</figure>
+<h2 id="control-contour-levels">Control Contour Levels</h2>
+<p>The default contour levels of each variable set based on a variable type. 
+For example, <code>Relative Humidity</code> variable will have 10 levels from 0 to 100 with an interval of 10.
+If you wish to change these intervals for specific variable, you may do so with <code>--clevels</code> argument. 
+Levels are to be in ascending order and separated by ','. 
+For example, <code>24,26,28,30,32,34,36</code>.
+Example plot to change temperature level to highlight the temperature range of interest will be as follows:</p>
+<div class="highlight"><pre><span></span><code>wrfplot --vars &quot;rh2&quot; --clevels &#39;0,10,20,30,32,34,36,38,40,42,44,46&#39; --input ../../test/wrfout_data/wrfout_d01_2021-05-13_00_00_00 --output ../../test/wrfout_data/output_images 
+</code></pre></div>
+<p>After executing the command with <code>--clevels</code> argument, the plot would look like this:</p>
+<figure>
+  <img alt="Image title" src="../static/images/T2_13-05-2021_17_30_clevels.png" />
+      <figcaption>T2 Plot with Custom <code>--clevels</code> Option</figcaption>
+</figure>
+<p>this can be compared with the default clevels set by the <code>wrfplot</code> as shown below:</p>
+<figure>
+  <img alt="Image title" src="../static/images/T2_13-05-2021_17_30.png" />
+      <figcaption>T2 Plot with Default <code>--clevels</code> Option</figcaption>
+</figure>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+    <div class="md-copyright__highlight">
+      Copyright &copy; 2024 J Sundar
+    </div>
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      <script id="__config" type="application/json">{"base": "..", "features": ["content.code.copy"], "search": "../assets/javascripts/workers/search.d50fe291.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../assets/javascripts/bundle.13a4f30d.min.js"></script>
+      
+    
+  </body>
+</html>

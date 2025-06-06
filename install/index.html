@@ -1,0 +1,860 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Command line application to plot WRF output files">
+      
+      
+        <meta name="author" content="J Sundar">
+      
+      
+        <link rel="canonical" href="https://wxguy.github.io/wrfplot/install/">
+      
+      
+        <link rel="prev" href="..">
+      
+      
+        <link rel="next" href="../variables/">
+      
+      
+      <link rel="icon" href="../static/wrfplot.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.6.14">
+    
+    
+      
+        <title>Installation - wrfplot</title>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/stylesheets/main.342714a4.min.css">
+      
+        
+        <link rel="stylesheet" href="../assets/stylesheets/palette.06af60db.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#installation-guide" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href=".." title="wrfplot" class="md-header__button md-logo" aria-label="wrfplot" data-md-component="logo">
+      
+  <img src="../static/wrfplot.png" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            wrfplot
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Installation
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12s-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/wxguy/wrfplot" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.7.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2024 Fonticons, Inc.--><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81"/></svg>
+  </div>
+  <div class="md-source__repository">
+    wxguy/wrfplot
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href=".." title="wrfplot" class="md-nav__button md-logo" aria-label="wrfplot" data-md-component="logo">
+      
+  <img src="../static/wrfplot.png" alt="logo">
+
+    </a>
+    wrfplot
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/wxguy/wrfplot" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.7.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2024 Fonticons, Inc.--><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81"/></svg>
+  </div>
+  <div class="md-source__repository">
+    wxguy/wrfplot
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href=".." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Home
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    Installation
+    
+  </span>
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    Installation
+    
+  </span>
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#system-requirements" class="md-nav__link">
+    <span class="md-ellipsis">
+      System Requirements
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#install-on-windows-linux-and-macos" class="md-nav__link">
+    <span class="md-ellipsis">
+      Install on Windows, Linux and macOS
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#standalone-binary-installation" class="md-nav__link">
+    <span class="md-ellipsis">
+      Standalone (Binary) Installation
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Standalone (Binary) Installation">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#installation-under-windows" class="md-nav__link">
+    <span class="md-ellipsis">
+      Installation under Windows
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#installation-under-linux" class="md-nav__link">
+    <span class="md-ellipsis">
+      Installation under Linux
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#installation-under-macos" class="md-nav__link">
+    <span class="md-ellipsis">
+      Installation under macOS
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#confirm-installation" class="md-nav__link">
+    <span class="md-ellipsis">
+      Confirm Installation
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../variables/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Variables
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../usage/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Usage
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../colormaps/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Colormaps
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../support/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Support
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../contribution/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Contribution
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../authors/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Authors
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../license/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    License
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#system-requirements" class="md-nav__link">
+    <span class="md-ellipsis">
+      System Requirements
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#install-on-windows-linux-and-macos" class="md-nav__link">
+    <span class="md-ellipsis">
+      Install on Windows, Linux and macOS
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#standalone-binary-installation" class="md-nav__link">
+    <span class="md-ellipsis">
+      Standalone (Binary) Installation
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Standalone (Binary) Installation">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#installation-under-windows" class="md-nav__link">
+    <span class="md-ellipsis">
+      Installation under Windows
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#installation-under-linux" class="md-nav__link">
+    <span class="md-ellipsis">
+      Installation under Linux
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#installation-under-macos" class="md-nav__link">
+    <span class="md-ellipsis">
+      Installation under macOS
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#confirm-installation" class="md-nav__link">
+    <span class="md-ellipsis">
+      Confirm Installation
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+  
+  
+
+
+<h1 id="installation-guide">Installation Guide</h1>
+<p>This section briefly guides you to install <strong><em>wrfplot</em></strong> on a variety of Operating Systems viz., Linux, Windows and macOS.</p>
+<h2 id="system-requirements">System Requirements</h2>
+<p>Here are the following dependencies you should know about before installing <code>wrfplot</code>:</p>
+<ul>
+<li>
+<p>Operating System (Windows): Windows 10 or above. May work on Windows 7/ 8 but not tested.</p>
+</li>
+<li>
+<p>Operating System (Linux): Ubuntu 20.04 or above. If you wish to use it on Red Hat or Cent OS based, then it should be versioned 8 or above.</p>
+</li>
+<li>
+<p>Architecture: x86_64 or simple called 64bit. <strong><em>Don't download if you have 32bit machine</em></strong>. It won't work.</p>
+</li>
+</ul>
+<h2 id="install-on-windows-linux-and-macos">Install on Windows, Linux and macOS</h2>
+<p>Support for all platforms is provided through conda-forge.
+If you have already conda installed, then the following command is enough to install <code>wrfplot</code>:</p>
+<div class="highlight"><pre><span></span><code>conda install -c cond-forge wrfplot
+</code></pre></div>
+<p>Check your installation by typing the following command which should show the version number:</p>
+<div class="highlight"><pre><span></span><code>wrfplot --version
+2.0.2
+</code></pre></div>
+<h2 id="standalone-binary-installation">Standalone (Binary) Installation</h2>
+<p>Since it is intended to be used as a command line, the application is distributed as stand-alone on both Linux and Windows. You must download the correct version of application installer or setup file. Both are described in the subsection below.</p>
+<h3 id="installation-under-windows">Installation under Windows</h3>
+<p>Go to <a href="https://github.com/wxguy/wrfplot/releases">https://github.com/wxguy/wrfplot/releases</a> and look for the latest release. The Windows setup executable will have name <code>wrfplot-windows-64bit.exe</code> and download it to the local disk. The rest of the installation procedure is same as you do for any other windows setup files. Here are the complete process of installing in visual format:</p>
+<figure>  <br />
+<img alt="Image title" src="../static/images/screenshots/1-windows-setup.png" />
+<br />
+<figcaption>Double Click on Windows Executable</figcaption>
+</figure>
+<figure>  <br />
+<img alt="Image title" src="../static/images/screenshots/2-user-elivation.png" />
+<br />
+<figcaption>Accept Windows User Elevation</figcaption>
+</figure>
+<figure>  <br />
+<img alt="Image title" src="../static/images/screenshots/3-windows-welcome-screen.png" />
+      <figcaption>Windows Setup Welcome Screen</figcaption>
+</figure>
+<figure>  <br />
+<img alt="Image title" src="../static/images/screenshots/4-windows-user-agreement.png" />
+      <figcaption>Accept User Agreement</figcaption>
+</figure>
+<figure>  <br />
+<img alt="Image title" src="../static/images/screenshots/5-windows-install-options.png" />
+      <figcaption>Choose Install Option (recommended <code>Install just for me</code>)</figcaption>
+</figure>
+<figure>  <br />
+<img alt="Image title" src="../static/images/screenshots/6-windows-destination-dir.png" />
+      <figcaption>Windows Install Directory (recommended not to change)</figcaption>
+</figure>
+<figure>  <br />
+<img alt="Image title" src="../static/images/screenshots/7-windows-install-progress.png" />
+      <figcaption>Wait till Install Complete</figcaption>
+</figure>
+<figure>  <br />
+<img alt="Image title" src="../static/images/screenshots/8-windows-install-finish.png" />
+      <figcaption>Click Finish to Close Setup</figcaption>
+</figure>
+<p>That’s it. You have successfully installed <code>wrfplot</code>.</p>
+<h3 id="installation-under-linux">Installation under Linux</h3>
+<p>Go to <a href="https://github.com/wxguy/wrfplot/releases">https://github.com/wxguy/wrfplot/releases</a> and look for the latest release. The Linux installer will have name <code>wrfplot</code>-linux-64bit.run. Click on the link and download it to local disk. Thereafter, execute the below command (assuming that the Linux installer is downloaded at ~/Downloads):</p>
+<div class="highlight"><pre><span></span><code>bash ~/Downloads/wrfplot-linux-64bit.run
+</code></pre></div>
+<p>that would produce the output as indicated below:</p>
+<div class="highlight"><pre><span></span><code><span class="go">Verifying archive integrity...  100%   MD5 checksums are OK. All good.</span>
+<span class="go">Uncompressing wrfplot_Linux_Installer  100%</span>
+<span class="go">Removing previous install directory...</span>
+<span class="go">Installing wrfplot to /home/wxguy/.wrfplot...</span>
+<span class="go">Renaming &#39;/home/wxguy/wrfplot&#39; directory to &#39;/home/wxguy/.wrfplot&#39;..</span>
+<span class="go">&#39;/home/wxguy/.local/bin&#39; directory already exists. Not creating it.</span>
+<span class="go">Linking wrfplot executable...</span>
+<span class="go">Updating .bashrc file to include install directory...</span>
+<span class="go">/home/wxguy/.local/bin directory already added to PATH. Skipping...</span>
+<span class="go">Installation completed. Please restart your terminal to continue using wrfplot...</span>
+</code></pre></div>
+<h3 id="installation-under-macos">Installation under macOS</h3>
+<p>There is no binary distribution made available for macOS at the moment. The support for macOS is provided through miniconda. If you already have miniconda/ anaconda installed, you can execute the following to install <code>wrfplot</code>:</p>
+<div class="highlight"><pre><span></span><code>conda install -c conda-forge wrfplot
+</code></pre></div>
+<h2 id="confirm-installation">Confirm Installation</h2>
+<p>The easiest way to check the installation is to issue the following command in the terminal:</p>
+<div class="highlight"><pre><span></span><code>wrfplot --help
+</code></pre></div>
+<p>This should produce brief information about the <code>wrfplot</code> as shown below:</p>
+<div class="highlight"><pre><span></span><code><span class="go">usage: wrfplot [-h] [--list-vars] [--input &lt;input_file&gt;] [--output &lt;output_dir&gt;] [--vars &lt;variable(s)&gt;] [--ulevels &lt;upper-levels&gt;]</span>
+<span class="go">                  [--list-cmaps] [--cmap &lt;cmap-name&gt;] [--clevels &lt;contour-levels&gt;] [--dpi &lt;value&gt;] [--gif] [--gif-speed &lt;seconds&gt;]</span>
+<span class="go">                  [--version]</span>
+
+<span class="go">Command line application to plot static WRF model prognostic products...</span>
+
+<span class="go">options:</span>
+<span class="go">  -h, --help            show this help message and exit</span>
+<span class="go">  --list-vars           Show list of variables supported by wrfplot and exit.</span>
+<span class="go">  --input &lt;input_file&gt;  Path to WRF generated netCDF.</span>
+<span class="go">  --output &lt;output_dir&gt;</span>
+<span class="go">                        Path to output directory for saving plotted images.</span>
+<span class="go">  --vars &lt;variable(s)&gt;  Name of the variable to be plotted. Multiple variables are to be separated with &#39;,&#39;. Use &#39;--list-vars&#39; option</span>
+<span class="go">                        to see list of supported variables.</span>
+<span class="go">  --ulevels &lt;upper-levels&gt;</span>
+<span class="go">                        Provide custom upper level(s) when plotting upper atmospheric data. Each level is to be separated by &#39;,&#39; i.e.,</span>
+<span class="go">                        &#39;925,850,700&#39;. Use &#39;--list-vars&#39; to know list of supported upper level variables.</span>
+<span class="go">  --list-cmaps          List colour maps (cmaps) supported by wrfplot. Refer https://pratiman-91.github.io/colormaps for information on</span>
+<span class="go">                        each colourmaps.</span>
+<span class="go">  --cmap &lt;cmap-name&gt;    Valid colormap name to fill colors. Use &#39;--list-cmaps&#39; option to see list of supported colormaps. Must have</span>
+<span class="go">                        minimum 11 colors, else will lead to error.</span>
+<span class="go">  --clevels &lt;contour-levels&gt;</span>
+<span class="go">                        Provide custom contour level(s) to highlight data. Levels are to be in ascending order and separated by &#39;,&#39;</span>
+<span class="go">                        i.e., &#39;24,26,28&#39;. If single value is provided, clevels will be automatically calculated.</span>
+<span class="go">  --dpi &lt;value&gt;         Increase or decrease the plotted image resolution. Default is 125. More is higher resolution and less is course</span>
+<span class="go">                        resolution. Higher values will reduce the speed of plot.</span>
+<span class="go">  --gif                 If applied, creates an animated GIF image. GIF image will be saved same location as other images with a name</span>
+<span class="go">                        specifed in &#39;--vars&#39; option.</span>
+<span class="go">  --gif-speed &lt;seconds&gt;</span>
+<span class="go">                        Set speed of GIF frame in seconds. Default is 0.5 sec. Lower value increases the speed of animation. To be used</span>
+<span class="go">                        with &#39;--gif&#39; option to take effect.</span>
+<span class="go">  --version             Print version information of &#39;wrfplot&#39; and exit.</span>
+
+<span class="go">© J Sundar, wrf.guy@gmail.com, 2024</span>
+</code></pre></div>
+<p>If you get the inbuilt help page of <code>wrfplot</code>, then it is ensured that you have successfully installed <code>wrfplot</code>.</p>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+    <div class="md-copyright__highlight">
+      Copyright &copy; 2024 J Sundar
+    </div>
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      <script id="__config" type="application/json">{"base": "..", "features": ["content.code.copy"], "search": "../assets/javascripts/workers/search.d50fe291.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../assets/javascripts/bundle.13a4f30d.min.js"></script>
+      
+    
+  </body>
+</html>
