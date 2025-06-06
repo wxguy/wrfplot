@@ -1,4 +1,4 @@
-name: "PyPi Build"
+name: "PyPi Build and Release"
 
 on:
   push:
@@ -22,7 +22,7 @@ jobs:
       run: |
         python -m build --sdist
     - name: Publish to PyPi
-      uses: pypa/gh-action-pypi-publish@release/v1.5
+      uses: pypa/gh-action-pypi-publish@release/v1.12
       with:
         password: ${{ secrets.PYPI_API_TOKEN }}
         packages_dir: dist/
