@@ -1,13 +1,16 @@
 # -*- mode: python ; coding: utf-8 -*-
-import sys ; sys.setrecursionlimit(sys.getrecursionlimit() * 5)
+import sys
+
+sys.setrecursionlimit(sys.getrecursionlimit() * 5)
 
 import os
 import importlib
+
 block_cipher = None
 
 
 def include_files(src_dir, dest_dir, startswith=None, endswith=None):
-    """ Copy files from source to Pyinstaller packed destination """
+    """Copy files from source to Pyinstaller packed destination"""
     path_list = []
     if os.path.isdir(src_dir):
         for file in os.listdir(src_dir):
@@ -25,20 +28,35 @@ def include_files(src_dir, dest_dir, startswith=None, endswith=None):
 
 
 conda_prefix = os.getenv("CONDA_PREFIX")
-libos_files = include_files(os.path.join(conda_prefix, "lib"), os.path.join("shapely", ".libs"), startswith='libgeos')
-py_files = include_files('wrfplot', '.', endswith='.py')
+libos_files = include_files(
+    os.path.join(conda_prefix, "lib"),
+    os.path.join("shapely", ".libs"),
+    startswith="libgeos",
+)
+py_files = include_files("wrfplot", ".", endswith=".py")
 # Convert name list path to list to string
-mpl_toolkits_dir = list(importlib.import_module('mpl_toolkits').__path__)[0]
-mpl_toolkits_module = include_files(mpl_toolkits_dir, 'mpl_toolkits')
-colormaps_module =  os.path.dirname(importlib.machinery.PathFinder().find_module("colormaps").get_filename())
-
+mpl_toolkits_dir = list(importlib.import_module("mpl_toolkits").__path__)[0]
+mpl_toolkits_module = include_files(mpl_toolkits_dir, "mpl_toolkits")
+try:
+    colormaps_module = os.path.dirname(
+        importlib.machinery.PathFinder().find_module("colormaps").get_filename()
+    )
+except Exception as err:
+    colormaps_module = (
+        importlib.machinery.PathFinder()
+        .find_spec("colormaps")
+        .submodule_search_locations[0]
+    )
 
 a = Analysis(
-    ['wrfplot/wrfplot.py'],
+    ["wrfplot/wrfplot.py"],
     pathex=[],
     binaries=[],
-    datas=[('./wrfplot/data', 'data'), (colormaps_module, 'colormaps')] + libos_files + py_files + mpl_toolkits_module,
-    hiddenimports=['colormaps', 'tqdm'],
+    datas=[("./wrfplot/data", "data"), (colormaps_module, "colormaps")]
+    + libos_files
+    + py_files
+    + mpl_toolkits_module,
+    hiddenimports=["colormaps", "tqdm"],
     hookspath=[],
     hooksconfig={},
     runtime_hooks=[],
@@ -56,7 +74,7 @@ exe = EXE(
     a.scripts,
     [],
     exclude_binaries=True,
-    name='wrfplot',
+    name="wrfplot",
     debug=False,
     bootloader_ignore_signals=False,
     strip=False,
@@ -77,5 +95,5 @@ coll = COLLECT(
     strip=False,
     upx=True,
     upx_exclude=[],
-    name='wrfplot',
+    name="wrfplot",
 )
