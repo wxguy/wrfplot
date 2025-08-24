@@ -47,12 +47,20 @@ except Exception as err:
         .find_spec("colormaps")
         .submodule_search_locations[0]
     )
+wrf_py_data_dir = os.path.join(
+    importlib.machinery.PathFinder().find_spec("wrf").submodule_search_locations[0],
+    "data",
+)
 
 a = Analysis(
     ["wrfplot/wrfplot.py"],
     pathex=[],
     binaries=[],
-    datas=[("./wrfplot/data", "data"), (colormaps_module, "colormaps")]
+    datas=[
+        ("./wrfplot/data", "data"),
+        (colormaps_module, "colormaps"),
+        (wrf_py_data_dir, "wrf/data"),
+    ]
     + libos_files
     + py_files
     + mpl_toolkits_module,
